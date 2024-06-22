@@ -4,7 +4,7 @@ WORKDIR /app
 COPY . .
 
 RUN chmod +x ./mvnw
-RUN ./mvnw package ./settings.xml -DskipTests
+RUN ./mvnw -s /settings.xml package -DskipTests
 
 EXPOSE 8200
 
