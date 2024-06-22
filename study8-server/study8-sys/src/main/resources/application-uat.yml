@@ -1,0 +1,23 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:https://study8:2024study8@study8.onrender.com/eureka/}
+  instance:
+    hostname: ${EUREKA_SERVER_HOSTNAME:study8.onrender.com}
+    prefer-ip-address: true
+spring:
+  application:
+    name: study8-sys
+  datasource:
+    url: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres
+    username: postgres.gikzqewvhsgduqowpfld
+    password: BGYprG2kic..c68
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+server:
+  port: 8200
