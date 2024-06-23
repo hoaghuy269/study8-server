@@ -4,12 +4,12 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 /**
- * MessageKeyConstant
+ * ExceptionConstant
  * @Date: 2024-06-23
  * @Author: HuyNH
- * @Desc: Message key constant
+ * @Desc: Exception Constant
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MessageKeyConstant {
-    public static final String DATA_PROCESSING_ERROR = "DATA_PROCESSING_ERROR";
+public class ExceptionConstant {
+    public static final String EXCEPTION_DATA_PROCESSING = "EXCEPTION_DATA_PROCESSING";
 }
