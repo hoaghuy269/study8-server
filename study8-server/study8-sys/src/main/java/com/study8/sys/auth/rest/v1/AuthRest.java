@@ -7,6 +7,8 @@ import com.study8.sys.auth.res.LoginRes;
 import com.study8.sys.constant.ApiConstant;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +28,7 @@ public interface AuthRest {
      * @Desc: Login api
      */
     @PostMapping(AuthApiConstant.API_LOGIN)
-    CoreApiRes<LoginRes> login(@RequestBody LoginReq loginReq,
-                                           HttpServletRequest request,
-                                           HttpServletResponse response);
+    CoreApiRes<LoginRes> login(@RequestBody @Valid LoginReq loginReq,
+            BindingResult bindingResult, HttpServletRequest request,
+            HttpServletResponse response);
 }
