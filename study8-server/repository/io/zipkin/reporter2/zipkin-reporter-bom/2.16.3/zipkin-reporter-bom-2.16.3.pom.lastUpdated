@@ -1,0 +1,5 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Tue Jun 25 21:15:52 ICT 2024
+de8af17c497eb41e24c0e5a8282c56fafeba8eff@default-github-https\://maven.pkg.github.com/hoaghuy269/study8-core/.lastUpdated=1719324952689
+https\://maven.pkg.github.com/hoaghuy269/study8-core/.error=Could not transfer artifact io.zipkin.reporter2\:zipkin-reporter-bom\:pom\:2.16.3 from/to github (https\://maven.pkg.github.com/hoaghuy269/study8-core)\: status code\: 401, reason phrase\: Unauthorized (401)
+https\://repo.maven.apache.org/maven2/.lastUpdated=1719324952974
