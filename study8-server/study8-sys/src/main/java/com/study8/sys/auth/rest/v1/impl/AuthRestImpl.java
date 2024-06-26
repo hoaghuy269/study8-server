@@ -8,6 +8,7 @@ import com.study8.sys.auth.rest.v1.AuthRest;
 import com.study8.sys.constant.ExceptionConstant;
 import com.study8.sys.util.ExceptionUtils;
 import com.study8.sys.util.JwtUtils;
+import com.study8.sys.util.PasswordUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -43,17 +44,22 @@ public class AuthRestImpl implements AuthRest {
             HttpServletResponse response) {
         Locale locale = CoreLanguageUtils.getLanguageFromHeader(request);
         try {
-            LoginRes res = new LoginRes();
             if (bindingResult.hasErrors()) {
                 ExceptionUtils.throwCoreApplicationException(
                         ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
             }
+            //Decode password
+            String passwordDecode = PasswordUtils.decrypt(loginReq.getPassword());
+            loginReq.setPassword(passwordDecode);
+            //Authentication
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginReq.getUsername(), loginReq.getPassword()));
             SecurityContextHolder.getContext()
                     .setAuthentication(authentication);
+            //JWT
             String jwt = jwtUtils.generateJwtToken(authentication);
+            LoginRes res = new LoginRes();
             if (StringUtils.isNotEmpty(jwt)) {
                 res.setToken(jwt);
             }
