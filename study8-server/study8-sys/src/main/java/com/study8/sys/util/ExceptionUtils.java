@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExceptionUtils {
-    private static final String MESSAGES = "messages";
+    private static final String MESSAGES = "messages-sys";
 
     public static void throwCoreApplicationException(String messageKey, Locale locale) throws
             CoreApplicationException {

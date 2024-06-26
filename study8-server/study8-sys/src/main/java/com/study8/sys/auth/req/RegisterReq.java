@@ -6,18 +6,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * LoginReq
+ * RegisterReq
  * @Date: 2024-06-17
  * @Author: HuyNH
- * @Desc: Login request
+ * @Desc: Register request
  */
 @NoArgsConstructor
 @Getter
 @Setter
-public class LoginReq {
-    @Size(max = 30)
-    private String username;
+public class RegisterReq {
+    @Size(max = 50)
+    private String fullName;
 
-    @Size(max = 255)
+    @Size(max = 50)
+    private String emailOrPhone;
     private String password;
 }
