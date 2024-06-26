@@ -18,6 +18,6 @@ public class LoginReq {
     @Size(max = 30)
     private String username;
 
-    @Size(max = 50)
+    @Size(max = 255)
     private String password;
 }
