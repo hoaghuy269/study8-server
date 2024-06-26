@@ -22,11 +22,26 @@ public class SystemConfigServiceImpl implements SystemConfigService {
     @Override
     public Integer getIntValue(String code, String groupCode) {
         Integer result = null;
-        SystemConfigDto systemConfigDto = systemConfigRepository.findByCodeAndGroupCode(code, groupCode);
+        SystemConfigDto systemConfigDto = this.findConfigByCodeAndGroupCode(code, groupCode);
         if (ObjectUtils.isNotEmpty(systemConfigDto)
                 && StringUtils.isNotEmpty(systemConfigDto.getValue())) {
             result = Integer.valueOf(systemConfigDto.getValue());
         }
         return result;
+    }
+
+    @Override
+    public String getStringValue(String code, String groupCode) {
+        String result = null;
+        SystemConfigDto systemConfigDto = this.findConfigByCodeAndGroupCode(code, groupCode);
+        if (ObjectUtils.isNotEmpty(systemConfigDto)
+                && StringUtils.isNotEmpty(systemConfigDto.getValue())) {
+            result = systemConfigDto.getValue();
+        }
+        return result;
+    }
+
+    private SystemConfigDto findConfigByCodeAndGroupCode(String code, String groupCode) {
+        return systemConfigRepository.findByCodeAndGroupCode(code, groupCode);
     }
 }
