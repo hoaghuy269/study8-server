@@ -20,5 +20,7 @@ public class RegisterReq {
 
     @Size(max = 50)
     private String emailOrPhone;
+
+    @Size(max = 100)
     private String password;
 }
