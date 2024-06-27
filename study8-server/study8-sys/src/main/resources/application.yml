@@ -24,3 +24,7 @@ spring:
     open-in-view: false
 server:
   port: 8200
+encryption:
+  algorithm: ${ENCRYPTION_ALGORITHM}
+  key: ${ENCRYPTION_KEY}
+  iv: ${ENCRYPTION_IV}
