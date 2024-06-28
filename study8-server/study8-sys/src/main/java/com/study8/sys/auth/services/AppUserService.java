@@ -2,6 +2,7 @@ package com.study8.sys.auth.services;
 
 import com.study8.core.exception.CoreApplicationException;
 import com.study8.sys.auth.dto.AppUserDto;
+import com.study8.sys.auth.req.RegisterReq;
 
 import java.util.Locale;
 
@@ -13,4 +14,6 @@ import java.util.Locale;
  */
 public interface AppUserService {
     AppUserDto getByUsername(String username);
+
+    AppUserDto register(RegisterReq registerReq, Locale locale) throws CoreApplicationException;
 }

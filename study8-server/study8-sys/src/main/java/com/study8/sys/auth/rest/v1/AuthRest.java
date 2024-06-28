@@ -41,7 +41,7 @@ public interface AuthRest {
      * @Desc: Register api
      */
     @PostMapping(AuthApiConstant.API_REGISTER)
-    CoreApiRes<RegisterRes> register(@RequestBody @Valid RegisterReq loginReq,
+    CoreApiRes<RegisterRes> register(@RequestBody @Valid RegisterReq registerReq,
                                      BindingResult bindingResult, HttpServletRequest request,
                                      HttpServletResponse response);
 }
