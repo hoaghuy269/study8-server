@@ -28,3 +28,12 @@ encryption:
   algorithm: ${ENCRYPTION_ALGORITHM}
   key: ${ENCRYPTION_KEY}
   iv: ${ENCRYPTION_IV}
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
