@@ -18,4 +18,8 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     @Query("SELECT new com.study8.sys.auth.dto.AppUserDto(u.code, u.username, u.password, u.active, u.createdDate, u.createdId, u.deleted, u.deletedDate, u.deletedId) " +
             "FROM AppUser u WHERE u.username = :username")
     AppUserDto findByUsername(@Param("username") String username);
+
+    @Query("SELECT new com.study8.sys.auth.dto.AppUserDto(u.code, u.username, u.password, u.active, u.createdDate, u.createdId, u.deleted, u.deletedDate, u.deletedId) " +
+            "FROM AppUser u WHERE u.email = :emailOrTel OR u.tel = :emailOrTel")
+    AppUserDto findByEmailOrPhoneNumber(@Param("emailOrTel") String emailOrTel);
 }
