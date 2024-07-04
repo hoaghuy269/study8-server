@@ -22,8 +22,8 @@ public class AppUserValidator {
     @Autowired
     AppUserRepository appUserRepository;
 
-    public Boolean isAccountNotExits(String emailOrPhoneNumber, Locale locale) throws CoreApplicationException {
-        AppUserDto appUserDto = appUserRepository.findByEmailOrPhoneNumber(emailOrPhoneNumber);
+    public Boolean isAccountNotExits(String username, Locale locale) throws CoreApplicationException {
+        AppUserDto appUserDto = appUserRepository.findByUsername(username);
         if (ObjectUtils.isNotEmpty(appUserDto)) {
             ExceptionUtils.throwCoreApplicationException(
                     AuthExceptionConstant.EXCEPTION_AUTH_ACCOUNT_EXITS, locale);

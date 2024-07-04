@@ -38,8 +38,8 @@ public class AppUser extends CoreEntity {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "tel")
-    private String tel;
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
     @Column(name = "active")
     private Integer active;

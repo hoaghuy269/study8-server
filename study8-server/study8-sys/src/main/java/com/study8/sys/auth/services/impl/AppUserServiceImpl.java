@@ -48,24 +48,15 @@ public class AppUserServiceImpl implements AppUserService {
         AppUserDto result = new AppUserDto();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         //Entity insert
-        String emailOrPhoneNumber = registerReq.getEmailOrPhoneNumber();
-        Boolean isAccountValid = appUserValidator.isAccountNotExits(emailOrPhoneNumber, locale);
-        if (isAccountValid) {
+        Boolean isAccountValid = appUserValidator.isAccountNotExits(
+                registerReq.getUsername(), locale);
+        if (Boolean.TRUE.equals(isAccountValid)) {
             AppUser appUserInsert = new AppUser();
-            //TODO: Dự định bỏ trường username
-            //appUserInsert.setUsername();
+            appUserInsert.setUsername(result.getUsername());
             appUserInsert.setCode(UUIDUtils.randomUUID());
             appUserInsert.setPassword(passwordEncoder.encode(registerReq.getPassword()));
+            appUserInsert.setEmail(appUserInsert.getEmail());
             appUserInsert.setActive(AccountActiveEnum.INACTIVE.getValue());
-            //Validate email or phone number
-            if (Pattern.matches(SysConstant.EMAIL_PATTERN, emailOrPhoneNumber)) {
-                appUserInsert.setEmail(emailOrPhoneNumber);
-            } else if (Pattern.matches(SysConstant.TEL_PATTERN, emailOrPhoneNumber)) {
-                appUserInsert.setTel(emailOrPhoneNumber);
-            } else {
-                ExceptionUtils.throwCoreApplicationException(
-                        AuthExceptionConstant.EXCEPTION_AUTH_EMAIL_OR_PHONE_NUMBER_NOT_VALID, locale);
-            }
             AppUser appUser = appUserRepository.save(appUserInsert);
             if (ObjectUtils.isNotEmpty(appUser)) {
                 result = objectMapper.convertValue(appUser, AppUserDto.class);
