@@ -36,7 +36,7 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public AppUserDto getByUsername(String username) {
-        return appUserRepository.findByUsername(username);
+        return appUserRepository.findByUsernameOrPhoneNumber(username, null);
     }
 
     @Override
@@ -62,6 +62,6 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public AppUserDto getByPhoneNumber(String phoneNumber) {
-        return appUserRepository.findByPhoneNumber(phoneNumber);
+        return appUserRepository.findByUsernameOrPhoneNumber(null, phoneNumber);
     }
 }
