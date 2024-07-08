@@ -2,7 +2,6 @@ package com.study8.sys.auth.services.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study8.core.exception.CoreApplicationException;
-import com.study8.sys.auth.constant.AuthExceptionConstant;
 import com.study8.sys.auth.dto.AppUserDto;
 import com.study8.sys.auth.entity.AppUser;
 import com.study8.sys.auth.enumf.AccountActiveEnum;
@@ -10,8 +9,6 @@ import com.study8.sys.auth.repository.AppUserRepository;
 import com.study8.sys.auth.req.RegisterReq;
 import com.study8.sys.auth.services.AppUserService;
 import com.study8.sys.auth.validator.AppUserValidator;
-import com.study8.sys.constant.SysConstant;
-import com.study8.sys.util.ExceptionUtils;
 import com.study8.sys.util.UUIDUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Locale;
-import java.util.regex.Pattern;
 
 /**
  * AppUserServiceImpl
