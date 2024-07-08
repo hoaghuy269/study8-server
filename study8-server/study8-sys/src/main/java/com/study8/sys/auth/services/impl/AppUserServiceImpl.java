@@ -47,15 +47,14 @@ public class AppUserServiceImpl implements AppUserService {
     public AppUserDto register(RegisterReq registerReq, Locale locale) throws CoreApplicationException {
         AppUserDto result = new AppUserDto();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        //Entity insert
+        //Validate exits
         Boolean isAccountValid = appUserValidator.isAccountNotExits(
-                registerReq.getUsername(), locale);
-        if (Boolean.TRUE.equals(isAccountValid)) {
+                registerReq.getUsername(), registerReq.getPhoneNumber(), locale);
+        if (Boolean.TRUE.equals(isAccountValid)) { //Do save account
             AppUser appUserInsert = new AppUser();
-            appUserInsert.setUsername(result.getUsername());
             appUserInsert.setCode(UUIDUtils.randomUUID());
+            appUserInsert.setUsername(registerReq.getUsername());
             appUserInsert.setPassword(passwordEncoder.encode(registerReq.getPassword()));
-            appUserInsert.setEmail(appUserInsert.getEmail());
             appUserInsert.setActive(AccountActiveEnum.INACTIVE.getValue());
             AppUser appUser = appUserRepository.save(appUserInsert);
             if (ObjectUtils.isNotEmpty(appUser)) {
@@ -63,5 +62,10 @@ public class AppUserServiceImpl implements AppUserService {
             }
         }
         return result;
+    }
+
+    @Override
+    public AppUserDto getByPhoneNumber(String phoneNumber) {
+        return appUserRepository.findByPhoneNumber(phoneNumber);
     }
 }

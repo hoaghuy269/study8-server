@@ -16,4 +16,6 @@ public interface AppUserService {
     AppUserDto getByUsername(String username);
 
     AppUserDto register(RegisterReq registerReq, Locale locale) throws CoreApplicationException;
+
+    AppUserDto getByPhoneNumber(String phoneNumber);
 }
