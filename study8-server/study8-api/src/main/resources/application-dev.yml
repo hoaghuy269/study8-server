@@ -11,8 +11,8 @@ spring:
     name: study8-api
   security:
     user:
-      password: 2024study8
-      name: study8
+      password: ${SECURITY_PASSWORD:study82024}
+      name: ${SECURITY_USERNAME:study8}
 logging:
   level:
     org:

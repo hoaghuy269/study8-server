@@ -20,6 +20,8 @@ public class AppUserDto extends CoreDto {
     private String code;
     private String username;
     private String password;
+    private String email;
+    private String phoneNumber;
     private Integer active;
 
     public AppUserDto(String code, String username, String password,

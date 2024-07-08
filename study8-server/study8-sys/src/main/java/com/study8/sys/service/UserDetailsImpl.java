@@ -46,7 +46,8 @@ public class UserDetailsImpl implements UserDetails {
     public static UserDetailsImpl build(AppUser user) {
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
-                .collect(Collectors.toList());
+                .<GrantedAuthority>map(authority -> authority)
+                .toList();
         return new UserDetailsImpl(
                 user.getId(),
                 user.getUsername(),
@@ -97,5 +98,10 @@ public class UserDetailsImpl implements UserDetails {
             return false;
         UserDetailsImpl user = (UserDetailsImpl) o;
         return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

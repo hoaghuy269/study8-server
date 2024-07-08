@@ -35,6 +35,12 @@ public class AppUser extends CoreEntity {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
     @Column(name = "active")
     private Integer active;
 

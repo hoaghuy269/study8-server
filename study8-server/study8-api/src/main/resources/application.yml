@@ -1,18 +1,18 @@
 eureka:
   instance:
-    hostname: ${EUREKA_SERVER_HOSTNAME:localhost}
+    hostname: ${EUREKA_SERVER_HOSTNAME}
   client:
     register-with-eureka: false
     fetch-registry: false
     serviceUrl:
-      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka/}
+      defaultZone: ${EUREKA_SERVER_URL}
 spring:
   application:
     name: study8-api
   security:
     user:
-      password: 2024study8
-      name: study8
+      password: ${SECURITY_PASSWORD}
+      name: ${SECURITY_USERNAME}
 logging:
   level:
     org:

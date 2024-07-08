@@ -8,4 +8,6 @@ package com.study8.sys.system.service;
  */
 public interface SystemConfigService {
     Integer getIntValue(String code, String groupCode);
+
+    String getStringValue(String code, String groupCode);
 }
