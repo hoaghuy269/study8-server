@@ -1,7 +1,5 @@
 package com.study8.sys.util;
 
-import com.study8.core.exception.CoreApplicationException;
-
 import java.util.Locale;
 import java.util.ResourceBundle;
 
