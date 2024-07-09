@@ -4,8 +4,10 @@ import com.study8.core.res.CoreApiRes;
 import com.study8.sys.auth.constant.AuthApiConstant;
 import com.study8.sys.auth.req.LoginReq;
 import com.study8.sys.auth.req.RegisterReq;
+import com.study8.sys.auth.req.SendOTPReq;
 import com.study8.sys.auth.res.LoginRes;
 import com.study8.sys.auth.res.RegisterRes;
+import com.study8.sys.auth.res.SendOTPRes;
 import com.study8.sys.constant.ApiConstant;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,7 +29,7 @@ public interface AuthRest {
      * @API: /sys/api/v1/auth/login
      * @Date: 2024-06-11
      * @Author: HuyNH
-     * @Desc: Login api
+     * @Desc: Login API
      */
     @PostMapping(AuthApiConstant.API_LOGIN)
     CoreApiRes<LoginRes> login(@RequestBody @Valid LoginReq loginReq,
@@ -38,10 +40,21 @@ public interface AuthRest {
      * @API: /sys/api/v1/auth/register
      * @Date: 2024-06-27
      * @Author: HuyNH
-     * @Desc: Register api
+     * @Desc: Register API
      */
     @PostMapping(AuthApiConstant.API_REGISTER)
     CoreApiRes<RegisterRes> register(@RequestBody @Valid RegisterReq registerReq,
                                      BindingResult bindingResult, HttpServletRequest request,
                                      HttpServletResponse response);
+
+    /**
+     * @API: /sys/api/v1/auth/send-otp
+     * @Date: 2024-06-27
+     * @Author: HuyNH
+     * @Desc: Send OTP API
+     */
+    @PostMapping(AuthApiConstant.API_SEND_OTP)
+    CoreApiRes<SendOTPRes> sendOTP(@RequestBody @Valid SendOTPReq sendOTPReq,
+                                   BindingResult bindingResult, HttpServletRequest request,
+                                   HttpServletResponse response);
 }

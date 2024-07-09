@@ -14,4 +14,5 @@ public class AuthApiConstant {
     public static final String API_AUTH = "/auth";
     public static final String API_LOGIN = "/login";
     public static final String API_REGISTER = "/register";
+    public static final String API_SEND_OTP = "/send-otp";
 }
