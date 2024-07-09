@@ -16,6 +16,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     @Query("SELECT new com.study8.sys.auth.dto.AppUserDto(u.code, u.username, u.password, u.active, u.createdDate, u.createdId, u.deleted, u.deletedDate, u.deletedId) " +
-            "FROM AppUser u WHERE (:username IS NULL OR u.username = :username) AND (:phoneNumber IS NULL OR u.phoneNumber = :phoneNumber)")
-    AppUserDto findByUsernameOrPhoneNumber(@Param("username") String username, @Param("phoneNumber") String phoneNumber);
+            "FROM AppUser u WHERE u.username = :username")
+    AppUserDto findByUsername(@Param("username") String username);
+
+    @Query("SELECT new com.study8.sys.auth.dto.AppUserDto(u.code, u.username, u.password, u.active, u.createdDate, u.createdId, u.deleted, u.deletedDate, u.deletedId) " +
+            "FROM AppUser u WHERE u.phoneNumber = :phoneNumber")
+    AppUserDto findByPhoneNumber(@Param("phoneNumber") String phoneNumber);
 }
