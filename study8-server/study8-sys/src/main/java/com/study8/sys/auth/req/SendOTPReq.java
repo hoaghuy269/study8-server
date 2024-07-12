@@ -2,6 +2,9 @@ package com.study8.sys.auth.req;
 
 import com.study8.sys.constant.SysConstant;
 import jakarta.validation.constraints.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * SendOTPReq
@@ -9,6 +12,9 @@ import jakarta.validation.constraints.*;
  * @Author: HuyNH
  * @Desc: Send OTP Request
  */
+@Getter
+@Setter
+@NoArgsConstructor
 public class SendOTPReq {
     @NotBlank
     @Size(max = 30)
