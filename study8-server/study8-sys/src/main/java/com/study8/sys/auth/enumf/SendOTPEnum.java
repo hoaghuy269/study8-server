@@ -1,26 +1,25 @@
 package com.study8.sys.auth.enumf;
 
+import lombok.Getter;
+
 /**
  * SendOTPEnum
  * @Date: 2024-07-09
  * @Author: HuyNH
  * @Desc: Send OTP Enum
  */
+@Getter
 public enum SendOTPEnum {
-    PHONE_NUMBER("1"), //Send OTP
-    EMAIL("2"); //Send email
+    PHONE_NUMBER(1), //Send OTP
+    EMAIL(2); //Send email
 
-    private final String value;
+    private final Integer value;
 
-    SendOTPEnum(String value) {
+    SendOTPEnum(Integer value) {
         this.value = value;
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    public static SendOTPEnum resolveByValue(String value) {
+    public static SendOTPEnum resolveByValue(Integer value) {
         for (SendOTPEnum enumValue : SendOTPEnum.values()) {
             if (enumValue.value.equals(value)) {
                 return enumValue;
