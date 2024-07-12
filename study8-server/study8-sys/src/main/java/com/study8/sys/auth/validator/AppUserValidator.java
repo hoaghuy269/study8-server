@@ -7,6 +7,7 @@ import com.study8.sys.auth.services.AppUserService;
 import com.study8.sys.util.ExceptionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.Locale;
@@ -19,6 +20,7 @@ import java.util.Locale;
  */
 @Component
 public class AppUserValidator {
+    @Lazy
     @Autowired
     AppUserService appUserService;
 
