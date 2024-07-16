@@ -24,10 +24,6 @@ spring:
     open-in-view: false
 server:
   port: 8200
-encryption:
-  algorithm: ${ENCRYPTION_ALGORITHM:AES/CBC/PKCS5Padding}
-  key: ${ENCRYPTION_KEY:aesEncryptionKey}
-  iv: ${ENCRYPTION_IV:encryptionIntVec}
 logging:
   level:
     org:
