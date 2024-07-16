@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Locale;
 
 /**
@@ -42,6 +43,7 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public AppUserDto register(RegisterReq registerReq, Locale locale) throws CoreApplicationException {
         AppUserDto result = new AppUserDto();
+        LocalDateTime today = LocalDateTime.now();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         //Validate exits
         Boolean isAccountValid = appUserValidator.isAccountNotExits(
@@ -52,6 +54,8 @@ public class AppUserServiceImpl implements AppUserService {
             appUserInsert.setUsername(registerReq.getUsername());
             appUserInsert.setPassword(passwordEncoder.encode(registerReq.getPassword()));
             appUserInsert.setActive(AccountActiveEnum.INACTIVE.getValue());
+            appUserInsert.setCreatedDate(today);
+            appUserInsert.setPhoneNumber(registerReq.getPhoneNumber());
             AppUser appUser = appUserRepository.save(appUserInsert);
             if (ObjectUtils.isNotEmpty(appUser)) {
                 result = objectMapper.convertValue(appUser, AppUserDto.class);
