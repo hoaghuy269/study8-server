@@ -15,7 +15,6 @@ import com.study8.sys.auth.services.AppUserService;
 import com.study8.sys.constant.ExceptionConstant;
 import com.study8.sys.util.ExceptionUtils;
 import com.study8.sys.util.JwtUtils;
-import com.study8.sys.util.PasswordUtils;
 import com.study8.sys.util.ResourceBundleUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -61,9 +60,6 @@ public class AuthRestImpl implements AuthRest {
                 ExceptionUtils.throwCoreApplicationException(
                         ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
             }
-            //Decode password
-            String passwordDecode = PasswordUtils.decrypt(loginReq.getPassword());
-            loginReq.setPassword(passwordDecode);
             //Authentication
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
