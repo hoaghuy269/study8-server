@@ -27,13 +27,13 @@ import java.util.Locale;
 @Service
 public class AppUserServiceImpl implements AppUserService {
     @Autowired
-    AppUserRepository appUserRepository;
+    private AppUserRepository appUserRepository;
 
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @Autowired
-    AppUserValidator appUserValidator;
+    private AppUserValidator appUserValidator;
 
     @Override
     public AppUserDto getByUsername(String username) {

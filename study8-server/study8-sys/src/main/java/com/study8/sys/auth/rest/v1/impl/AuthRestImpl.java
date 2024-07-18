@@ -43,13 +43,13 @@ import java.util.Locale;
 @Slf4j
 public class AuthRestImpl implements AuthRest {
     @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    JwtUtils jwtUtils;
+    private JwtUtils jwtUtils;
 
     @Autowired
-    AppUserService appUserService;
+    private AppUserService appUserService;
 
     @Override
     public CoreApiRes<LoginRes> login(LoginReq loginReq,
@@ -108,6 +108,7 @@ public class AuthRestImpl implements AuthRest {
         try {
             BindingResultUtils.handleBindingResult(bindingResult, locale);
             SendOTPRes res = new SendOTPRes();
+
             return CoreApiRes.handleSuccess(res, locale);
         } catch (Exception e) {
             log.error("AuthRestImpl | sendOTP", e);

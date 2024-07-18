@@ -22,7 +22,7 @@ import java.util.Locale;
 public class AppUserValidator {
     @Lazy
     @Autowired
-    AppUserService appUserService;
+    private AppUserService appUserService;
 
     public Boolean isAccountNotExits(String username, String phoneNumber, Locale locale)
             throws CoreApplicationException {
