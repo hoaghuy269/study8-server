@@ -13,6 +13,7 @@ import com.study8.sys.auth.res.SendOTPRes;
 import com.study8.sys.auth.rest.v1.AuthRest;
 import com.study8.sys.auth.services.AppUserService;
 import com.study8.sys.constant.ExceptionConstant;
+import com.study8.sys.util.BindingResultUtils;
 import com.study8.sys.util.ExceptionUtils;
 import com.study8.sys.util.JwtUtils;
 import com.study8.sys.util.ResourceBundleUtils;
@@ -56,10 +57,7 @@ public class AuthRestImpl implements AuthRest {
             HttpServletResponse response) {
         Locale locale = CoreLanguageUtils.getLanguageFromHeader(request);
         try {
-            if (bindingResult.hasErrors()) {
-                ExceptionUtils.throwCoreApplicationException(
-                        ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
-            }
+            BindingResultUtils.handleBindingResult(bindingResult, locale);
             //Authentication
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -90,10 +88,7 @@ public class AuthRestImpl implements AuthRest {
                                          HttpServletResponse response) {
         Locale locale = CoreLanguageUtils.getLanguageFromHeader(request);
         try {
-            if (bindingResult.hasErrors()) {
-                ExceptionUtils.throwCoreApplicationException(
-                        ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
-            }
+            BindingResultUtils.handleBindingResult(bindingResult, locale);
             RegisterRes res = new RegisterRes();
             AppUserDto appUserDto = appUserService.register(registerReq, locale);
             if (ObjectUtils.isNotEmpty(appUserDto)) {
@@ -111,10 +106,7 @@ public class AuthRestImpl implements AuthRest {
                                           HttpServletRequest request, HttpServletResponse response) {
         Locale locale = CoreLanguageUtils.getLanguageFromHeader(request);
         try {
-            if (bindingResult.hasErrors()) {
-                ExceptionUtils.throwCoreApplicationException(
-                        ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
-            }
+            BindingResultUtils.handleBindingResult(bindingResult, locale);
             SendOTPRes res = new SendOTPRes();
             return CoreApiRes.handleSuccess(res, locale);
         } catch (Exception e) {
