@@ -12,6 +12,7 @@ import com.study8.sys.auth.res.RegisterRes;
 import com.study8.sys.auth.res.SendOTPRes;
 import com.study8.sys.auth.rest.v1.AuthRest;
 import com.study8.sys.auth.services.AppUserService;
+import com.study8.sys.auth.services.OTPService;
 import com.study8.sys.util.BindingResultUtils;
 import com.study8.sys.util.JwtUtils;
 import com.study8.sys.util.ResourceBundleUtils;
@@ -48,6 +49,9 @@ public class AuthRestImpl implements AuthRest {
 
     @Autowired
     private AppUserService appUserService;
+
+    @Autowired
+    private OTPService otpService;
 
     @Override
     public CoreApiRes<LoginRes> login(LoginReq loginReq,
@@ -105,8 +109,7 @@ public class AuthRestImpl implements AuthRest {
         Locale locale = CoreLanguageUtils.getLanguageFromHeader(request);
         try {
             BindingResultUtils.handleBindingResult(bindingResult, locale);
-            SendOTPRes res = new SendOTPRes();
-
+            SendOTPRes res = otpService.sendOTP(sendOTPReq);
             return CoreApiRes.handleSuccess(res, locale);
         } catch (Exception e) {
             log.error("AuthRestImpl | sendOTP", e);
