@@ -1,4 +1,4 @@
-package com.study8.sys.auth.services;
+package com.study8.sys.auth.service;
 
 import com.study8.core.exception.CoreApplicationException;
 import com.study8.sys.auth.dto.AppUserDto;

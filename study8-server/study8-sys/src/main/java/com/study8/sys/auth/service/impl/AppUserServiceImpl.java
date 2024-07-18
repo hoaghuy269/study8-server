@@ -1,4 +1,4 @@
-package com.study8.sys.auth.services.impl;
+package com.study8.sys.auth.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study8.core.exception.CoreApplicationException;
@@ -7,7 +7,7 @@ import com.study8.sys.auth.entity.AppUser;
 import com.study8.sys.auth.enumf.AccountActiveEnum;
 import com.study8.sys.auth.repository.AppUserRepository;
 import com.study8.sys.auth.req.RegisterReq;
-import com.study8.sys.auth.services.AppUserService;
+import com.study8.sys.auth.service.AppUserService;
 import com.study8.sys.auth.validator.AppUserValidator;
 import com.study8.sys.util.UUIDUtils;
 import org.apache.commons.lang3.ObjectUtils;
