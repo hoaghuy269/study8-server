@@ -3,7 +3,7 @@ package com.study8.sys.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study8.sys.auth.dto.AppUserDto;
 import com.study8.sys.auth.entity.AppUser;
-import com.study8.sys.auth.services.AppUserService;
+import com.study8.sys.auth.service.AppUserService;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

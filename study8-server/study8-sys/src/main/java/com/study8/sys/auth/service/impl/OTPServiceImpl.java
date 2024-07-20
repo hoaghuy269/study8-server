@@ -1,10 +1,10 @@
-package com.study8.sys.auth.services.impl;
+package com.study8.sys.auth.service.impl;
 
 import com.study8.core.exception.CoreApplicationException;
 import com.study8.sys.auth.enumf.SendOTPEnum;
 import com.study8.sys.auth.req.SendOTPReq;
 import com.study8.sys.auth.res.SendOTPRes;
-import com.study8.sys.auth.services.OTPService;
+import com.study8.sys.auth.service.OTPService;
 import org.springframework.stereotype.Service;
 
 /**
