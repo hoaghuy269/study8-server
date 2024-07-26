@@ -39,4 +39,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.SONAR_GITHUB_TOKEN_STUDY8_CORE }}
         run: |
           cd ./study8-server
-          mvn -s ./study8-server/settings.xml -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=hoaghuy269_study8-server
+          mvn -s ./settings.xml -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=hoaghuy269_study8-server
