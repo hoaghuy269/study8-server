@@ -31,6 +31,10 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+      - name: Replace variables in settings.xml
+        run: |
+          sed -i 's/\${GITHUB_USERNAME}/${{ secrets.SONAR_GITHUB_USERNAME }}/g' ./study8-server/settings.xml
+          sed -i 's/\${GITHUB_TOKEN}/${{ secrets.SONAR_GITHUB_TOKEN_STUDY8_CORE }}/g' ./study8-server/settings.xml
       - name: Build and analyze
         env:
           SONAR_GITHUB_TOKEN: ${{ secrets.SONAR_GITHUB_TOKEN }}  # Needed to get PR information, if any
