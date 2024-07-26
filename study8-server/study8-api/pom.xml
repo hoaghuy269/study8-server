@@ -15,6 +15,8 @@
     <description>study8-api</description>
     <properties>
         <java.version>17</java.version>
+        <sonar.organization>hoaghuy269</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
     <dependencies>
         <dependency>
