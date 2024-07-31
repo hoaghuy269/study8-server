@@ -32,8 +32,8 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Replace variables in settings.xml
         run: |
-          sed -i 's/\${GITHUB_USERNAME}/${{ secrets.STUDY8_CORE_USERNAME }}/g' ./settings.xml
-          sed -i 's/\${GITHUB_TOKEN}/${{ secrets.STUDY8_CORE_TOKEN }}/g' ./settings.xml
+          sed -i 's/\${GITHUB_USERNAME}/${{ secrets.STUDY8_CORE_USERNAME }}/g' ./study8-server/settings.xml
+          sed -i 's/\${GITHUB_TOKEN}/${{ secrets.STUDY8_CORE_TOKEN }}/g' ./study8-server/settings.xml
       - name: Build and analyze
         env:
           SONAR_GITHUB_TOKEN: ${{ secrets.SONAR_GITHUB_TOKEN }}
