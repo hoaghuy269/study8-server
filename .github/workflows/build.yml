@@ -34,9 +34,11 @@ jobs:
         env:
           SONAR_GITHUB_TOKEN: ${{ secrets.SONAR_GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          STUDY8_CORE_USERNAME: ${{ secrets.STUDY8_CORE_USERNAME }}
+          STUDY8_CORE_TOKEN: ${{ secrets.STUDY8_CORE_TOKEN }}
         run: |
-          sed -i 's|${GITHUB_USERNAME}|'${{ secrets.STUDY8_CORE_USERNAME }}'|g' ./study8-server/settings.xml 
-          sed -i 's|${GITHUB_TOKEN}|'${{ secrets.STUDY8_CORE_TOKEN }}'|g' ./study8-server/settings.xml
+          sed -i 's|${GITHUB_USERNAME}|'${{ env.STUDY8_CORE_USERNAME }}'|g' ./study8-server/settings.xml 
+          sed -i 's|${GITHUB_TOKEN}|'${{ env.STUDY8_CORE_TOKEN }}'|g' ./study8-server/settings.xml
           cd ./study8-server
           mvn -s ./settings.xml -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=hoaghuy269_study8-server
 
