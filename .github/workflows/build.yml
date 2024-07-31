@@ -33,6 +33,12 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Build and analyze
         env:
-          GITHUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_GITHUB_TOKEN: ${{ secrets.SONAR_GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=hoaghuy269_study8-server
+          GITHUB_USERNAME: ${{ secrets.SONAR_GITHUB_USERNAME }}
+          GITHUB_TOKEN: ${{ secrets.SONAR_GITHUB_TOKEN_STUDY8_CORE }}
+        run: |
+          sed -i 's/\${GITHUB_USERNAME}/${{ secrets.SONAR_GITHUB_USERNAME }}/g' ./study8-server/settings.xml
+          sed -i 's/\${GITHUB_TOKEN}/${{ secrets.SONAR_GITHUB_TOKEN_STUDY8_CORE }}/g' ./study8-server/settings.xml
+          cd ./study8-server
+          mvn -s ./settings.xml -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=hoaghuy269_study8-server
