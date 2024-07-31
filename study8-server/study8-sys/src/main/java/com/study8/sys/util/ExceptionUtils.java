@@ -23,4 +23,9 @@ public class ExceptionUtils {
         String message = messages.getString(messageKey);
         throw new CoreApplicationException(message);
     }
+
+    public static void throwCoreApplicationException(String message) throws
+            CoreApplicationException {
+        throw new CoreApplicationException(message);
+    }
 }

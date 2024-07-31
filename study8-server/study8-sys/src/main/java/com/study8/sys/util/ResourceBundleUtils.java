@@ -10,7 +10,7 @@ import java.util.ResourceBundle;
  * @Desc: Resource Bundle Utils
  */
 public class ResourceBundleUtils {
-    private static final String MESSAGES = "messages-sys";
+    private static final String MESSAGES = "messages_sys";
 
     public static String getMessage(String messageKey, Locale locale) {
         ResourceBundle messages = ResourceBundle.getBundle(MESSAGES, locale);
