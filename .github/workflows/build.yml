@@ -2,7 +2,6 @@ name: SonarCloud
 on:
   push:
     branches:
-      - main
       - feature/phase_1_cm/authentication
   pull_request:
     types: [opened, synchronize, reopened]
@@ -31,14 +30,14 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+      - name: Replace variables in settings.xml
+        run: |
+          sed -i 's/\${GITHUB_USERNAME}/${{ secrets.STUDY8_CORE_USERNAME }}/g' ./settings.xml
+          sed -i 's/\${GITHUB_TOKEN}/${{ secrets.STUDY8_CORE_TOKEN }}/g' ./settings.xml
       - name: Build and analyze
         env:
-          SONAR_GITHUB_TOKEN: ${{ secrets.SONAR_GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_GITHUB_TOKEN: ${{ secrets.SONAR_GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_USERNAME: ${{ secrets.SONAR_GITHUB_USERNAME }}
-          GITHUB_TOKEN: ${{ secrets.SONAR_GITHUB_TOKEN_STUDY8_CORE }}
         run: |
-          sed -i 's/\${GITHUB_USERNAME}/${{ secrets.SONAR_GITHUB_USERNAME }}/g' ./study8-server/settings.xml
-          sed -i 's/\${GITHUB_TOKEN}/${{ secrets.SONAR_GITHUB_TOKEN_STUDY8_CORE }}/g' ./study8-server/settings.xml
           cd ./study8-server
           mvn -s ./settings.xml -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=hoaghuy269_study8-server
