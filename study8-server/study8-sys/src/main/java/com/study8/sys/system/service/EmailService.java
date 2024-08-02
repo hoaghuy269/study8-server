@@ -15,6 +15,5 @@ import java.util.Locale;
  * @Desc: Service Send Email SMTP
  */
 public interface EmailService {
-    SendEmailResultDto sendEmailSMTP(SendEmailDto sendEmailDto, Locale locale)
-            throws CoreApplicationException;
+    SendEmailResultDto sendEmailSMTP(SendEmailDto sendEmailDto, Locale locale);
 }

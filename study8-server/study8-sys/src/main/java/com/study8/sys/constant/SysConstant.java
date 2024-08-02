@@ -17,4 +17,6 @@ public class SysConstant {
     public static final String EMAIL = "EMAIL";
     public static final String EMAIL_USERNAME = "EMAIL_USERNAME";
     public static final String EMAIL_PASSWORD = "EMAIL_PASSWORD";
+    public static final String MESSAGES_SYS = "messages_sys";
+    public static final String RESOURCE_EMAIL_TEMPLATES = "email-templates";
 }

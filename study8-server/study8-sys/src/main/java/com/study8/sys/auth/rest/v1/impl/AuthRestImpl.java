@@ -15,7 +15,7 @@ import com.study8.sys.auth.service.AppUserService;
 import com.study8.sys.auth.service.OTPService;
 import com.study8.sys.util.BindingResultUtils;
 import com.study8.sys.util.JwtUtils;
-import com.study8.sys.util.ResourceBundleUtils;
+import com.study8.sys.util.ResourceUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -75,7 +75,7 @@ public class AuthRestImpl implements AuthRest {
             return CoreApiRes.handleSuccess(res, locale);
         } catch (BadCredentialsException e) {
             log.error("AuthService | login", e);
-            return CoreApiRes.handleError(ResourceBundleUtils
+            return CoreApiRes.handleError(ResourceUtils
                     .getMessage(AuthExceptionConstant.EXCEPTION_AUTH_ACCOUNT_NOT_VALID,
                             locale));
         } catch (Exception e) {
@@ -109,7 +109,7 @@ public class AuthRestImpl implements AuthRest {
         Locale locale = CoreLanguageUtils.getLanguageFromHeader(request);
         try {
             BindingResultUtils.handleBindingResult(bindingResult, locale);
-            SendOTPRes res = otpService.sendOTP(sendOTPReq);
+            SendOTPRes res = otpService.sendOTP(sendOTPReq, locale);
             return CoreApiRes.handleSuccess(res, locale);
         } catch (Exception e) {
             log.error("AuthRestImpl | sendOTP", e);
