@@ -18,10 +18,10 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 public class SendEmailDto {
-    private String templateName;
+    private String templateCode;
     private String subject;
-    private List<String> to;
-    private List<String> cc;
-    private List<String> bcc;
+    private List<String> to; //Not allow null
+    private List<String> cc; //Allow null
+    private List<String> bcc; //Allow null
     Map<String, Objects> mapData;
 }

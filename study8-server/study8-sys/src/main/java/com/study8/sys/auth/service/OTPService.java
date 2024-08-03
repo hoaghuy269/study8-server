@@ -4,6 +4,8 @@ import com.study8.core.exception.CoreApplicationException;
 import com.study8.sys.auth.req.SendOTPReq;
 import com.study8.sys.auth.res.SendOTPRes;
 
+import java.util.Locale;
+
 /**
  * OTPService
  * @Date: 2024-07-12
@@ -11,5 +13,6 @@ import com.study8.sys.auth.res.SendOTPRes;
  * @Desc: OTP Service
  */
 public interface OTPService {
-    SendOTPRes sendOTP(SendOTPReq sendOTPReq) throws CoreApplicationException;
+    SendOTPRes sendOTP(SendOTPReq sendOTPReq, Locale locale)
+            throws CoreApplicationException;
 }
