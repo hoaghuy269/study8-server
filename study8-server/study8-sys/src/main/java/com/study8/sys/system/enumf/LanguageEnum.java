@@ -28,4 +28,9 @@ public enum LanguageEnum {
         }
         return UNKNOWN;
     }
+
+    @Override
+    public String toString() {
+        return this.value;
+    }
 }

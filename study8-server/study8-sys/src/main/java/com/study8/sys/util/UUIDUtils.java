@@ -13,10 +13,14 @@ import java.util.UUID;
  * @Desc: UUID Utils
  */
 public class UUIDUtils {
-    public static String randomUUID() {
+    public static String randomUUIDByDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(DateTimeConstant.DDMMYYYY);
         String currentDate = dateFormat.format(new Date());
         String uuid = UUID.randomUUID().toString();
         return currentDate + "-" + uuid;
+    }
+
+    public static String randomUUID() {
+        return UUID.randomUUID().toString();
     }
 }

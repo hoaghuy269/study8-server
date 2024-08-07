@@ -16,7 +16,5 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class SendOTPRes {
-    private String username;
     private Boolean isSendOTP;
-    private LocalDateTime expirationDate;
 }

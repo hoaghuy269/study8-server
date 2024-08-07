@@ -13,9 +13,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * AuthRest
@@ -57,4 +59,16 @@ public interface AuthRest {
     CoreApiRes<SendOTPRes> sendOTP(@RequestBody @Valid SendOTPReq sendOTPReq,
                                    BindingResult bindingResult, HttpServletRequest request,
                                    HttpServletResponse response);
+
+    /**
+     * @API: /sys/api/v1/auth/verify-otp
+     * @Date: 2024-06-27
+     * @Author: HuyNH
+     * @Desc: Verify OTP API
+     */
+    @GetMapping(AuthApiConstant.API_VERIFY_OTP)
+    CoreApiRes<SendOTPRes> verifyOTP(@RequestParam(name = "username") String username,
+                                     @RequestParam(name = "code") String code,
+                                     HttpServletRequest request,
+                                     HttpServletResponse response);
 }

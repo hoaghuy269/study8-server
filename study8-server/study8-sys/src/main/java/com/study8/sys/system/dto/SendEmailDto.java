@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * SendEmailDto
@@ -23,5 +22,5 @@ public class SendEmailDto {
     private List<String> to; //Not allow null
     private List<String> cc; //Allow null
     private List<String> bcc; //Allow null
-    Map<String, Objects> mapData;
+    Map<String, Object> mapData;
 }

@@ -17,4 +17,6 @@ public interface SystemConfigService {
     String getStringValue(String code, String groupCode);
 
     Map<String, String> getListStringValue(String groupCode);
+
+    Long getLongValue(String code, String groupCode);
 }

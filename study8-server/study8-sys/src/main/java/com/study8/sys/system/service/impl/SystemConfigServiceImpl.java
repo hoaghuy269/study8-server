@@ -63,6 +63,18 @@ public class SystemConfigServiceImpl implements SystemConfigService {
         return result;
     }
 
+    @Override
+    public Long getLongValue(String code, String groupCode) {
+        Long result = null;
+        SystemConfigDto systemConfigDto = this.findConfigByCodeAndGroupCode(code, groupCode);
+        if (ObjectUtils.isNotEmpty(systemConfigDto)
+                && StringUtils.isNotEmpty(systemConfigDto.getValue())) {
+            result = Long.parseLong(
+                    systemConfigDto.getValue());
+        }
+        return result;
+    }
+
     private SystemConfigDto findConfigByCodeAndGroupCode(String code, String groupCode) {
         return systemConfigRepository.findByCodeAndGroupCode(code, groupCode);
     }

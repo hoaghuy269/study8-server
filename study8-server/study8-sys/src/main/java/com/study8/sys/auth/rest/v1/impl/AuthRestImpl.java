@@ -12,7 +12,7 @@ import com.study8.sys.auth.res.RegisterRes;
 import com.study8.sys.auth.res.SendOTPRes;
 import com.study8.sys.auth.rest.v1.AuthRest;
 import com.study8.sys.auth.service.AppUserService;
-import com.study8.sys.auth.service.OTPService;
+import com.study8.sys.system.service.SystemOTPService;
 import com.study8.sys.util.BindingResultUtils;
 import com.study8.sys.util.JwtUtils;
 import com.study8.sys.util.ResourceUtils;
@@ -51,7 +51,7 @@ public class AuthRestImpl implements AuthRest {
     private AppUserService appUserService;
 
     @Autowired
-    private OTPService otpService;
+    private SystemOTPService systemOtpService;
 
     @Override
     public CoreApiRes<LoginRes> login(LoginReq loginReq,
@@ -109,11 +109,16 @@ public class AuthRestImpl implements AuthRest {
         Locale locale = CoreLanguageUtils.getLanguageFromHeader(request);
         try {
             BindingResultUtils.handleBindingResult(bindingResult, locale);
-            SendOTPRes res = otpService.sendOTP(sendOTPReq, locale);
+            SendOTPRes res = systemOtpService.sendOTP(sendOTPReq, locale);
             return CoreApiRes.handleSuccess(res, locale);
         } catch (Exception e) {
             log.error("AuthRestImpl | sendOTP", e);
             return CoreApiRes.handleError(e.getMessage());
         }
+    }
+
+    @Override
+    public CoreApiRes<SendOTPRes> verifyOTP(String username, String code, HttpServletRequest request, HttpServletResponse response) {
+        return null;
     }
 }
