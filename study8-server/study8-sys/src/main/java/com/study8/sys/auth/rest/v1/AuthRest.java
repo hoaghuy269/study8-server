@@ -49,26 +49,4 @@ public interface AuthRest {
                                      BindingResult bindingResult, HttpServletRequest request,
                                      HttpServletResponse response);
 
-    /**
-     * @API: /sys/api/v1/auth/send-otp
-     * @Date: 2024-06-27
-     * @Author: HuyNH
-     * @Desc: Send OTP API
-     */
-    @PostMapping(AuthApiConstant.API_SEND_OTP)
-    CoreApiRes<SendOTPRes> sendOTP(@RequestBody @Valid SendOTPReq sendOTPReq,
-                                   BindingResult bindingResult, HttpServletRequest request,
-                                   HttpServletResponse response);
-
-    /**
-     * @API: /sys/api/v1/auth/verify-otp
-     * @Date: 2024-06-27
-     * @Author: HuyNH
-     * @Desc: Verify OTP API
-     */
-    @GetMapping(AuthApiConstant.API_VERIFY_OTP)
-    CoreApiRes<SendOTPRes> verifyOTP(@RequestParam(name = "username") String username,
-                                     @RequestParam(name = "code") String code,
-                                     HttpServletRequest request,
-                                     HttpServletResponse response);
 }

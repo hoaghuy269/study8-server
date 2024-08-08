@@ -1,13 +1,13 @@
 package com.study8.sys.system.service.impl;
 
 import com.study8.core.exception.CoreApplicationException;
-import com.study8.sys.auth.constant.AuthApiConstant;
 import com.study8.sys.auth.dto.AppUserDto;
 import com.study8.sys.auth.enumf.SendOTPEnum;
 import com.study8.sys.auth.req.SendOTPReq;
 import com.study8.sys.auth.res.SendOTPRes;
 import com.study8.sys.auth.service.AppUserService;
 import com.study8.sys.constant.ApiConstant;
+import com.study8.sys.system.constant.SystemApiConstant;
 import com.study8.sys.system.dto.SystemOTPDto;
 import com.study8.sys.system.entity.SystemOTP;
 import com.study8.sys.system.repository.SystemOTPRepository;
@@ -160,8 +160,8 @@ public class SystemOTPServiceImpl implements SystemOTPService {
         String verifyUrl = rootDomain
                 + ApiConstant.API_SYS
                 + ApiConstant.API_V1
-                + AuthApiConstant.API_AUTH
-                + AuthApiConstant.API_VERIFY_OTP;
+                + SystemApiConstant.API_SYSTEM
+                + SystemApiConstant.API_VERIFY_OTP;
         String usernameParam = "?username=" + username;
         String codeParam = "?code=" + otpCode;
         return verifyUrl

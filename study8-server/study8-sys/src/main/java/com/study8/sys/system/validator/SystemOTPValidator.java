@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 
 /**
@@ -28,16 +30,22 @@ public class SystemOTPValidator {
 
     public Boolean validateBeforeSendOTP(AppUserDto appUserDto, Locale locale)
             throws CoreApplicationException {
-        if (ObjectUtils.isNotEmpty(appUserDto)) {
+        LocalDateTime currentDate = LocalDateTime.now();
+        if (ObjectUtils.isEmpty(appUserDto)) {
             ExceptionUtils.throwCoreApplicationException(
                     ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
         }
         SystemOTPDto systemOTPDto = systemOTPService
                 .getByUserId(appUserDto.getId());
-        if (ObjectUtils.isEmpty(systemOTPDto)) {
-            //TODO: Validate theo phút chưa thực hiện
+        if (ObjectUtils.isNotEmpty(systemOTPDto)
+                && systemOTPDto.getActive()) {
+            String[] errors = new String[] {String.valueOf(
+                    ChronoUnit.MINUTES.between(
+                            currentDate,
+                            systemOTPDto.getExpiryDate()))};
             ExceptionUtils.throwCoreApplicationException(
-                    SystemExceptionConstant.EXCEPTION_OTP_STILL_VALID, locale);
+                    SystemExceptionConstant.EXCEPTION_OTP_STILL_VALID,
+                    locale, errors);
         }
         return true;
     }

@@ -50,9 +50,6 @@ public class AuthRestImpl implements AuthRest {
     @Autowired
     private AppUserService appUserService;
 
-    @Autowired
-    private SystemOTPService systemOtpService;
-
     @Override
     public CoreApiRes<LoginRes> login(LoginReq loginReq,
             BindingResult bindingResult, HttpServletRequest request,
@@ -101,24 +98,5 @@ public class AuthRestImpl implements AuthRest {
             log.error("AuthRestImpl | register", e);
             return CoreApiRes.handleError(e.getMessage());
         }
-    }
-
-    @Override
-    public CoreApiRes<SendOTPRes> sendOTP(SendOTPReq sendOTPReq, BindingResult bindingResult,
-                                          HttpServletRequest request, HttpServletResponse response) {
-        Locale locale = CoreLanguageUtils.getLanguageFromHeader(request);
-        try {
-            BindingResultUtils.handleBindingResult(bindingResult, locale);
-            SendOTPRes res = systemOtpService.sendOTP(sendOTPReq, locale);
-            return CoreApiRes.handleSuccess(res, locale);
-        } catch (Exception e) {
-            log.error("AuthRestImpl | sendOTP", e);
-            return CoreApiRes.handleError(e.getMessage());
-        }
-    }
-
-    @Override
-    public CoreApiRes<SendOTPRes> verifyOTP(String username, String code, HttpServletRequest request, HttpServletResponse response) {
-        return null;
     }
 }
