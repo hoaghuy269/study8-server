@@ -21,12 +21,10 @@ public class SendOTPReq {
     private String username;
 
     @Size(max = 20)
-    @NotBlank
     @Pattern(regexp = SysConstant.PHONE_NUMBER_PATTERN)
     private String phoneNumber;
 
     @Size(max = 255)
-    @NotBlank
     @Pattern(regexp = SysConstant.EMAIL_PATTERN)
     private String email;
 

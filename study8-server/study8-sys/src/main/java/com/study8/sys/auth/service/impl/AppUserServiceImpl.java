@@ -68,4 +68,10 @@ public class AppUserServiceImpl implements AppUserService {
     public AppUserDto getByPhoneNumber(String phoneNumber) {
         return appUserRepository.findByPhoneNumber(phoneNumber);
     }
+
+    @Override
+    public Boolean isAccountExits(String username, String phoneNumber) {
+        return appUserValidator.isAccountExits(
+                username, phoneNumber);
+    }
 }

@@ -1,5 +1,6 @@
 package com.study8.sys.util;
 
+import com.study8.sys.constant.SysConstant;
 import com.study8.sys.service.UserDetailsImpl;
 import com.study8.sys.system.service.SystemConfigService;
 import io.jsonwebtoken.*;
@@ -21,15 +22,14 @@ import java.util.Date;
 @Component
 @Slf4j
 public class JwtUtils {
-    private static final String SYSTEM = "SYSTEM";
-    private static final String JWT_EXPIRATION = "JWT_EXPIRATION";
     private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     @Autowired
     private SystemConfigService systemConfigService;
 
     private int getJwtExpiration() {
-        return systemConfigService.getIntValue(JWT_EXPIRATION, SYSTEM);
+        return systemConfigService.getIntValue(SysConstant.JWT_EXPIRATION,
+                SysConstant.SYSTEM);
     }
 
     public String generateJwtToken(Authentication authentication) {

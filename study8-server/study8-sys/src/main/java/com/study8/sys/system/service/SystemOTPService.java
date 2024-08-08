@@ -1,8 +1,9 @@
-package com.study8.sys.auth.service;
+package com.study8.sys.system.service;
 
 import com.study8.core.exception.CoreApplicationException;
 import com.study8.sys.auth.req.SendOTPReq;
 import com.study8.sys.auth.res.SendOTPRes;
+import com.study8.sys.system.dto.SystemOTPDto;
 
 import java.util.Locale;
 
@@ -12,7 +13,9 @@ import java.util.Locale;
  * @Author: HuyNH
  * @Desc: OTP Service
  */
-public interface OTPService {
+public interface SystemOTPService {
     SendOTPRes sendOTP(SendOTPReq sendOTPReq, Locale locale)
             throws CoreApplicationException;
+
+    SystemOTPDto getByUserId(Long userId);
 }

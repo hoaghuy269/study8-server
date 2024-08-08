@@ -13,4 +13,5 @@ import lombok.NoArgsConstructor;
 public class SignConstant {
     public static final String SPLASH = "/";
     public static final String DASH = "_";
+    public static final String DOT = ".";
 }

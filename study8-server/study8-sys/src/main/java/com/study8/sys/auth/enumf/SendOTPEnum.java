@@ -11,7 +11,8 @@ import lombok.Getter;
 @Getter
 public enum SendOTPEnum {
     PHONE_NUMBER(1), //Send OTP
-    EMAIL(2); //Send email
+    EMAIL(2), //Send email
+    UNKNOWN(999); //Unknown
 
     private final Integer value;
 
@@ -25,6 +26,6 @@ public enum SendOTPEnum {
                 return enumValue;
             }
         }
-        throw new IllegalArgumentException("Invalid SendOTPEnum value: " + value);
+        return UNKNOWN;
     }
 }

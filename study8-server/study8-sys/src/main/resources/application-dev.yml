@@ -27,10 +27,10 @@ spring:
       mail:
         smtp:
           starttls:
-            enable: 'true'
-          auth: 'true'
+            enable: true
+          auth: true
     host: smtp.gmail.com
-    port: 25
+    port: 587
 server:
   port: 8200
 logging:
