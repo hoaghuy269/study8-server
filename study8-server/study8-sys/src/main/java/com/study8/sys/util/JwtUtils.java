@@ -5,12 +5,14 @@ import com.study8.sys.service.UserDetailsImpl;
 import com.study8.sys.system.service.SystemConfigService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 /**
@@ -22,14 +24,25 @@ import java.util.Date;
 @Component
 @Slf4j
 public class JwtUtils {
-    private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private SecretKey secretKey;
 
     @Autowired
     private SystemConfigService systemConfigService;
 
     private int getJwtExpiration() {
-        return systemConfigService.getIntValue(SysConstant.JWT_EXPIRATION,
-                SysConstant.SYSTEM);
+        return systemConfigService
+                .getIntValue(SysConstant.JWT_EXPIRATION,
+                        SysConstant.SYSTEM);
+    }
+
+    @PostConstruct
+    public void init() {
+        String jwtSecret = systemConfigService
+                .getStringValue(SysConstant.JWT_SECRET,
+                        SysConstant.SYSTEM);
+        this.secretKey = Keys.hmacShaKeyFor(
+                jwtSecret.getBytes(
+                        StandardCharsets.UTF_8));
     }
 
     public String generateJwtToken(Authentication authentication) {
@@ -37,7 +50,8 @@ public class JwtUtils {
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + this.getJwtExpiration()))
+                .setExpiration(new Date(System.currentTimeMillis()
+                        + this.getJwtExpiration()))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }

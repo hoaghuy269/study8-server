@@ -25,4 +25,7 @@ public class SysConstant {
     public static final String JWT_EXPIRATION = "JWT_EXPIRATION";
     public static final String ROOT_DOMAIN = "ROOT_DOMAIN";
     public static final String STUDY8_DOMAIN = "STUDY8_DOMAIN";
+    public static final String AUTHORIZATION = "Authorization";
+    public static final String BEARER = "Bearer ";
+    public static final String JWT_SECRET ="JWT_SECRET";
 }
