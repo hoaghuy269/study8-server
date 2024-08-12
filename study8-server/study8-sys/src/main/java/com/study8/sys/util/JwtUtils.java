@@ -5,7 +5,6 @@ import com.study8.sys.service.UserDetailsImpl;
 import com.study8.sys.system.service.SystemConfigService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
