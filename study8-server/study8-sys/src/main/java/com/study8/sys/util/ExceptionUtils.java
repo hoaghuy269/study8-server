@@ -2,6 +2,8 @@ package com.study8.sys.util;
 
 import com.study8.core.exception.CoreApplicationException;
 import com.study8.sys.constant.SysConstant;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.text.MessageFormat;
 import java.util.Locale;
@@ -13,6 +15,7 @@ import java.util.ResourceBundle;
  * @Author: HuyNH
  * @Desc: Throw exception utils
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExceptionUtils {
     public static void throwCoreApplicationException(String messageKey, Locale locale)
             throws CoreApplicationException {

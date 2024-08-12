@@ -4,6 +4,7 @@ import com.study8.core.exception.CoreApplicationException;
 import com.study8.sys.auth.req.SendOTPReq;
 import com.study8.sys.auth.res.SendOTPRes;
 import com.study8.sys.system.dto.SystemOTPDto;
+import com.study8.sys.system.entity.SystemOTP;
 
 import java.util.Locale;
 
@@ -18,4 +19,8 @@ public interface SystemOTPService {
             throws CoreApplicationException;
 
     SystemOTPDto getByUserId(Long userId);
+
+    SystemOTP update(SystemOTP systemOTP);
+
+    SystemOTP findEntity(Long id);
 }

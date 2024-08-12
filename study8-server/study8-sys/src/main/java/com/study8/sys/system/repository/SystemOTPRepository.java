@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface SystemOTPRepository extends JpaRepository<SystemOTP, Long> {
-    @Query("SELECT new com.study8.sys.system.dto.SystemOTPDto(so.userId, so.otpType, so.otpCode, so.active, so.sentDate, so.expiryDate) " +
+    @Query("SELECT new com.study8.sys.system.dto.SystemOTPDto(so.id, so.userId, so.otpType, so.otpCode, so.active, so.sentDate, so.expiryDate) " +
             "FROM SystemOTP so WHERE so.userId = :userId " +
             "AND COALESCE(so.deleted, 0) = 0")
     SystemOTPDto findByUserId(Long userId);
