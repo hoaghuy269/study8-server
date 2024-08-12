@@ -1,6 +1,5 @@
 package com.study8.sys.system.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study8.core.exception.CoreApplicationException;
 import com.study8.sys.auth.dto.AppUserDto;
 import com.study8.sys.auth.enumf.SendOTPEnum;
