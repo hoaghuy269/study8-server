@@ -16,12 +16,12 @@ import java.util.UUID;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UUIDUtils {
-    public static String randomUUIDByDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DateTimeConstant.DDMMYYYY);
-        String currentDate = dateFormat.format(new Date());
-        String uuid = UUID.randomUUID().toString();
-        return currentDate + "-" + uuid;
-    }
+//    public static String randomUUIDByDate() {
+//        SimpleDateFormat dateFormat = new SimpleDateFormat(DateTimeConstant.DDMMYYYY);
+//        String currentDate = dateFormat.format(new Date());
+//        String uuid = UUID.randomUUID().toString();
+//        return currentDate + "-" + uuid;
+//    }
 
     public static String randomUUID() {
         return UUID.randomUUID().toString();

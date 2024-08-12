@@ -61,9 +61,6 @@ public class SystemOTPServiceImpl implements SystemOTPService {
     @Autowired
     private SystemOTPValidator systemOTPValidator;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Override
     public SendOTPRes sendOTP(SendOTPReq sendOTPReq, Locale locale)
             throws CoreApplicationException {
