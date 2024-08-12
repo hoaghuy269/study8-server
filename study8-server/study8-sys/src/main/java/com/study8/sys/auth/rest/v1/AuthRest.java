@@ -4,20 +4,16 @@ import com.study8.core.res.CoreApiRes;
 import com.study8.sys.auth.constant.AuthApiConstant;
 import com.study8.sys.auth.req.LoginReq;
 import com.study8.sys.auth.req.RegisterReq;
-import com.study8.sys.auth.req.SendOTPReq;
 import com.study8.sys.auth.res.LoginRes;
 import com.study8.sys.auth.res.RegisterRes;
-import com.study8.sys.auth.res.SendOTPRes;
 import com.study8.sys.constant.ApiConstant;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * AuthRest
