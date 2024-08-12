@@ -23,6 +23,7 @@ import com.study8.sys.system.validator.SystemOTPValidator;
 import com.study8.sys.util.ExceptionUtils;
 import com.study8.sys.util.ResourceUtils;
 import com.study8.sys.util.UUIDUtils;
+import com.study8.sys.util.UserProfileUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +82,22 @@ public class SystemOTPServiceImpl implements SystemOTPService {
 
     @Override
     public SystemOTPDto getByUserId(Long userId) {
-        return systemOTPRepository.findByUserId(userId);
+        return systemOTPRepository
+                .findByUserId(userId);
+    }
+
+    @Override
+    public SystemOTP update(SystemOTP systemOTP) {
+        return systemOTPRepository
+                .save(systemOTP);
+    }
+
+    @Override
+    public SystemOTP findEntity(Long id) {
+        Optional<SystemOTP> systemOTPOptional = systemOTPRepository
+                .findById(id);
+        return systemOTPOptional
+                .orElse(null);
     }
 
     private void sendEmailOTP(SendOTPReq sendOTPReq, AppUserDto appUserDto, Locale locale)
@@ -89,7 +105,8 @@ public class SystemOTPServiceImpl implements SystemOTPService {
         SystemOTP systemOTP = this.generateOTPEmail(appUserDto, locale);
         if (ObjectUtils.isNotEmpty(systemOTP)) {
             SendEmailDto sendEmailDto = new SendEmailDto();
-            sendEmailDto.setTo(Collections.singletonList(sendOTPReq.getEmail()));
+            sendEmailDto.setTo(Collections.singletonList(
+                    sendOTPReq.getEmail()));
             sendEmailDto.setTemplateCode(EmailEnum.OTP_EMAIL.toString());
             sendEmailDto.setSubject(ResourceUtils
                     .getMessage(SysConstant.EMAIL_001_SUBJECT,
@@ -105,8 +122,10 @@ public class SystemOTPServiceImpl implements SystemOTPService {
                     .sendEmailSMTP(sendEmailDto, locale);
             if (ObjectUtils.isNotEmpty(sendEmailResultDto)
                     && sendEmailResultDto.getIsSuccess()) {
-                LocalDateTime sentDate = sendEmailResultDto.getTime();
-                Optional<SystemOTP> systemOTPUpdate = systemOTPRepository.findById(systemOTP.getId());
+                LocalDateTime sentDate = sendEmailResultDto
+                        .getTime();
+                Optional<SystemOTP> systemOTPUpdate = systemOTPRepository
+                        .findById(systemOTP.getId());
                 systemOTPUpdate.ifPresent(otp -> {
                     otp.setSentDate(sentDate);
                     systemOTPRepository.save(otp); //Update
@@ -132,7 +151,7 @@ public class SystemOTPServiceImpl implements SystemOTPService {
         systemOTP.setActive(true);
         systemOTP.setExpiryDate(this.getOTPExpiryDate(currentDate));
         systemOTP.setCreatedDate(currentDate);
-        systemOTP.setCreatedId(userId);
+        systemOTP.setCreatedId(UserProfileUtils.getUserId());
         return systemOTPRepository.save(systemOTP);
     }
 

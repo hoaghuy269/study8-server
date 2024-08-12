@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class SystemOTPDto extends CoreDto {
+    private Long id;
     private Long userId;
     private Integer otpType;
     private String otpCode;
@@ -24,7 +25,11 @@ public class SystemOTPDto extends CoreDto {
     private LocalDateTime sentDate;
     private LocalDateTime expiryDate;
 
-    public SystemOTPDto(Long userId, Integer otpType, String otpCode, Boolean active, LocalDateTime sentDate, LocalDateTime expiryDate) {
+    public SystemOTPDto(Long id, Long userId,
+                        Integer otpType, String otpCode,
+                        Boolean active, LocalDateTime sentDate,
+                        LocalDateTime expiryDate) {
+        this.id = id;
         this.userId = userId;
         this.otpType = otpType;
         this.otpCode = otpCode;
