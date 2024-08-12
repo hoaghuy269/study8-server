@@ -38,8 +38,9 @@ public class JwtUtils {
                         SysConstant.SYSTEM);
     }
 
-    @PostConstruct
-    public void init() {
+    @Autowired
+    public JwtUtils(SystemConfigService systemConfigService) {
+        this.systemConfigService = systemConfigService;
         String jwtSecret = systemConfigService
                 .getStringValue(SysConstant.JWT_SECRET,
                         SysConstant.SYSTEM);
