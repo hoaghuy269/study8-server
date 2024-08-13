@@ -28,6 +28,7 @@ public class WebSecurityConfig {
                         .authenticationEntryPoint(unauthorizedHandler))
                 .authorizeExchange(authorize -> authorize
                         .pathMatchers("/sys/api/v1/auth/**").permitAll()
+                        .pathMatchers("/sys/api/v1/system/**").permitAll()
                         .anyExchange().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .build();

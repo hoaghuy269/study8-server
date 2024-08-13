@@ -27,7 +27,7 @@ import java.util.Map;
 public class AuthEntryPointJwt implements ServerAuthenticationEntryPoint {
     @Override
     public Mono<Void> commence(ServerWebExchange exchange, AuthenticationException authException) {
-        log.error("AuthEntryPointJwt | Unauthorized error: {}", authException.getMessage());
+        log.error("AuthEntryPointJwt | Unauthorized error", authException);
 
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(HttpStatus.UNAUTHORIZED);
@@ -45,7 +45,7 @@ public class AuthEntryPointJwt implements ServerAuthenticationEntryPoint {
             DataBuffer dataBuffer = response.bufferFactory().wrap(responseBody);
             return response.writeWith(Mono.just(dataBuffer));
         } catch (IOException e) {
-            log.error("Error writing response body: {}", e.getMessage());
+            log.error("AuthEntryPointJwt | Error writing response body", e);
             return Mono.error(e);
         }
     }
