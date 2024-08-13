@@ -1,7 +1,6 @@
 package com.study8.sys.system.rest.v1;
 
 import com.study8.core.res.CoreApiRes;
-import com.study8.sys.auth.constant.AuthApiConstant;
 import com.study8.sys.auth.req.SendOTPReq;
 import com.study8.sys.auth.res.SendOTPRes;
 import com.study8.sys.constant.ApiConstant;
