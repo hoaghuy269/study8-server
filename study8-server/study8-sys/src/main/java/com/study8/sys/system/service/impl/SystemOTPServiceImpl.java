@@ -66,8 +66,8 @@ public class SystemOTPServiceImpl implements SystemOTPService {
         SendOTPRes result = new SendOTPRes();
         AppUserDto appUserDto = appUserService
                 .getByUsername(sendOTPReq.getUsername());
-        if (systemOTPValidator.validateBeforeSendOTP(
-                appUserDto, locale)) { //Validate before action
+        if (Boolean.TRUE.equals(systemOTPValidator
+                .validateBeforeSendOTP(appUserDto, locale))) { //Validate before action
             SendOTPEnum sendOTPEnum = SendOTPEnum.resolveByValue(sendOTPReq.getType());
             switch (sendOTPEnum) {
                 case PHONE_NUMBER -> this.sendPhoneNumberOTP();
