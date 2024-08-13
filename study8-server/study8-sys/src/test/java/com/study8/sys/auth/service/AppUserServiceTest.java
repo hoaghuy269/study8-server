@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
  * @Desc: AppUser Service Test
  */
 @ExtendWith(MockitoExtension.class)
-public class AppUserServiceTest {
+class AppUserServiceTest {
     @Mock
     private AppUserRepository appUserRepository;
 
