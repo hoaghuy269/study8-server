@@ -2,7 +2,6 @@ package com.study8.sys.config;
 
 import com.study8.sys.constant.SysConstant;
 import com.study8.sys.system.service.SystemConfigService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
