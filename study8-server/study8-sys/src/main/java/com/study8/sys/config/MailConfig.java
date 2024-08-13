@@ -20,16 +20,13 @@ import java.util.Properties;
  */
 @Configuration
 public class MailConfig {
-
-    @Autowired
-    private SystemConfigService systemConfigService;
-
     @Bean
     public JavaMailSender javaMailSender(
             @Value("${spring.mail.host}") String mailHost,
             @Value("${spring.mail.port}") int mailPort,
             @Value("${spring.mail.properties.mail.smtp.auth}") boolean mailSmtpAuth,
-            @Value("${spring.mail.properties.mail.smtp.starttls.enable}") boolean mailSmtpStarttlsEnable) {
+            @Value("${spring.mail.properties.mail.smtp.starttls.enable}") boolean mailSmtpStarttlsEnable,
+            SystemConfigService systemConfigService) {
 
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost(mailHost);
