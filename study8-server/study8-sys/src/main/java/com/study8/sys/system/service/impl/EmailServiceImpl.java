@@ -43,7 +43,7 @@ public class EmailServiceImpl implements EmailService {
     public SendEmailResultDto sendEmailSMTP(SendEmailDto sendEmailDto, Locale locale) {
         SendEmailResultDto sendEmailResultDto = new SendEmailResultDto();
         LocalDateTime currentDate = LocalDateTime.now();
-        if (!emailValidator.isDataValid(sendEmailDto)) { //Validate before send email
+        if (Boolean.FALSE.equals(emailValidator.isDataValid(sendEmailDto))) { //Validate before send email
             sendEmailResultDto.setIsSuccess(false);
             sendEmailResultDto.setErrorMessage(
                     ResourceUtils.getMessage(ExceptionConstant.EXCEPTION_DATA_PROCESSING,
