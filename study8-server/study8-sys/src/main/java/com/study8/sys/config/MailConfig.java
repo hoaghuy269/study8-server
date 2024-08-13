@@ -13,34 +13,28 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * EmailConfig
+ * MailConfig
  * @Date: 2024-07-18
  * @Author: HuyNH
- * @Desc: Email Config
+ * @Desc: Mail Config
  */
 @Configuration
 public class MailConfig {
+
     @Autowired
-    SystemConfigService systemConfigService;
-
-    @Value("${spring.mail.host}")
-    private String mailHost;
-
-    @Value("${spring.mail.port}")
-    private int mailPort;
-
-    @Value("${spring.mail.properties.mail.smtp.auth}")
-    private boolean mailSmtpAuth;
-
-    @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
-    private boolean mailSmtpStarttlsEnable;
+    private SystemConfigService systemConfigService;
 
     @Bean
-    public JavaMailSender javaMailSender() {
+    public JavaMailSender javaMailSender(
+            @Value("${spring.mail.host}") String mailHost,
+            @Value("${spring.mail.port}") int mailPort,
+            @Value("${spring.mail.properties.mail.smtp.auth}") boolean mailSmtpAuth,
+            @Value("${spring.mail.properties.mail.smtp.starttls.enable}") boolean mailSmtpStarttlsEnable) {
+
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost(mailHost);
         mailSender.setPort(mailPort);
-        // Email username, password
+
         Map<String, String> emailConfigMap = systemConfigService
                 .getListStringValue(SysConstant.EMAIL);
         mailSender.setUsername(emailConfigMap.get(SysConstant.EMAIL_USERNAME));
