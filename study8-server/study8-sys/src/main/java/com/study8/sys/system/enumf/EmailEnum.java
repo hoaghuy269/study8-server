@@ -1,7 +1,5 @@
 package com.study8.sys.system.enumf;
 
-import com.study8.sys.auth.enumf.SendOTPEnum;
-
 /**
  * EmailEnum
  * @Date: 2024-08-01
