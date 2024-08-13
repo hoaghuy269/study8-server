@@ -24,15 +24,14 @@ public class UserProfileUtils {
     }
 
     public static UserDetailsImpl getUserDetail() {
-        UserDetailsImpl userDetails = null;
         if (ObjectUtils.isNotEmpty(getAuthentication())
                 && getAuthentication().getPrincipal()
-                instanceof UserDetailsImpl) {
-            userDetails = (UserDetailsImpl)getAuthentication()
-                    .getPrincipal();
+                instanceof UserDetailsImpl userDetails) {
+            return userDetails;
         }
-        return userDetails;
+        return null;
     }
+
 
     public static Long getUserId() {
         return Optional.ofNullable(getUserDetail())
