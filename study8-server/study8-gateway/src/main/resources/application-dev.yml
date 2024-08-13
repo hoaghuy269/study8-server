@@ -8,6 +8,10 @@ spring:
           uri: ${EUREKA_ROUTES_URI:lb://study8-sys}
           predicates:
             - Path=/sys/api/v1/auth/**
+        - id: study8-sys-system
+          uri: ${EUREKA_ROUTES_URI:lb://study8-sys}
+          predicates:
+            - Path=/sys/api/v1/system/**
 eureka:
   client:
     serviceUrl:
