@@ -18,7 +18,6 @@ import java.util.function.Predicate;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RouterValidator {
     public static final List<String> openApiEndpoints = List.of(
-            "/sys/api/v1/auth/register",
             "/sys/api/v1/auth/login"
     );
 
