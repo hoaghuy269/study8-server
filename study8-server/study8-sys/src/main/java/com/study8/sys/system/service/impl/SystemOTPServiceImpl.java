@@ -3,7 +3,6 @@ package com.study8.sys.system.service.impl;
 import com.study8.core.exception.CoreApplicationException;
 import com.study8.sys.auth.dto.AppUserDto;
 import com.study8.sys.auth.enumf.SendOTPEnum;
-import com.study8.sys.system.constant.SystemExceptionConstant;
 import com.study8.sys.system.req.SendOTPReq;
 import com.study8.sys.system.res.SendOTPRes;
 import com.study8.sys.auth.service.AppUserService;
@@ -116,7 +115,7 @@ public class SystemOTPServiceImpl implements SystemOTPService {
                 appUserDto, systemOTPDto, locale)) { //Validate
             //TODO: Làm tiếp verify
         }
-        return null;
+        return result;
     }
 
     private void sendEmailOTP(SendOTPReq sendOTPReq, AppUserDto appUserDto, Locale locale)
