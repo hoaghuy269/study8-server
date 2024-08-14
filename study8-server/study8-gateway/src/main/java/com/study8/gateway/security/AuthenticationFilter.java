@@ -23,15 +23,12 @@ import reactor.core.publisher.Mono;
 @Component
 public class AuthenticationFilter implements GatewayFilter {
     @Autowired
-    private RouterValidator routerValidator;
-
-    @Autowired
     private JwtUtils jwtUtil;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        if (routerValidator.isSecured.test(request)) {
+        if (RouterValidator.isSecured.test(request)) {
             if (this.isAuthMissing(request))
                 return this.onError(exchange);
 
