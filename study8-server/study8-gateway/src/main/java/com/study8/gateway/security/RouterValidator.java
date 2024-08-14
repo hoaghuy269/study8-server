@@ -1,5 +1,7 @@
 package com.study8.gateway.security;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,7 @@ import java.util.function.Predicate;
  * @Desc: Router Validator
  */
 @Component
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RouterValidator {
     public static final List<String> openApiEndpoints = List.of(
             "/sys/api/v1/auth/register",
