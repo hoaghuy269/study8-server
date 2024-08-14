@@ -1,5 +1,6 @@
 package com.study8.gateway.security;
 
+import com.study8.gateway.constant.SysServiceConstant;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -18,8 +19,7 @@ import java.util.function.Predicate;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RouterValidator {
     public static final List<String> openApiEndpoints = List.of(
-            "/sys/api/v1/auth/register",
-            "/sys/api/v1/auth/login"
+            SysServiceConstant.SYS_AUTH_API_LOGIN
     );
 
     public static final Predicate<ServerHttpRequest> isSecured =

@@ -1,5 +1,6 @@
 package com.study8.gateway.security;
 
+import com.study8.gateway.constant.GatewayConstant;
 import com.study8.gateway.jwt.JwtUtils;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,9 +52,9 @@ public class AuthenticationFilter implements GatewayFilter {
     private String getAuthHeader(ServerHttpRequest request) {
         String header = request
                 .getHeaders()
-                .getOrEmpty("Authorization")
+                .getOrEmpty(GatewayConstant.AUTHORIZATION)
                 .get(0);
-        return header.startsWith("Bearer ")
+        return header.startsWith(GatewayConstant.BEARER)
                 ? header.substring(7)
                 : header;
     }
@@ -61,7 +62,7 @@ public class AuthenticationFilter implements GatewayFilter {
 
     private boolean isAuthMissing(ServerHttpRequest request) {
         return !request.getHeaders()
-                .containsKey("Authorization");
+                .containsKey(GatewayConstant.AUTHORIZATION);
     }
 
     private void populateRequestWithHeaders(ServerWebExchange exchange, String token) {
