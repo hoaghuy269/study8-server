@@ -17,11 +17,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableHystrix
 public class GatewayConfig {
-    @Autowired
-    AuthenticationFilter filter;
-
     @Bean
-    public RouteLocator routes(RouteLocatorBuilder builder) {
+    public RouteLocator routes(RouteLocatorBuilder builder, AuthenticationFilter filter) {
         return builder.routes()
                 .route("study8-sys-auth", r -> r.path("/sys/api/v1/auth/**")
                         .filters(f -> f.filter(filter))
