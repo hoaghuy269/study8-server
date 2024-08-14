@@ -9,7 +9,7 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 /**
- * SecurityAdapter
+ * WebSecurityConfig
  * @Date: 2024-06-17
  * @Author: HuyNH
  * @Desc: Web Security Config
