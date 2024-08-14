@@ -46,9 +46,9 @@ public class AppUserServiceImpl implements AppUserService {
         LocalDateTime today = LocalDateTime.now();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         //Validate exits
-        Boolean isAccountValid = appUserValidator.isAccountNotExits(
+        boolean isAccountValid = appUserValidator.isAccountNotExits(
                 registerReq.getUsername(), registerReq.getPhoneNumber(), locale);
-        if (Boolean.TRUE.equals(isAccountValid)) { //Do save account
+        if (isAccountValid) { //Do save account
             AppUser appUserInsert = new AppUser();
             appUserInsert.setCode(UUIDUtils.randomUUID());
             appUserInsert.setUsername(registerReq.getUsername());
@@ -67,11 +67,5 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public AppUserDto getByPhoneNumber(String phoneNumber) {
         return appUserRepository.findByPhoneNumber(phoneNumber);
-    }
-
-    @Override
-    public Boolean isAccountExits(String username, String phoneNumber) {
-        return appUserValidator.isAccountExits(
-                username, phoneNumber);
     }
 }

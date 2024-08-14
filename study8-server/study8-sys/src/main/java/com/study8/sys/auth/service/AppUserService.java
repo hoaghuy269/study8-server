@@ -19,6 +19,4 @@ public interface AppUserService {
             throws CoreApplicationException;
 
     AppUserDto getByPhoneNumber(String phoneNumber);
-
-    Boolean isAccountExits(String username, String phoneNumber);
 }

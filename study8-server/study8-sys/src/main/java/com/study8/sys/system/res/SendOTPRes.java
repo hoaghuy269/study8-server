@@ -1,4 +1,4 @@
-package com.study8.sys.auth.res;
+package com.study8.sys.system.res;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

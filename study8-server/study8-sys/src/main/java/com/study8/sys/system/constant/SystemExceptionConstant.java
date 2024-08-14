@@ -12,4 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SystemExceptionConstant {
     public static final String EXCEPTION_OTP_STILL_VALID = "EXCEPTION_OTP_STILL_VALID";
+    public static final String EXCEPTION_OTP_NOT_VALID = "EXCEPTION_OTP_NOT_VALID";
+    public static final String EXCEPTION_ACCOUNT_HAS_BEEN_VERIFIED = "EXCEPTION_ACCOUNT_HAS_BEEN_VERIFIED";
 }

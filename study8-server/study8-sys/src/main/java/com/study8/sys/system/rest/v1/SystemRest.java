@@ -1,10 +1,11 @@
 package com.study8.sys.system.rest.v1;
 
 import com.study8.core.res.CoreApiRes;
-import com.study8.sys.auth.req.SendOTPReq;
-import com.study8.sys.auth.res.SendOTPRes;
+import com.study8.sys.system.req.SendOTPReq;
+import com.study8.sys.system.res.SendOTPRes;
 import com.study8.sys.constant.ApiConstant;
 import com.study8.sys.system.constant.SystemApiConstant;
+import com.study8.sys.system.res.VerifyOTPRes;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -41,8 +42,8 @@ public interface SystemRest {
      * @Desc: Verify OTP API
      */
     @GetMapping(SystemApiConstant.API_VERIFY_OTP)
-    CoreApiRes<SendOTPRes> verifyOTP(@RequestParam(name = "username") String username,
-                                     @RequestParam(name = "code") String code,
-                                     HttpServletRequest request,
-                                     HttpServletResponse response);
+    CoreApiRes<VerifyOTPRes> verifyOTP(@RequestParam(name = "username") String username,
+                                       @RequestParam(name = "code") String code,
+                                       HttpServletRequest request,
+                                       HttpServletResponse response);
 }

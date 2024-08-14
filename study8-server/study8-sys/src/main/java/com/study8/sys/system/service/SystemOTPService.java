@@ -1,10 +1,11 @@
 package com.study8.sys.system.service;
 
 import com.study8.core.exception.CoreApplicationException;
-import com.study8.sys.auth.req.SendOTPReq;
-import com.study8.sys.auth.res.SendOTPRes;
+import com.study8.sys.system.req.SendOTPReq;
+import com.study8.sys.system.res.SendOTPRes;
 import com.study8.sys.system.dto.SystemOTPDto;
 import com.study8.sys.system.entity.SystemOTP;
+import com.study8.sys.system.res.VerifyOTPRes;
 
 import java.util.Locale;
 
@@ -20,7 +21,8 @@ public interface SystemOTPService {
 
     SystemOTPDto getByUserId(Long userId);
 
-    SystemOTP update(SystemOTP systemOTP);
+    SystemOTP updateActive(Long systemOTPId);
 
-    SystemOTP findEntity(Long id);
+    VerifyOTPRes verifyOTP(String username, String code, Locale locale)
+            throws CoreApplicationException;
 }

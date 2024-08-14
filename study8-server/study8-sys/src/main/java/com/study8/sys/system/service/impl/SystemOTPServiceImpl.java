@@ -3,14 +3,16 @@ package com.study8.sys.system.service.impl;
 import com.study8.core.exception.CoreApplicationException;
 import com.study8.sys.auth.dto.AppUserDto;
 import com.study8.sys.auth.enumf.SendOTPEnum;
-import com.study8.sys.auth.req.SendOTPReq;
-import com.study8.sys.auth.res.SendOTPRes;
+import com.study8.sys.system.constant.SystemExceptionConstant;
+import com.study8.sys.system.req.SendOTPReq;
+import com.study8.sys.system.res.SendOTPRes;
 import com.study8.sys.auth.service.AppUserService;
 import com.study8.sys.constant.ApiConstant;
 import com.study8.sys.system.constant.SystemApiConstant;
 import com.study8.sys.system.dto.SystemOTPDto;
 import com.study8.sys.system.entity.SystemOTP;
 import com.study8.sys.system.repository.SystemOTPRepository;
+import com.study8.sys.system.res.VerifyOTPRes;
 import com.study8.sys.system.service.SystemConfigService;
 import com.study8.sys.system.service.SystemOTPService;
 import com.study8.sys.constant.ExceptionConstant;
@@ -66,8 +68,8 @@ public class SystemOTPServiceImpl implements SystemOTPService {
         SendOTPRes result = new SendOTPRes();
         AppUserDto appUserDto = appUserService
                 .getByUsername(sendOTPReq.getUsername());
-        if (Boolean.TRUE.equals(systemOTPValidator
-                .validateBeforeSendOTP(appUserDto, locale))) { //Validate before action
+        if (systemOTPValidator.validateBeforeSendOTP(
+                appUserDto, locale)) { //Validate before action
             SendOTPEnum sendOTPEnum = SendOTPEnum.resolveByValue(sendOTPReq.getType());
             switch (sendOTPEnum) {
                 case PHONE_NUMBER -> this.sendPhoneNumberOTP();
@@ -87,17 +89,34 @@ public class SystemOTPServiceImpl implements SystemOTPService {
     }
 
     @Override
-    public SystemOTP update(SystemOTP systemOTP) {
-        return systemOTPRepository
-                .save(systemOTP);
+    public SystemOTP updateActive(Long systemOTPId) {
+        LocalDateTime currentDate = LocalDateTime.now();
+        Optional<SystemOTP> systemOTPOptional = systemOTPRepository
+                .findById(systemOTPId);
+        if (systemOTPOptional.isPresent()) {
+            SystemOTP systemOTP = systemOTPOptional.get();
+            systemOTP.setActive(false);
+            systemOTP.setDeleted(1);
+            systemOTP.setDeletedDate(currentDate);
+            systemOTP.setDeletedId(UserProfileUtils.getUserId());
+            return systemOTPRepository.save(systemOTP);
+        }
+        return null;
     }
 
     @Override
-    public SystemOTP findEntity(Long id) {
-        Optional<SystemOTP> systemOTPOptional = systemOTPRepository
-                .findById(id);
-        return systemOTPOptional
-                .orElse(null);
+    public VerifyOTPRes verifyOTP(String username, String code, Locale locale)
+            throws CoreApplicationException {
+        VerifyOTPRes result = new VerifyOTPRes();
+        AppUserDto appUserDto = appUserService
+                .getByUsername(username);
+        SystemOTPDto systemOTPDto = systemOTPRepository
+                .findByOTPCode(code);
+        if (systemOTPValidator.validateBeforeVerifyOTP(
+                appUserDto, systemOTPDto, locale)) { //Validate
+            //TODO: Làm tiếp verify
+        }
+        return null;
     }
 
     private void sendEmailOTP(SendOTPReq sendOTPReq, AppUserDto appUserDto, Locale locale)

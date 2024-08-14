@@ -25,7 +25,7 @@ public class AppUserValidator {
     @Autowired
     private AppUserService appUserService;
 
-    public Boolean isAccountNotExits(String username, String phoneNumber, Locale locale)
+    public boolean isAccountNotExits(String username, String phoneNumber, Locale locale)
             throws CoreApplicationException {
         AppUserDto appUserDto = appUserService.getByUsername(username);
         if (ObjectUtils.isNotEmpty(appUserDto)) {
@@ -36,19 +36,6 @@ public class AppUserValidator {
         if (ObjectUtils.isNotEmpty(appUserDto)) {
             ExceptionUtils.throwCoreApplicationException(
                     AuthExceptionConstant.EXCEPTION_AUTH_PHONE_NUMBER_EXITS, locale);
-        }
-        return true;
-    }
-
-    public Boolean isAccountExits(String username, String phoneNumber) {
-        AppUserDto appUserDto;
-        if (StringUtils.isNotEmpty(username)) {
-            appUserDto = appUserService.getByUsername(username);
-            return ObjectUtils.isNotEmpty(appUserDto);
-        }
-        if (StringUtils.isNotEmpty(phoneNumber)) {
-            appUserDto = appUserService.getByPhoneNumber(phoneNumber);
-            return ObjectUtils.isNotEmpty(appUserDto);
         }
         return true;
     }
