@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +27,8 @@ import java.util.Date;
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JwtUtils {
-    private SecretKey secretKey;
+    @Value("${jwt.secret}")
+    private String jwtSecret;
 
     @Autowired
     private SystemConfigService systemConfigService;
@@ -37,19 +39,9 @@ public class JwtUtils {
                         SysConstant.SYSTEM);
     }
 
-    @Autowired
-    public JwtUtils(SystemConfigService systemConfigService) {
-        this.systemConfigService = systemConfigService;
-        String jwtSecret = systemConfigService
-                .getStringValue(SysConstant.JWT_SECRET,
-                        SysConstant.SYSTEM);
-        this.secretKey = Keys.hmacShaKeyFor(
-                jwtSecret.getBytes(
-                        StandardCharsets.UTF_8));
-    }
-
     public String generateJwtToken(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        SecretKey secretKey = this.getSecretKey();
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
                 .setIssuedAt(new Date())
@@ -60,11 +52,13 @@ public class JwtUtils {
     }
 
     public String getUserNameFromJwtToken(String token) {
+        SecretKey secretKey = this.getSecretKey();
         return Jwts.parserBuilder().setSigningKey(secretKey).build()
                 .parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateJwtToken(String authToken) {
+        SecretKey secretKey = this.getSecretKey();
         try {
             Jwts.parserBuilder().setSigningKey(secretKey).build().parse(authToken);
             return true;
@@ -78,5 +72,11 @@ public class JwtUtils {
             log.error("JwtUtils | JWT claims string is empty", e);
         }
         return false;
+    }
+
+    private SecretKey getSecretKey() {
+        return Keys.hmacShaKeyFor(jwtSecret
+                .getBytes(StandardCharsets
+                        .UTF_8));
     }
 }

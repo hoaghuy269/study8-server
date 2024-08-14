@@ -45,6 +45,8 @@ spring:
           auth: true
     host: smtp.gmail.com
     port: 587
+jwt:
+  secret: ${JWT_SECRET}
 server:
   port: 8200
 logging:
