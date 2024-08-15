@@ -1,4 +1,4 @@
-package com.study8.sys.auth.req;
+package com.study8.sys.system.req;
 
 import com.study8.sys.constant.SysConstant;
 import jakarta.validation.constraints.*;

@@ -2,13 +2,13 @@ package com.study8.sys.system.validator;
 
 import com.study8.core.exception.CoreApplicationException;
 import com.study8.sys.auth.dto.AppUserDto;
+import com.study8.sys.auth.enumf.AccountActiveEnum;
 import com.study8.sys.constant.ExceptionConstant;
 import com.study8.sys.system.constant.SystemExceptionConstant;
 import com.study8.sys.system.dto.SystemOTPDto;
 import com.study8.sys.system.entity.SystemOTP;
 import com.study8.sys.system.service.SystemOTPService;
 import com.study8.sys.util.ExceptionUtils;
-import com.study8.sys.util.UserProfileUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -30,30 +30,21 @@ public class SystemOTPValidator {
     @Autowired
     private SystemOTPService systemOTPService;
 
-    public Boolean validateBeforeSendOTP(AppUserDto appUserDto, Locale locale)
+    public boolean validateBeforeSendOTP(AppUserDto appUserDto, Locale locale)
             throws CoreApplicationException {
         LocalDateTime currentDate = LocalDateTime.now();
         if (ObjectUtils.isEmpty(appUserDto)) { //Validate data
             ExceptionUtils.throwCoreApplicationException(
                     ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
         }
+        this.validateAccount(appUserDto, locale);
         SystemOTPDto systemOTPDto = systemOTPService
                 .getByUserId(appUserDto.getId());
         if (ObjectUtils.isNotEmpty(systemOTPDto)) {
             SystemOTP systemOTPUpdated = null;
             if (systemOTPDto.getExpiryDate() != null
                     && currentDate.isAfter(systemOTPDto.getExpiryDate())) { //Update active otp
-                SystemOTP systemOTP = systemOTPService
-                        .findEntity(systemOTPDto.getId());
-                if (ObjectUtils.isEmpty(systemOTP)) {
-                    ExceptionUtils.throwCoreApplicationException(
-                            ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
-                }
-                systemOTP.setActive(false);
-                systemOTP.setDeleted(1);
-                systemOTP.setDeletedDate(currentDate);
-                systemOTP.setDeletedId(UserProfileUtils.getUserId());
-                systemOTPUpdated = systemOTPService.update(systemOTP);
+                systemOTPUpdated = systemOTPService.updateActive(systemOTPDto.getId());
             }
             if (ObjectUtils.isEmpty(systemOTPUpdated)
                     && (systemOTPDto.getActive() != null
@@ -68,5 +59,29 @@ public class SystemOTPValidator {
             }
         }
         return true;
+    }
+
+    public boolean validateBeforeVerifyOTP(AppUserDto appUserDto, SystemOTPDto systemOTPDto, Locale locale)
+            throws CoreApplicationException {
+        if (ObjectUtils.isEmpty(appUserDto)) { //Validate appUserDto
+            ExceptionUtils.throwCoreApplicationException(
+                    ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
+        }
+        if (ObjectUtils.isEmpty(systemOTPDto)) { //Validate data
+            ExceptionUtils.throwCoreApplicationException(
+                    SystemExceptionConstant.EXCEPTION_OTP_NOT_VALID, locale);
+        }
+        this.validateAccount(appUserDto, locale); //Validate active account
+        return true;
+    }
+
+    private void validateAccount(AppUserDto appUserDto, Locale locale)
+            throws CoreApplicationException {
+        if (appUserDto.getActive() != null
+                && AccountActiveEnum.ACTIVE.getValue()
+                    == appUserDto.getActive()) {
+            ExceptionUtils.throwCoreApplicationException(
+                    SystemExceptionConstant.EXCEPTION_ACCOUNT_HAS_BEEN_VERIFIED, locale);
+        }
     }
 }
