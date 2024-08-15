@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  * AppUserServiceImpl
@@ -42,7 +43,6 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public AppUserDto register(RegisterReq registerReq, Locale locale) throws CoreApplicationException {
-        AppUserDto result = new AppUserDto();
         LocalDateTime today = LocalDateTime.now();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         //Validate exits
@@ -58,14 +58,27 @@ public class AppUserServiceImpl implements AppUserService {
             appUserInsert.setPhoneNumber(registerReq.getPhoneNumber());
             AppUser appUser = appUserRepository.save(appUserInsert);
             if (ObjectUtils.isNotEmpty(appUser)) {
-                result = objectMapper.convertValue(appUser, AppUserDto.class);
+                return objectMapper.convertValue(
+                        appUser, AppUserDto.class);
             }
         }
-        return result;
+        return null;
     }
 
     @Override
     public AppUserDto getByPhoneNumber(String phoneNumber) {
         return appUserRepository.findByPhoneNumber(phoneNumber);
+    }
+
+    @Override
+    public AppUser activeAccount(Long userId) {
+        Optional<AppUser> appUserOptional = appUserRepository
+                .findById(userId);
+        if (appUserOptional.isPresent()) {
+            AppUser appUser = appUserOptional.get();
+            appUser.setActive(AccountActiveEnum.ACTIVE.getValue());
+            return appUserRepository.save(appUser);
+        }
+        return null;
     }
 }

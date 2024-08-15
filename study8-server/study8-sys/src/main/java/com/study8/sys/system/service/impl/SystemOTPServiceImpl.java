@@ -2,6 +2,7 @@ package com.study8.sys.system.service.impl;
 
 import com.study8.core.exception.CoreApplicationException;
 import com.study8.sys.auth.dto.AppUserDto;
+import com.study8.sys.auth.entity.AppUser;
 import com.study8.sys.auth.enumf.SendOTPEnum;
 import com.study8.sys.system.req.SendOTPReq;
 import com.study8.sys.system.res.SendOTPRes;
@@ -88,7 +89,7 @@ public class SystemOTPServiceImpl implements SystemOTPService {
     }
 
     @Override
-    public SystemOTP updateActive(Long systemOTPId) {
+    public SystemOTP updateActive(Long systemOTPId, boolean isVerified) {
         LocalDateTime currentDate = LocalDateTime.now();
         Optional<SystemOTP> systemOTPOptional = systemOTPRepository
                 .findById(systemOTPId);
@@ -98,6 +99,9 @@ public class SystemOTPServiceImpl implements SystemOTPService {
             systemOTP.setDeleted(1);
             systemOTP.setDeletedDate(currentDate);
             systemOTP.setDeletedId(UserProfileUtils.getUserId());
+            if (isVerified) {
+                systemOTP.setVerificationDate(currentDate);
+            }
             return systemOTPRepository.save(systemOTP);
         }
         return null;
@@ -113,7 +117,17 @@ public class SystemOTPServiceImpl implements SystemOTPService {
                 .findByOTPCode(code);
         if (systemOTPValidator.validateBeforeVerifyOTP(
                 appUserDto, systemOTPDto, locale)) { //Validate
-            //TODO: Làm tiếp verify
+            //Active account
+            AppUser appUserUpdated = appUserService.activeAccount(appUserDto.getId());
+            SystemOTP systemOTPUpdated = this.updateActive(systemOTPDto.getId(), true);
+            if (ObjectUtils.isEmpty(appUserUpdated)
+                    || ObjectUtils.isEmpty(systemOTPUpdated)) {
+                ExceptionUtils.throwCoreApplicationException(
+                        ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
+            }
+            result.setIsVerified(true);
+            result.setUsername(appUserUpdated.getUsername());
+            result.setDateOfVerification(systemOTPUpdated.getVerificationDate());
         }
         return result;
     }
@@ -200,7 +214,7 @@ public class SystemOTPServiceImpl implements SystemOTPService {
                 + SystemApiConstant.API_SYSTEM
                 + SystemApiConstant.API_VERIFY_OTP;
         String usernameParam = "?username=" + username;
-        String codeParam = "?code=" + otpCode;
+        String codeParam = "&?code=" + otpCode;
         return verifyUrl
                 + usernameParam
                 + codeParam;

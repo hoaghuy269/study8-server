@@ -30,14 +30,8 @@ public class JwtUtils {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
-    @Autowired
-    private SystemConfigService systemConfigService;
-
-    private int getJwtExpiration() {
-        return systemConfigService
-                .getIntValue(SysConstant.JWT_EXPIRATION,
-                        SysConstant.SYSTEM);
-    }
+    @Value("${jwt.expiration}")
+    private int jwtExpiration;
 
     public String generateJwtToken(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
@@ -46,7 +40,7 @@ public class JwtUtils {
                 .setSubject(userPrincipal.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis()
-                        + this.getJwtExpiration()))
+                        + jwtExpiration))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }

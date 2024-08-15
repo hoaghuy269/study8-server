@@ -47,4 +47,7 @@ public class SystemOTP extends CoreEntity {
 
     @Column(name = "expiry_date")
     private LocalDateTime expiryDate;
+
+    @Column(name = "verification_date")
+    private LocalDateTime verificationDate;
 }
