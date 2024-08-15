@@ -24,11 +24,12 @@ public class SystemOTPDto extends CoreDto {
     private Boolean active;
     private LocalDateTime sentDate;
     private LocalDateTime expiryDate;
+    private LocalDateTime verificationDate;
 
     public SystemOTPDto(Long id, Long userId,
                         Integer otpType, String otpCode,
                         Boolean active, LocalDateTime sentDate,
-                        LocalDateTime expiryDate) {
+                        LocalDateTime expiryDate, LocalDateTime verificationDate) {
         this.id = id;
         this.userId = userId;
         this.otpType = otpType;
@@ -36,5 +37,6 @@ public class SystemOTPDto extends CoreDto {
         this.active = active;
         this.sentDate = sentDate;
         this.expiryDate = expiryDate;
+        this.verificationDate = verificationDate;
     }
 }

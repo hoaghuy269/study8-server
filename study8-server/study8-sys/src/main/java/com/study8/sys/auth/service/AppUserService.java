@@ -2,6 +2,7 @@ package com.study8.sys.auth.service;
 
 import com.study8.core.exception.CoreApplicationException;
 import com.study8.sys.auth.dto.AppUserDto;
+import com.study8.sys.auth.entity.AppUser;
 import com.study8.sys.auth.req.RegisterReq;
 
 import java.util.Locale;
@@ -19,4 +20,6 @@ public interface AppUserService {
             throws CoreApplicationException;
 
     AppUserDto getByPhoneNumber(String phoneNumber);
+
+    AppUser activeAccount(Long userId);
 }

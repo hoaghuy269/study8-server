@@ -1,14 +1,11 @@
 package com.study8.sys.util;
 
-import com.study8.sys.constant.SysConstant;
 import com.study8.sys.service.UserDetailsImpl;
-import com.study8.sys.system.service.SystemConfigService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -30,14 +27,8 @@ public class JwtUtils {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
-    @Autowired
-    private SystemConfigService systemConfigService;
-
-    private int getJwtExpiration() {
-        return systemConfigService
-                .getIntValue(SysConstant.JWT_EXPIRATION,
-                        SysConstant.SYSTEM);
-    }
+    @Value("${jwt.expiration}")
+    private int jwtExpiration;
 
     public String generateJwtToken(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
@@ -46,7 +37,7 @@ public class JwtUtils {
                 .setSubject(userPrincipal.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis()
-                        + this.getJwtExpiration()))
+                        + jwtExpiration))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }

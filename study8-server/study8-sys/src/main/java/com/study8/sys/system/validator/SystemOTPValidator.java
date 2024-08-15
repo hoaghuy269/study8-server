@@ -44,7 +44,8 @@ public class SystemOTPValidator {
             SystemOTP systemOTPUpdated = null;
             if (systemOTPDto.getExpiryDate() != null
                     && currentDate.isAfter(systemOTPDto.getExpiryDate())) { //Update active otp
-                systemOTPUpdated = systemOTPService.updateActive(systemOTPDto.getId());
+                systemOTPUpdated = systemOTPService.updateActive(
+                        systemOTPDto.getId(), false);
             }
             if (ObjectUtils.isEmpty(systemOTPUpdated)
                     && (systemOTPDto.getActive() != null
