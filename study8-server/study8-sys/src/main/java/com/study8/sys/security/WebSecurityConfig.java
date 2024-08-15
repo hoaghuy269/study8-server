@@ -3,6 +3,7 @@ package com.study8.sys.security;
 import com.study8.sys.auth.constant.AuthApiConstant;
 import com.study8.sys.constant.ApiConstant;
 import com.study8.sys.service.UserDetailsServiceImpl;
+import com.study8.sys.system.constant.SystemApiConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +35,7 @@ public class WebSecurityConfig {
     private AuthEntryPointJwt unauthorizedHandler;
 
     private static final String authUrl = ApiConstant.API_SYS + ApiConstant.API_V1 + AuthApiConstant.API_AUTH + ApiConstant.API_ALL;
+    private static final String verifyOTPUrl = ApiConstant.API_SYS + ApiConstant.API_V1 + SystemApiConstant.API_SYSTEM + SystemApiConstant.API_VERIFY_OTP;
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -64,7 +66,7 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(authUrl).permitAll()
+                        auth.requestMatchers(authUrl, verifyOTPUrl).permitAll()
                                 .anyRequest().authenticated()
                 );
         http.authenticationProvider(authenticationProvider());
