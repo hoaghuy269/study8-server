@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.*;
  * @Desc: SystemOTP Service Test
  */
 @ExtendWith(MockitoExtension.class)
-public class SystemOTPServiceTest {
+class SystemOTPServiceTest {
     @Mock
     private SystemOTPRepository systemOTPRepository;
 
@@ -36,7 +36,7 @@ public class SystemOTPServiceTest {
     private SystemOTPServiceImpl systemOTPService;
 
     @Test
-    public void testUpdateActiveOTPJob() {
+    void testUpdateActiveOTPJob() {
         LocalDateTime currentDate = LocalDateTime.now();
         int pageSize = 50;
         int pageNumber = 0;
