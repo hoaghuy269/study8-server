@@ -25,4 +25,6 @@ public interface SystemOTPService {
 
     VerifyOTPRes verifyOTP(String username, String code, Locale locale)
             throws CoreApplicationException;
+
+    void updateActiveOTPJob();
 }

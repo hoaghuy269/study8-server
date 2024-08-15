@@ -29,12 +29,17 @@ import com.study8.sys.util.UserProfileUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -130,6 +135,31 @@ public class SystemOTPServiceImpl implements SystemOTPService {
             result.setDateOfVerification(systemOTPUpdated.getVerificationDate());
         }
         return result;
+    }
+
+    @Override
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void updateActiveOTPJob() {
+        LocalDateTime currentDate = LocalDateTime.now();
+        int pageSize = 50;
+        int pageNumber = 0;
+
+        Page<SystemOTP> systemOTPPage;
+        do {
+            Pageable pageable = PageRequest
+                    .of(pageNumber, pageSize);
+            systemOTPPage = systemOTPRepository
+                    .findExpiredOTP(currentDate, pageable);
+            List<SystemOTP> systemOTPUpdated = systemOTPPage
+                    .getContent();
+            systemOTPUpdated.forEach(otp -> {
+                otp.setActive(false);
+                otp.setDeleted(1);
+                otp.setDeletedDate(currentDate);
+            });
+            systemOTPRepository.saveAll(systemOTPUpdated);
+            pageNumber++;
+        } while (systemOTPPage.hasNext());
     }
 
     private void sendEmailOTP(SendOTPReq sendOTPReq, AppUserDto appUserDto, Locale locale)
