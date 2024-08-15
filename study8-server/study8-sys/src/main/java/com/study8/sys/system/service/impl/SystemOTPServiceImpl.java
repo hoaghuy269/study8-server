@@ -214,7 +214,7 @@ public class SystemOTPServiceImpl implements SystemOTPService {
                 + SystemApiConstant.API_SYSTEM
                 + SystemApiConstant.API_VERIFY_OTP;
         String usernameParam = "?username=" + username;
-        String codeParam = "&?code=" + otpCode;
+        String codeParam = "&code=" + otpCode;
         return verifyUrl
                 + usernameParam
                 + codeParam;
