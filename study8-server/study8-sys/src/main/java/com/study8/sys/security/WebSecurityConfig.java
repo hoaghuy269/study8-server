@@ -35,7 +35,7 @@ public class WebSecurityConfig {
     private AuthEntryPointJwt unauthorizedHandler;
 
     private static final String authUrl = ApiConstant.API_SYS + ApiConstant.API_V1 + AuthApiConstant.API_AUTH + ApiConstant.API_ALL;
-    private static final String verifyOTPUrl = ApiConstant.API_SYS + ApiConstant.API_V1 + SystemApiConstant.API_SYSTEM + SystemApiConstant.API_VERIFY_OTP;
+    private static final String verifyUrl = ApiConstant.API_SYS + ApiConstant.API_V1 + SystemApiConstant.API_SYSTEM + SystemApiConstant.API_VERIFY_OTP;
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -66,7 +66,7 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(authUrl, verifyOTPUrl).permitAll()
+                        auth.requestMatchers(authUrl, verifyUrl).permitAll()
                                 .anyRequest().authenticated()
                 );
         http.authenticationProvider(authenticationProvider());
