@@ -1,15 +1,17 @@
 package com.study8.sys.util;
 
 import com.study8.sys.service.UserDetailsImpl;
-import com.study8.sys.system.service.SystemConfigService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 /**
@@ -20,34 +22,34 @@ import java.util.Date;
  */
 @Component
 @Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JwtUtils {
-    private static final String SYSTEM = "SYSTEM";
-    private static final String JWT_EXPIRATION = "JWT_EXPIRATION";
-    private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    @Value("${jwt.secret}")
+    private String jwtSecret;
 
-    @Autowired
-    private SystemConfigService systemConfigService;
-
-    private int getJwtExpiration() {
-        return systemConfigService.getIntValue(JWT_EXPIRATION, SYSTEM);
-    }
+    @Value("${jwt.expiration}")
+    private int jwtExpiration;
 
     public String generateJwtToken(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        SecretKey secretKey = this.getSecretKey();
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + this.getJwtExpiration()))
+                .setExpiration(new Date(System.currentTimeMillis()
+                        + jwtExpiration))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 
     public String getUserNameFromJwtToken(String token) {
+        SecretKey secretKey = this.getSecretKey();
         return Jwts.parserBuilder().setSigningKey(secretKey).build()
                 .parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateJwtToken(String authToken) {
+        SecretKey secretKey = this.getSecretKey();
         try {
             Jwts.parserBuilder().setSigningKey(secretKey).build().parse(authToken);
             return true;
@@ -61,5 +63,11 @@ public class JwtUtils {
             log.error("JwtUtils | JWT claims string is empty", e);
         }
         return false;
+    }
+
+    private SecretKey getSecretKey() {
+        return Keys.hmacShaKeyFor(jwtSecret
+                .getBytes(StandardCharsets
+                        .UTF_8));
     }
 }

@@ -7,6 +7,14 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * SystemConfigServiceImpl
@@ -37,6 +45,32 @@ public class SystemConfigServiceImpl implements SystemConfigService {
         if (ObjectUtils.isNotEmpty(systemConfigDto)
                 && StringUtils.isNotEmpty(systemConfigDto.getValue())) {
             result = systemConfigDto.getValue();
+        }
+        return result;
+    }
+
+    @Override
+    public Map<String, String> getListStringValue(String groupCode) {
+        Map<String, String> result = new HashMap<>();
+        List<SystemConfigDto> systemConfigDtoList = systemConfigRepository
+                .findListByGroupCode(groupCode);
+        if (!CollectionUtils.isEmpty(systemConfigDtoList)) {
+            return systemConfigDtoList.stream()
+                    .filter(item -> StringUtils.isNotEmpty(item.getValue())
+                            && StringUtils.isNotEmpty(item.getCode()))
+                    .collect(Collectors.toMap(SystemConfigDto::getCode, SystemConfigDto::getValue));
+        }
+        return result;
+    }
+
+    @Override
+    public Long getLongValue(String code, String groupCode) {
+        Long result = null;
+        SystemConfigDto systemConfigDto = this.findConfigByCodeAndGroupCode(code, groupCode);
+        if (ObjectUtils.isNotEmpty(systemConfigDto)
+                && StringUtils.isNotEmpty(systemConfigDto.getValue())) {
+            result = Long.parseLong(
+                    systemConfigDto.getValue());
         }
         return result;
     }

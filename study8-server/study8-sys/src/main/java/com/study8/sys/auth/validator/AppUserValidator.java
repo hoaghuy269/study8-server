@@ -3,7 +3,7 @@ package com.study8.sys.auth.validator;
 import com.study8.core.exception.CoreApplicationException;
 import com.study8.sys.auth.constant.AuthExceptionConstant;
 import com.study8.sys.auth.dto.AppUserDto;
-import com.study8.sys.auth.services.AppUserService;
+import com.study8.sys.auth.service.AppUserService;
 import com.study8.sys.util.ExceptionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +22,9 @@ import java.util.Locale;
 public class AppUserValidator {
     @Lazy
     @Autowired
-    AppUserService appUserService;
+    private AppUserService appUserService;
 
-    public Boolean isAccountNotExits(String username, String phoneNumber, Locale locale)
+    public boolean isAccountNotExits(String username, String phoneNumber, Locale locale)
             throws CoreApplicationException {
         AppUserDto appUserDto = appUserService.getByUsername(username);
         if (ObjectUtils.isNotEmpty(appUserDto)) {

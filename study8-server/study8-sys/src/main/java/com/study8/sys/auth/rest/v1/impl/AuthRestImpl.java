@@ -6,17 +6,13 @@ import com.study8.sys.auth.constant.AuthExceptionConstant;
 import com.study8.sys.auth.dto.AppUserDto;
 import com.study8.sys.auth.req.LoginReq;
 import com.study8.sys.auth.req.RegisterReq;
-import com.study8.sys.auth.req.SendOTPReq;
 import com.study8.sys.auth.res.LoginRes;
 import com.study8.sys.auth.res.RegisterRes;
-import com.study8.sys.auth.res.SendOTPRes;
 import com.study8.sys.auth.rest.v1.AuthRest;
-import com.study8.sys.auth.services.AppUserService;
-import com.study8.sys.constant.ExceptionConstant;
-import com.study8.sys.util.ExceptionUtils;
+import com.study8.sys.auth.service.AppUserService;
+import com.study8.sys.util.BindingResultUtils;
 import com.study8.sys.util.JwtUtils;
-import com.study8.sys.util.PasswordUtils;
-import com.study8.sys.util.ResourceBundleUtils;
+import com.study8.sys.util.ResourceUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -43,13 +39,13 @@ import java.util.Locale;
 @Slf4j
 public class AuthRestImpl implements AuthRest {
     @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    JwtUtils jwtUtils;
+    private JwtUtils jwtUtils;
 
     @Autowired
-    AppUserService appUserService;
+    private AppUserService appUserService;
 
     @Override
     public CoreApiRes<LoginRes> login(LoginReq loginReq,
@@ -57,13 +53,7 @@ public class AuthRestImpl implements AuthRest {
             HttpServletResponse response) {
         Locale locale = CoreLanguageUtils.getLanguageFromHeader(request);
         try {
-            if (bindingResult.hasErrors()) {
-                ExceptionUtils.throwCoreApplicationException(
-                        ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
-            }
-            //Decode password
-            String passwordDecode = PasswordUtils.decrypt(loginReq.getPassword());
-            loginReq.setPassword(passwordDecode);
+            BindingResultUtils.handleBindingResult(bindingResult, locale);
             //Authentication
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -79,7 +69,7 @@ public class AuthRestImpl implements AuthRest {
             return CoreApiRes.handleSuccess(res, locale);
         } catch (BadCredentialsException e) {
             log.error("AuthService | login", e);
-            return CoreApiRes.handleError(ResourceBundleUtils
+            return CoreApiRes.handleError(ResourceUtils
                     .getMessage(AuthExceptionConstant.EXCEPTION_AUTH_ACCOUNT_NOT_VALID,
                             locale));
         } catch (Exception e) {
@@ -94,10 +84,7 @@ public class AuthRestImpl implements AuthRest {
                                          HttpServletResponse response) {
         Locale locale = CoreLanguageUtils.getLanguageFromHeader(request);
         try {
-            if (bindingResult.hasErrors()) {
-                ExceptionUtils.throwCoreApplicationException(
-                        ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
-            }
+            BindingResultUtils.handleBindingResult(bindingResult, locale);
             RegisterRes res = new RegisterRes();
             AppUserDto appUserDto = appUserService.register(registerReq, locale);
             if (ObjectUtils.isNotEmpty(appUserDto)) {
@@ -106,23 +93,6 @@ public class AuthRestImpl implements AuthRest {
             return CoreApiRes.handleSuccess(res, locale);
         } catch (Exception e) {
             log.error("AuthRestImpl | register", e);
-            return CoreApiRes.handleError(e.getMessage());
-        }
-    }
-
-    @Override
-    public CoreApiRes<SendOTPRes> sendOTP(SendOTPReq sendOTPReq, BindingResult bindingResult,
-                                          HttpServletRequest request, HttpServletResponse response) {
-        Locale locale = CoreLanguageUtils.getLanguageFromHeader(request);
-        try {
-            if (bindingResult.hasErrors()) {
-                ExceptionUtils.throwCoreApplicationException(
-                        ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
-            }
-            SendOTPRes res = new SendOTPRes();
-            return CoreApiRes.handleSuccess(res, locale);
-        } catch (Exception e) {
-            log.error("AuthRestImpl | sendOTP", e);
             return CoreApiRes.handleError(e.getMessage());
         }
     }
