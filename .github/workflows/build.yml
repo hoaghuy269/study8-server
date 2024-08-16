@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - feature/phase_1_cm/authentication
+      - develop/phase_1_cm
+      - main
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
