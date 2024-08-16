@@ -143,7 +143,7 @@ public class SystemOTPServiceImpl implements SystemOTPService {
     }
 
     @Override
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 0 0 * * *")
     public void updateActiveOTPJob() {
         LocalDateTime currentDate = LocalDateTime.now();
         int pageSize = 50;
