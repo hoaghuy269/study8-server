@@ -73,17 +73,17 @@ public class SystemOTPServiceImpl implements SystemOTPService {
         SendOTPRes result = new SendOTPRes();
         AppUserDto appUserDto = appUserService
                 .getByUsername(sendOTPReq.getUsername());
-//        if (systemOTPValidator.validateBeforeSendOTP(
-//                appUserDto, locale)) { //Validate before action
-//            SendOTPEnum sendOTPEnum = SendOTPEnum.resolveByValue(sendOTPReq.getType());
-//            switch (sendOTPEnum) {
-//                case PHONE_NUMBER -> this.sendPhoneNumberOTP();
-//                case EMAIL -> this.sendEmailOTP(sendOTPReq, appUserDto, locale);
-//                case UNKNOWN -> ExceptionUtils.throwCoreApplicationException(
-//                        ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
-//            }
-//            result.setIsSendOTP(true);
-//        }
+        if (systemOTPValidator.validateBeforeSendOTP(
+                appUserDto, locale)) { //Validate before action
+            SendOTPEnum sendOTPEnum = SendOTPEnum.resolveByValue(sendOTPReq.getType());
+            switch (sendOTPEnum) {
+                case PHONE_NUMBER -> this.sendPhoneNumberOTP();
+                case EMAIL -> this.sendEmailOTP(sendOTPReq, appUserDto, locale);
+                case UNKNOWN -> ExceptionUtils.throwCoreApplicationException(
+                        ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
+            }
+            result.setIsSendOTP(true);
+        }
         //Update account
         this.updateAccountNewThread(appUserDto,
                 sendOTPReq.getEmail(), sendOTPReq.getPhoneNumber());
