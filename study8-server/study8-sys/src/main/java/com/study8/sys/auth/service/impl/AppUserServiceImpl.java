@@ -9,13 +9,24 @@ import com.study8.sys.auth.repository.AppUserRepository;
 import com.study8.sys.auth.req.RegisterReq;
 import com.study8.sys.auth.service.AppUserService;
 import com.study8.sys.auth.validator.AppUserValidator;
+import com.study8.sys.config.SettingVariable;
 import com.study8.sys.util.UUIDUtils;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -26,6 +37,7 @@ import java.util.Optional;
  * @Desc: AppUser Service Impl
  */
 @Service
+@Slf4j
 public class AppUserServiceImpl implements AppUserService {
     @Autowired
     private AppUserRepository appUserRepository;
@@ -35,6 +47,9 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Autowired
     private AppUserValidator appUserValidator;
+
+    @Autowired
+    private PlatformTransactionManager platformTransactionManager;
 
     @Override
     public AppUserDto getByUsername(String username) {
@@ -56,6 +71,7 @@ public class AppUserServiceImpl implements AppUserService {
             appUserInsert.setActive(AccountActiveEnum.INACTIVE.getValue());
             appUserInsert.setCreatedDate(today);
             appUserInsert.setPhoneNumber(registerReq.getPhoneNumber());
+            appUserInsert.setCreatedId(SettingVariable.SYSTEM_ADMIN_ID);
             AppUser appUser = appUserRepository.save(appUserInsert);
             if (ObjectUtils.isNotEmpty(appUser)) {
                 return objectMapper.convertValue(
@@ -80,5 +96,25 @@ public class AppUserServiceImpl implements AppUserService {
             return appUserRepository.save(appUser);
         }
         return null;
+    }
+
+    @Override
+    public void updateAccount(AppUserDto appUserDto, boolean isUpdateInNewThread) {
+        AppUser appUser = objectMapper.convertValue(appUserDto, AppUser.class);
+        if (isUpdateInNewThread) { //New thread
+            TransactionTemplate transactionTemplate = new TransactionTemplate(
+                    platformTransactionManager);
+            Runnable saveMERequirementDetailHist = () -> transactionTemplate
+                    .execute(new TransactionCallbackWithoutResult() {
+                        @Override
+                        protected void doInTransactionWithoutResult(@NonNull TransactionStatus status) {
+                            appUserRepository.save(appUser);
+                        }
+                    });
+            Thread thread = new Thread(saveMERequirementDetailHist);
+            thread.start();
+        } else { //In thread
+            appUserRepository.save(appUser);
+        }
     }
 }

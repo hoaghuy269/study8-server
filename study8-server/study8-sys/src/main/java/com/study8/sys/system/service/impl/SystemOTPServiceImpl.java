@@ -73,17 +73,20 @@ public class SystemOTPServiceImpl implements SystemOTPService {
         SendOTPRes result = new SendOTPRes();
         AppUserDto appUserDto = appUserService
                 .getByUsername(sendOTPReq.getUsername());
-        if (systemOTPValidator.validateBeforeSendOTP(
-                appUserDto, locale)) { //Validate before action
-            SendOTPEnum sendOTPEnum = SendOTPEnum.resolveByValue(sendOTPReq.getType());
-            switch (sendOTPEnum) {
-                case PHONE_NUMBER -> this.sendPhoneNumberOTP();
-                case EMAIL -> this.sendEmailOTP(sendOTPReq, appUserDto, locale);
-                case UNKNOWN -> ExceptionUtils.throwCoreApplicationException(
-                        ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
-            }
-            result.setIsSendOTP(true);
-        }
+//        if (systemOTPValidator.validateBeforeSendOTP(
+//                appUserDto, locale)) { //Validate before action
+//            SendOTPEnum sendOTPEnum = SendOTPEnum.resolveByValue(sendOTPReq.getType());
+//            switch (sendOTPEnum) {
+//                case PHONE_NUMBER -> this.sendPhoneNumberOTP();
+//                case EMAIL -> this.sendEmailOTP(sendOTPReq, appUserDto, locale);
+//                case UNKNOWN -> ExceptionUtils.throwCoreApplicationException(
+//                        ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
+//            }
+//            result.setIsSendOTP(true);
+//        }
+        //Update account
+        this.updateAccountNewThread(appUserDto,
+                sendOTPReq.getEmail(), sendOTPReq.getPhoneNumber());
         return result;
     }
 
@@ -123,8 +126,10 @@ public class SystemOTPServiceImpl implements SystemOTPService {
         if (systemOTPValidator.validateBeforeVerifyOTP(
                 appUserDto, systemOTPDto, locale)) { //Validate
             //Active account
-            AppUser appUserUpdated = appUserService.activeAccount(appUserDto.getId());
-            SystemOTP systemOTPUpdated = this.updateActive(systemOTPDto.getId(), true);
+            AppUser appUserUpdated = appUserService
+                    .activeAccount(appUserDto.getId());
+            SystemOTP systemOTPUpdated = this.updateActive(
+                    systemOTPDto.getId(), true);
             if (ObjectUtils.isEmpty(appUserUpdated)
                     || ObjectUtils.isEmpty(systemOTPUpdated)) {
                 ExceptionUtils.throwCoreApplicationException(
@@ -259,5 +264,16 @@ public class SystemOTPServiceImpl implements SystemOTPService {
                     ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
         }
         return domain;
+    }
+
+    private void updateAccountNewThread(AppUserDto appUserDto,
+                                        String email, String phoneNumber) {
+        if (StringUtils.isNotEmpty(email)) {
+            appUserDto.setEmail(email);
+        }
+        if (StringUtils.isNotEmpty(phoneNumber)) {
+            appUserDto.setPhoneNumber(phoneNumber);
+        }
+        appUserService.updateAccount(appUserDto, true);
     }
 }
