@@ -21,7 +21,7 @@ spring:
     hikari:
       maximum-pool-size: 10
       connection-timeout: 30000
-      leakDetectionThreshold: 2000
+      leakDetectionThreshold: 60000
       data-source-properties:
         cachePrepStmts: false
         prepStmtCacheSize: 0

@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExceptionConstant {
     public static final String EXCEPTION_DATA_PROCESSING = "EXCEPTION_DATA_PROCESSING";
+    public static final String EXCEPTION_ACCOUNT_DOES_NOT_HAVE_PERMISSION = "EXCEPTION_ACCOUNT_DOES_NOT_HAVE_PERMISSION";
 }

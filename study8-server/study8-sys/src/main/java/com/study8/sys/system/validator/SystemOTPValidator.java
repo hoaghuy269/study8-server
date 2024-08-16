@@ -9,6 +9,7 @@ import com.study8.sys.system.dto.SystemOTPDto;
 import com.study8.sys.system.entity.SystemOTP;
 import com.study8.sys.system.service.SystemOTPService;
 import com.study8.sys.util.ExceptionUtils;
+import com.study8.sys.util.UserProfileUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -33,10 +34,6 @@ public class SystemOTPValidator {
     public boolean validateBeforeSendOTP(AppUserDto appUserDto, Locale locale)
             throws CoreApplicationException {
         LocalDateTime currentDate = LocalDateTime.now();
-        if (ObjectUtils.isEmpty(appUserDto)) { //Validate data
-            ExceptionUtils.throwCoreApplicationException(
-                    ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
-        }
         this.validateAccount(appUserDto, locale);
         SystemOTPDto systemOTPDto = systemOTPService
                 .getByUserId(appUserDto.getId());
@@ -64,10 +61,6 @@ public class SystemOTPValidator {
 
     public boolean validateBeforeVerifyOTP(AppUserDto appUserDto, SystemOTPDto systemOTPDto, Locale locale)
             throws CoreApplicationException {
-        if (ObjectUtils.isEmpty(appUserDto)) { //Validate appUserDto
-            ExceptionUtils.throwCoreApplicationException(
-                    ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
-        }
         if (ObjectUtils.isEmpty(systemOTPDto)) { //Validate data
             ExceptionUtils.throwCoreApplicationException(
                     SystemExceptionConstant.EXCEPTION_OTP_NOT_VALID, locale);
@@ -78,6 +71,15 @@ public class SystemOTPValidator {
 
     private void validateAccount(AppUserDto appUserDto, Locale locale)
             throws CoreApplicationException {
+        if (ObjectUtils.isEmpty(appUserDto)) { //Validate appUserDto
+            ExceptionUtils.throwCoreApplicationException(
+                    ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
+        }
+        if (!UserProfileUtils.getUserId()
+                .equals(appUserDto.getId())) {
+            ExceptionUtils.throwCoreApplicationException(
+                    ExceptionConstant.EXCEPTION_ACCOUNT_DOES_NOT_HAVE_PERMISSION, locale);
+        }
         if (appUserDto.getActive() != null
                 && AccountActiveEnum.ACTIVE.getValue()
                     == appUserDto.getActive()) {
