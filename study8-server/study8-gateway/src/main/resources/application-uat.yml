@@ -8,5 +8,10 @@ eureka:
   instance:
     hostname: localhost
     prefer-ip-address: true
+jwt:
+  secret: ${JWT_SECRET}
+study8:
+  sys:
+    uri: ${STUDY8_SYS_URI}
 server:
   port: 8300
