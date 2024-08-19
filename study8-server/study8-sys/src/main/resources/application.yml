@@ -44,7 +44,7 @@ spring:
             enable: 'true'
           auth: 'true'
     host: smtp.gmail.com
-    port: 25
+    port: 587
 jwt:
   secret: ${JWT_SECRET}
   expiration: ${JWT_EXPIRATION:1800000}
