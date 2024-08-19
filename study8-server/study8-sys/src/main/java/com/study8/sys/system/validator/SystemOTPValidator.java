@@ -75,7 +75,8 @@ public class SystemOTPValidator {
             ExceptionUtils.throwCoreApplicationException(
                     ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
         }
-        if (!UserProfileUtils.getUserId().equals(appUserDto.getId())
+        if ((UserProfileUtils.getUserId() != null
+                && !UserProfileUtils.getUserId().equals(appUserDto.getId()))
                 && isHasToken) {
             ExceptionUtils.throwCoreApplicationException(
                     ExceptionConstant.EXCEPTION_ACCOUNT_DOES_NOT_HAVE_PERMISSION, locale);

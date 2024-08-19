@@ -109,6 +109,7 @@ public class SystemOTPServiceImpl implements SystemOTPService {
             systemOTP.setDeletedId(UserProfileUtils.getUserId());
             if (isVerified) {
                 systemOTP.setVerificationDate(currentDate);
+                systemOTP.setVerified(true);
             }
             return systemOTPRepository.save(systemOTP);
         }
@@ -216,6 +217,7 @@ public class SystemOTPServiceImpl implements SystemOTPService {
         systemOTP.setOtpType(SendOTPEnum.EMAIL.getValue());
         systemOTP.setOtpCode(UUIDUtils.randomUUID());
         systemOTP.setActive(true);
+        systemOTP.setVerified(false);
         systemOTP.setExpiryDate(this.getOTPExpiryDate(currentDate));
         systemOTP.setCreatedDate(currentDate);
         systemOTP.setCreatedId(UserProfileUtils.getUserId());

@@ -56,10 +56,8 @@ public class AppUserServiceImpl implements AppUserService {
     public AppUserDto register(RegisterReq registerReq, Locale locale) throws CoreApplicationException {
         LocalDateTime today = LocalDateTime.now();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        //Validate exits
-        boolean isAccountValid = appUserValidator.isAccountNotExits(
-                registerReq.getUsername(), registerReq.getPhoneNumber(), locale);
-        if (isAccountValid) { //Do save account
+        if (appUserValidator.validateBeforeRegister(registerReq.getUsername(),
+                registerReq.getPhoneNumber(), locale)) { //Do save account
             AppUser appUserInsert = new AppUser();
             appUserInsert.setCode(UUIDUtils.randomUUID());
             appUserInsert.setUsername(registerReq.getUsername());
