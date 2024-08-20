@@ -30,9 +30,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -109,6 +107,7 @@ public class SystemOTPServiceImpl implements SystemOTPService {
             systemOTP.setDeletedId(UserProfileUtils.getUserId());
             if (isVerified) {
                 systemOTP.setVerificationDate(currentDate);
+                systemOTP.setVerified(true);
             }
             return systemOTPRepository.save(systemOTP);
         }
@@ -143,28 +142,15 @@ public class SystemOTPServiceImpl implements SystemOTPService {
     }
 
     @Override
-    @Scheduled(cron = "0 0 0 * * *")
-    public void updateActiveOTPJob() {
-        LocalDateTime currentDate = LocalDateTime.now();
-        int pageSize = 50;
-        int pageNumber = 0;
+    public Page<SystemOTP> findExpiredOTP(LocalDateTime currentDate, Pageable pageable) {
+        return systemOTPRepository
+                .findExpiredOTP(currentDate,
+                        pageable);
+    }
 
-        Page<SystemOTP> systemOTPPage;
-        do {
-            Pageable pageable = PageRequest
-                    .of(pageNumber, pageSize);
-            systemOTPPage = systemOTPRepository
-                    .findExpiredOTP(currentDate, pageable);
-            List<SystemOTP> systemOTPUpdated = systemOTPPage
-                    .getContent();
-            systemOTPUpdated.forEach(otp -> {
-                otp.setActive(false);
-                otp.setDeleted(1);
-                otp.setDeletedDate(currentDate);
-            });
-            systemOTPRepository.saveAll(systemOTPUpdated);
-            pageNumber++;
-        } while (systemOTPPage.hasNext());
+    @Override
+    public void saveAllEntityList(List<SystemOTP> systemOTPList) {
+        systemOTPRepository.saveAll(systemOTPList);
     }
 
     private void sendEmailOTP(SendOTPReq sendOTPReq, AppUserDto appUserDto, Locale locale)
@@ -216,6 +202,7 @@ public class SystemOTPServiceImpl implements SystemOTPService {
         systemOTP.setOtpType(SendOTPEnum.EMAIL.getValue());
         systemOTP.setOtpCode(UUIDUtils.randomUUID());
         systemOTP.setActive(true);
+        systemOTP.setVerified(false);
         systemOTP.setExpiryDate(this.getOTPExpiryDate(currentDate));
         systemOTP.setCreatedDate(currentDate);
         systemOTP.setCreatedId(UserProfileUtils.getUserId());

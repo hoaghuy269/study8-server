@@ -34,7 +34,7 @@ public class SystemOTPValidator {
     public boolean validateBeforeSendOTP(AppUserDto appUserDto, Locale locale)
             throws CoreApplicationException {
         LocalDateTime currentDate = LocalDateTime.now();
-        this.validateAccount(appUserDto, locale);
+        this.validateAccount(appUserDto, locale, true);
         SystemOTPDto systemOTPDto = systemOTPService
                 .getByUserId(appUserDto.getId());
         if (ObjectUtils.isNotEmpty(systemOTPDto)) {
@@ -65,18 +65,19 @@ public class SystemOTPValidator {
             ExceptionUtils.throwCoreApplicationException(
                     SystemExceptionConstant.EXCEPTION_OTP_NOT_VALID, locale);
         }
-        this.validateAccount(appUserDto, locale); //Validate active account
+        this.validateAccount(appUserDto, locale, false); //Validate active account
         return true;
     }
 
-    private void validateAccount(AppUserDto appUserDto, Locale locale)
+    private void validateAccount(AppUserDto appUserDto, Locale locale, boolean isHasToken)
             throws CoreApplicationException {
         if (ObjectUtils.isEmpty(appUserDto)) { //Validate appUserDto
             ExceptionUtils.throwCoreApplicationException(
                     ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
         }
-        if (!UserProfileUtils.getUserId()
-                .equals(appUserDto.getId())) {
+        if ((UserProfileUtils.getUserId() != null
+                && !UserProfileUtils.getUserId().equals(appUserDto.getId()))
+                && isHasToken) {
             ExceptionUtils.throwCoreApplicationException(
                     ExceptionConstant.EXCEPTION_ACCOUNT_DOES_NOT_HAVE_PERMISSION, locale);
         }

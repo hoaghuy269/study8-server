@@ -24,7 +24,7 @@ public class AppUserValidator {
     @Autowired
     private AppUserService appUserService;
 
-    public boolean isAccountNotExits(String username, String phoneNumber, Locale locale)
+    public boolean validateBeforeRegister(String username, String phoneNumber, Locale locale)
             throws CoreApplicationException {
         AppUserDto appUserDto = appUserService.getByUsername(username);
         if (ObjectUtils.isNotEmpty(appUserDto)) {

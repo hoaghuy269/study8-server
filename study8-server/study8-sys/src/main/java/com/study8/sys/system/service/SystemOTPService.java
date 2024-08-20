@@ -6,7 +6,11 @@ import com.study8.sys.system.res.SendOTPRes;
 import com.study8.sys.system.dto.SystemOTPDto;
 import com.study8.sys.system.entity.SystemOTP;
 import com.study8.sys.system.res.VerifyOTPRes;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -26,5 +30,7 @@ public interface SystemOTPService {
     VerifyOTPRes verifyOTP(String username, String code, Locale locale)
             throws CoreApplicationException;
 
-    void updateActiveOTPJob();
+    Page<SystemOTP> findExpiredOTP(LocalDateTime currentDate, Pageable pageable);
+
+    void saveAllEntityList(List<SystemOTP> systemOTPList);
 }
