@@ -2,6 +2,7 @@ package com.study8.sys.system.schedule;
 
 import com.study8.sys.system.entity.SystemOTP;
 import com.study8.sys.system.service.SystemOTPService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,11 @@ import java.util.List;
  * @Desc: SystemOTP Schedule
  */
 @Component
+@Slf4j
 public class SystemOTPSchedule {
     @Autowired
     @Lazy
     private SystemOTPService systemOTPService;
-
-    private static final Logger log = LoggerFactory.getLogger(SystemOTPSchedule.class);
 
     @Scheduled(fixedRate = 600000)
     public void updateActiveOTPJob() {
@@ -36,6 +36,7 @@ public class SystemOTPSchedule {
         int pageNumber = 0;
 
         Page<SystemOTP> systemOTPPage;
+        log.info("SystemOTPSchedule | updateActiveOTPJob | Start task");
         try {
             do {
                 Pageable pageable = PageRequest
@@ -55,5 +56,6 @@ public class SystemOTPSchedule {
         } catch (Exception e) {
             log.error("SystemOTPSchedule | updateActiveOTPJob", e);
         }
+        log.info("SystemOTPSchedule | updateActiveOTPJob | End task");
     }
 }

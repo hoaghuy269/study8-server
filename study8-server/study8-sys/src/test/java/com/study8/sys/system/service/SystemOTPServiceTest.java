@@ -1,9 +1,7 @@
 package com.study8.sys.system.service;
 
 import com.study8.sys.system.entity.SystemOTP;
-import com.study8.sys.system.repository.SystemOTPRepository;
 import com.study8.sys.system.schedule.SystemOTPSchedule;
-import com.study8.sys.system.service.impl.SystemOTPServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
