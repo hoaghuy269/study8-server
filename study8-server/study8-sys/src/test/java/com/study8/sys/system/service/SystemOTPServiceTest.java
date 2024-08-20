@@ -2,6 +2,7 @@ package com.study8.sys.system.service;
 
 import com.study8.sys.system.entity.SystemOTP;
 import com.study8.sys.system.repository.SystemOTPRepository;
+import com.study8.sys.system.schedule.SystemOTPSchedule;
 import com.study8.sys.system.service.impl.SystemOTPServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,10 +31,10 @@ import static org.assertj.core.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class SystemOTPServiceTest {
     @Mock
-    private SystemOTPRepository systemOTPRepository;
+    private SystemOTPService systemOTPService;
 
     @InjectMocks
-    private SystemOTPServiceImpl systemOTPService;
+    private SystemOTPSchedule systemOTPSchedule;
 
     @Test
     void testUpdateActiveOTPJob() {
@@ -49,13 +50,13 @@ class SystemOTPServiceTest {
         List<SystemOTP> otpList = Collections.singletonList(otp);
         Page<SystemOTP> otpPage = new PageImpl<>(otpList, PageRequest.of(pageNumber, pageSize), 1);
 
-        when(systemOTPRepository.findExpiredOTP(any(LocalDateTime.class), any(Pageable.class)))
+        when(systemOTPService.findExpiredOTP(any(LocalDateTime.class), any(Pageable.class)))
                 .thenReturn(otpPage);
 
-        systemOTPService.updateActiveOTPJob();
+        systemOTPSchedule.updateActiveOTPJob();
 
-        verify(systemOTPRepository, times(1)).findExpiredOTP(any(LocalDateTime.class), any(Pageable.class));
-        verify(systemOTPRepository, times(1)).saveAll(otpList);
+        verify(systemOTPService, times(1)).findExpiredOTP(any(LocalDateTime.class), any(Pageable.class));
+        verify(systemOTPService, times(1)).saveAllEntityList(otpList);
 
         assertThat(otpList.get(0).getActive()).isFalse();
         assertThat(otpList.get(0).getDeleted()).isEqualTo(1);

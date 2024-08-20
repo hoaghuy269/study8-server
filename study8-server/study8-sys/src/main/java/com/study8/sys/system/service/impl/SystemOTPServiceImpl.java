@@ -144,28 +144,15 @@ public class SystemOTPServiceImpl implements SystemOTPService {
     }
 
     @Override
-    @Scheduled(cron = "0 0 0 * * *")
-    public void updateActiveOTPJob() {
-        LocalDateTime currentDate = LocalDateTime.now();
-        int pageSize = 50;
-        int pageNumber = 0;
+    public Page<SystemOTP> findExpiredOTP(LocalDateTime currentDate, Pageable pageable) {
+        return systemOTPRepository
+                .findExpiredOTP(currentDate,
+                        pageable);
+    }
 
-        Page<SystemOTP> systemOTPPage;
-        do {
-            Pageable pageable = PageRequest
-                    .of(pageNumber, pageSize);
-            systemOTPPage = systemOTPRepository
-                    .findExpiredOTP(currentDate, pageable);
-            List<SystemOTP> systemOTPUpdated = systemOTPPage
-                    .getContent();
-            systemOTPUpdated.forEach(otp -> {
-                otp.setActive(false);
-                otp.setDeleted(1);
-                otp.setDeletedDate(currentDate);
-            });
-            systemOTPRepository.saveAll(systemOTPUpdated);
-            pageNumber++;
-        } while (systemOTPPage.hasNext());
+    @Override
+    public void saveAllEntityList(List<SystemOTP> systemOTPList) {
+        systemOTPRepository.saveAll(systemOTPList);
     }
 
     private void sendEmailOTP(SendOTPReq sendOTPReq, AppUserDto appUserDto, Locale locale)
