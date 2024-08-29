@@ -17,18 +17,24 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class AppUserDto extends CoreDto {
+    private Long id;
     private String code;
     private String username;
     private String password;
+    private String email;
+    private String phoneNumber;
     private Integer active;
 
-    public AppUserDto(String code, String username, String password,
-                      Integer active, LocalDateTime createdDate, Long createdId,
-                      Integer deleted, LocalDateTime deletedDate, Long deletedId) {
+    public AppUserDto(Long id, String code, String username, String password,
+                      String email, String phoneNumber, Integer active, LocalDateTime createdDate,
+                      Long createdId, Integer deleted, LocalDateTime deletedDate, Long deletedId) {
+        this.id = id;
         this.code = code;
         this.username = username;
         this.password = password;
         this.active = active;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
         this.setCreatedDate(createdDate);
         this.setCreatedId(createdId);
         this.setDeleted(deleted);

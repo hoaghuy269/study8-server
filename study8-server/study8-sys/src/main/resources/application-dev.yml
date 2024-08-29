@@ -1,23 +1,61 @@
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_SERVER_URL:http://study8:2024study8@localhost:8761/eureka/}
+      defaultZone: ${EUREKA_SERVER_URL:http://study8:study82024@localhost:8761/eureka/}
   instance:
     hostname: ${EUREKA_SERVER_HOSTNAME:localhost}
     prefer-ip-address: true
 spring:
   application:
     name: study8-sys
+  devtools:
+    livereload:
+      enabled: false
+  cache:
+    type: caffeine
   datasource:
-    url: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres
-    username: postgres.gikzqewvhsgduqowpfld
-    password: BGYprG2kic..c68
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 30000
+      leakDetectionThreshold: 60000
+      data-source-properties:
+        cachePrepStmts: false
+        prepStmtCacheSize: 0
+        useServerPrepStmts: false
   jpa:
+    show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        use_sql_comments: true
+        type: trace
     hibernate:
       ddl-auto: none
+    open-in-view: false
+  mail:
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+    host: smtp.gmail.com
+    port: 587
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION:1800000}
 server:
   port: 8200
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE

@@ -1,19 +1,17 @@
 spring:
   application:
     name: study8-gateway
-  cloud:
-    gateway:
-      routes:
-        - id: study8-sys-auth
-          uri: ${EUREKA_ROUTES_URI:lb://study8-sys}
-          predicates:
-            - Path=/sys/api/v1/auth/**
-server:
-  port: 8300
 eureka:
   client:
     serviceUrl:
-      defaultZone: ${EUREKA_SERVER_URL:http://study8:2024study8@localhost:8761/eureka/}
+      defaultZone: ${EUREKA_SERVER_URL:http://study8:study82024@localhost:8761/eureka/}
   instance:
     hostname: localhost
     prefer-ip-address: true
+jwt:
+  secret: ${JWT_SECRET}
+study8:
+  sys:
+    uri: ${STUDY8_SYS_URI:lb://study8-sys}
+server:
+  port: 8300
