@@ -14,5 +14,4 @@ public class AuthExceptionConstant {
     public static final String EXCEPTION_AUTH_ACCOUNT_EXITS = "EXCEPTION_AUTH_ACCOUNT_EXITS";
     public static final String EXCEPTION_AUTH_ACCOUNT_NOT_VALID = "EXCEPTION_AUTH_ACCOUNT_NOT_VALID";
     public static final String EXCEPTION_AUTH_PHONE_NUMBER_EXITS = "EXCEPTION_AUTH_PHONE_NUMBER_EXITS";
-    public static final String EXCEPTION_AUTH_EMAIL_EXITS = "EXCEPTION_AUTH_EMAIL_EXITS";
 }

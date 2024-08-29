@@ -11,8 +11,6 @@ import com.study8.sys.auth.req.RegisterReq;
 import com.study8.sys.auth.service.AppUserService;
 import com.study8.sys.auth.validator.AppUserValidator;
 import com.study8.sys.config.SettingVariable;
-import com.study8.sys.constant.ExceptionConstant;
-import com.study8.sys.util.ExceptionUtils;
 import com.study8.sys.util.UUIDUtils;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
