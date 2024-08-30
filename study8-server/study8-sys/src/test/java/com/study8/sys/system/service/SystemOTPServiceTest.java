@@ -48,12 +48,12 @@ class SystemOTPServiceTest {
         List<SystemOTP> otpList = Collections.singletonList(otp);
         Page<SystemOTP> otpPage = new PageImpl<>(otpList, PageRequest.of(pageNumber, pageSize), 1);
 
-        when(systemOTPService.findExpiredOTP(any(LocalDateTime.class), any(Pageable.class)))
+        when(systemOTPService.getExpiredOTP(any(LocalDateTime.class), any(Pageable.class)))
                 .thenReturn(otpPage);
 
         systemOTPSchedule.updateActiveOTPJob();
 
-        verify(systemOTPService, times(1)).findExpiredOTP(any(LocalDateTime.class), any(Pageable.class));
+        verify(systemOTPService, times(1)).getExpiredOTP(any(LocalDateTime.class), any(Pageable.class));
         verify(systemOTPService, times(1)).saveAllEntityList(otpList);
 
         assertThat(otpList.get(0).getActive()).isFalse();
