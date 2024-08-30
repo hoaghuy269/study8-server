@@ -16,6 +16,8 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -24,6 +26,7 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -79,7 +82,7 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public AppUserDto getByPhoneNumber(String phoneNumber) {
+    public List<AppUserDto> getListByPhoneNumber(String phoneNumber) {
         return appUserRepository.findByPhoneNumber(phoneNumber);
     }
 
@@ -121,5 +124,17 @@ public class AppUserServiceImpl implements AppUserService {
         } else { //In thread
             appUserRepository.save(appUser);
         }
+    }
+
+    @Override
+    public boolean isEmailVerified(String email) {
+        return appUserValidator
+                .validateEmailVerified(email);
+    }
+
+    @Override
+    public List<AppUserDto> getListByEmail(String email) {
+        return appUserRepository
+                .findByEmail(email);
     }
 }

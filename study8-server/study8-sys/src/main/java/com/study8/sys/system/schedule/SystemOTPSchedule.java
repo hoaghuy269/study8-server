@@ -40,7 +40,7 @@ public class SystemOTPSchedule {
                 Pageable pageable = PageRequest
                         .of(pageNumber, pageSize);
                 systemOTPPage = systemOTPService
-                        .findExpiredOTP(currentDate, pageable);
+                        .getExpiredOTP(currentDate, pageable);
                 List<SystemOTP> systemOTPUpdated = systemOTPPage
                         .getContent();
                 systemOTPUpdated.forEach(otp -> {
