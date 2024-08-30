@@ -4,7 +4,6 @@ import com.study8.sys.auth.constant.AuthApiConstant;
 import com.study8.sys.constant.ApiConstant;
 import com.study8.sys.service.UserDetailsServiceImpl;
 import com.study8.sys.system.constant.SystemApiConstant;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
