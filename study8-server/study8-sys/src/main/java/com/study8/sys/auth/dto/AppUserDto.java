@@ -24,10 +24,13 @@ public class AppUserDto extends CoreDto {
     private String email;
     private String phoneNumber;
     private Integer active;
+    private Boolean emailVerified;
+    private Boolean phoneNumberVerified;
 
     public AppUserDto(Long id, String code, String username, String password,
                       String email, String phoneNumber, Integer active, LocalDateTime createdDate,
-                      Long createdId, Integer deleted, LocalDateTime deletedDate, Long deletedId) {
+                      Long createdId, Integer deleted, LocalDateTime deletedDate, Long deletedId,
+                      Boolean emailVerified, Boolean phoneNumberVerified) {
         this.id = id;
         this.code = code;
         this.username = username;
@@ -40,5 +43,7 @@ public class AppUserDto extends CoreDto {
         this.setDeleted(deleted);
         this.setDeletedDate(deletedDate);
         this.setDeletedId(deletedId);
+        this.emailVerified = emailVerified;
+        this.phoneNumberVerified = phoneNumberVerified;
     }
 }
