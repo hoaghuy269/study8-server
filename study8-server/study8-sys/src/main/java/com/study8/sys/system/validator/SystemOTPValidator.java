@@ -4,10 +4,12 @@ import com.study8.core.exception.CoreApplicationException;
 import com.study8.sys.auth.dto.AppUserDto;
 import com.study8.sys.auth.enumf.AccountActiveEnum;
 import com.study8.sys.auth.enumf.SendOTPEnum;
+import com.study8.sys.auth.service.AppUserService;
 import com.study8.sys.constant.ExceptionConstant;
 import com.study8.sys.system.constant.SystemExceptionConstant;
 import com.study8.sys.system.dto.SystemOTPDto;
 import com.study8.sys.system.entity.SystemOTP;
+import com.study8.sys.system.req.SendOTPReq;
 import com.study8.sys.system.service.SystemOTPService;
 import com.study8.sys.util.ExceptionUtils;
 import com.study8.sys.util.UserProfileUtils;
@@ -19,7 +21,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
-import java.util.Objects;
 
 /**
  * SystemOTPValidator
@@ -32,6 +33,10 @@ public class SystemOTPValidator {
     @Lazy
     @Autowired
     private SystemOTPService systemOTPService;
+
+    @Lazy
+    @Autowired
+    private AppUserService appUserService;
 
     public boolean validateBeforeSendOTP(AppUserDto appUserDto, Locale locale)
             throws CoreApplicationException {
@@ -98,5 +103,14 @@ public class SystemOTPValidator {
             ExceptionUtils.throwCoreApplicationException(
                     SystemExceptionConstant.EXCEPTION_ACCOUNT_HAS_BEEN_VERIFIED, locale);
         }
+    }
+
+    public boolean validateBeforeSendEmailOTP(SendOTPReq sendOTPReq, Locale locale)
+            throws CoreApplicationException {
+        if (appUserService.isEmailVerified(sendOTPReq.getEmail())) {
+            ExceptionUtils.throwCoreApplicationException(
+                    SystemExceptionConstant.EXCEPTION_EMAIL_HAS_BEEN_VERIFIED, locale);
+        }
+        return true;
     }
 }

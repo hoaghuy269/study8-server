@@ -30,7 +30,7 @@ public interface SystemOTPService {
     VerifyOTPRes verifyOTP(String username, String code, Locale locale)
             throws CoreApplicationException;
 
-    Page<SystemOTP> findExpiredOTP(LocalDateTime currentDate, Pageable pageable);
+    Page<SystemOTP> getExpiredOTP(LocalDateTime currentDate, Pageable pageable);
 
     void saveAllEntityList(List<SystemOTP> systemOTPList);
 }
