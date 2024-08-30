@@ -42,4 +42,3 @@ jobs:
         run: |
           cd ./study8-server
           mvn -s ./settings.xml -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=hoaghuy269_study8-server -DskipTests
-

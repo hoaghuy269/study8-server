@@ -33,8 +33,11 @@ public class AppUserValidator {
         }
         appUserDto = appUserService.getByPhoneNumber(phoneNumber);
         if (ObjectUtils.isNotEmpty(appUserDto)) {
-            ExceptionUtils.throwCoreApplicationException(
-                    AuthExceptionConstant.EXCEPTION_AUTH_PHONE_NUMBER_EXITS, locale);
+            if (appUserDto.getPhoneNumberVerified() != null &&
+                    appUserDto.getPhoneNumberVerified()) {
+                ExceptionUtils.throwCoreApplicationException(
+                        AuthExceptionConstant.EXCEPTION_AUTH_PHONE_NUMBER_EXITS, locale);
+            }
         }
         return true;
     }

@@ -3,6 +3,7 @@ package com.study8.sys.system.validator;
 import com.study8.core.exception.CoreApplicationException;
 import com.study8.sys.auth.dto.AppUserDto;
 import com.study8.sys.auth.enumf.AccountActiveEnum;
+import com.study8.sys.auth.enumf.SendOTPEnum;
 import com.study8.sys.constant.ExceptionConstant;
 import com.study8.sys.system.constant.SystemExceptionConstant;
 import com.study8.sys.system.dto.SystemOTPDto;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * SystemOTPValidator
@@ -64,6 +66,15 @@ public class SystemOTPValidator {
         if (ObjectUtils.isEmpty(systemOTPDto)) { //Validate data
             ExceptionUtils.throwCoreApplicationException(
                     SystemExceptionConstant.EXCEPTION_OTP_NOT_VALID, locale);
+        }
+        if (systemOTPDto.getOtpType() == null) {
+            ExceptionUtils.throwCoreApplicationException(
+                    ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
+        }
+        SendOTPEnum sendOTPEnum = SendOTPEnum.resolveByValue(systemOTPDto.getOtpType());
+        if (SendOTPEnum.UNKNOWN.equals(sendOTPEnum)) {
+            ExceptionUtils.throwCoreApplicationException(
+                    ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
         }
         this.validateAccount(appUserDto, locale, false); //Validate active account
         return true;
