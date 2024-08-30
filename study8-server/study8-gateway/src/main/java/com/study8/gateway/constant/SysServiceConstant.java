@@ -16,4 +16,5 @@ public class SysServiceConstant {
     public static final String SYS_SYSTEM_ROUTE_ID = "study8-sys-system";
     public static final String SYS_SYSTEM_PATH = "/sys/api/v1/system/**";
     public static final String SYS_AUTH_API_LOGIN = "/sys/api/v1/auth/login";
+    public static final String SYS_AUTH_API_REGISTER = "/sys/api/v1/auth/register";
 }

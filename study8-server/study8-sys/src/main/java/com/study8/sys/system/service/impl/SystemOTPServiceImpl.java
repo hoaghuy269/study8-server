@@ -126,7 +126,8 @@ public class SystemOTPServiceImpl implements SystemOTPService {
                 appUserDto, systemOTPDto, locale)) { //Validate
             //Active account
             AppUser appUserUpdated = appUserService
-                    .activeAccount(appUserDto.getId());
+                    .activeAccount(appUserDto.getId(),
+                            systemOTPDto.getOtpType());
             SystemOTP systemOTPUpdated = this.updateActive(
                     systemOTPDto.getId(), true);
             if (ObjectUtils.isEmpty(appUserUpdated)

@@ -21,7 +21,7 @@ public interface AppUserService {
 
     AppUserDto getByPhoneNumber(String phoneNumber);
 
-    AppUser activeAccount(Long userId);
+    AppUser activeAccount(Long userId, Integer activeType);
 
     void updateAccount(AppUserDto appUserDto, boolean isUpdateInNewThread);
 }

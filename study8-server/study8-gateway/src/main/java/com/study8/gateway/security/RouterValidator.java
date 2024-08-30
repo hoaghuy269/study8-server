@@ -19,7 +19,8 @@ import java.util.function.Predicate;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RouterValidator {
     public static final List<String> openApiEndpoints = List.of(
-            SysServiceConstant.SYS_AUTH_API_LOGIN
+            SysServiceConstant.SYS_AUTH_API_LOGIN,
+            SysServiceConstant.SYS_AUTH_API_REGISTER
     );
 
     public static final Predicate<ServerHttpRequest> isSecured =

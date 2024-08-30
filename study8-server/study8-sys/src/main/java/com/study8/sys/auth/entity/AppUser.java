@@ -38,8 +38,14 @@ public class AppUser extends CoreEntity {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "email_verified")
+    private Boolean emailVerified;
+
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Column(name = "phone_number_verified")
+    private Boolean phoneNumberVerified;
 
     @Column(name = "active")
     private Integer active;

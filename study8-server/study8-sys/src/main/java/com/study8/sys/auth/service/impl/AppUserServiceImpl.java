@@ -5,6 +5,7 @@ import com.study8.core.exception.CoreApplicationException;
 import com.study8.sys.auth.dto.AppUserDto;
 import com.study8.sys.auth.entity.AppUser;
 import com.study8.sys.auth.enumf.AccountActiveEnum;
+import com.study8.sys.auth.enumf.SendOTPEnum;
 import com.study8.sys.auth.repository.AppUserRepository;
 import com.study8.sys.auth.req.RegisterReq;
 import com.study8.sys.auth.service.AppUserService;
@@ -65,6 +66,8 @@ public class AppUserServiceImpl implements AppUserService {
             appUserInsert.setActive(AccountActiveEnum.INACTIVE.getValue());
             appUserInsert.setCreatedDate(today);
             appUserInsert.setPhoneNumber(registerReq.getPhoneNumber());
+            appUserInsert.setEmailVerified(false);
+            appUserInsert.setPhoneNumberVerified(false);
             appUserInsert.setCreatedId(SettingVariable.SYSTEM_ADMIN_ID);
             AppUser appUser = appUserRepository.save(appUserInsert);
             if (ObjectUtils.isNotEmpty(appUser)) {
@@ -81,12 +84,20 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public AppUser activeAccount(Long userId) {
+    public AppUser activeAccount(Long userId, Integer activeType) {
         Optional<AppUser> appUserOptional = appUserRepository
                 .findById(userId);
         if (appUserOptional.isPresent()) {
             AppUser appUser = appUserOptional.get();
             appUser.setActive(AccountActiveEnum.ACTIVE.getValue());
+            SendOTPEnum sendOTPEnum = SendOTPEnum.resolveByValue(activeType);
+            switch (sendOTPEnum) {
+                case EMAIL -> appUser.setEmailVerified(true);
+                case PHONE_NUMBER -> appUser.setPhoneNumberVerified(true);
+                case UNKNOWN -> {
+                    return null;
+                }
+            }
             return appUserRepository.save(appUser);
         }
         return null;
