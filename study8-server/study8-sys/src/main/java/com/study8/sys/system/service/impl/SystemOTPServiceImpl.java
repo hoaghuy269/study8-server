@@ -143,7 +143,7 @@ public class SystemOTPServiceImpl implements SystemOTPService {
     }
 
     @Override
-    public Page<SystemOTP> findExpiredOTP(LocalDateTime currentDate, Pageable pageable) {
+    public Page<SystemOTP> getExpiredOTP(LocalDateTime currentDate, Pageable pageable) {
         return systemOTPRepository
                 .findExpiredOTP(currentDate,
                         pageable);
@@ -156,34 +156,37 @@ public class SystemOTPServiceImpl implements SystemOTPService {
 
     private void sendEmailOTP(SendOTPReq sendOTPReq, AppUserDto appUserDto, Locale locale)
             throws CoreApplicationException {
-        SystemOTP systemOTP = this.generateOTPEmail(appUserDto, locale);
-        if (ObjectUtils.isNotEmpty(systemOTP)) {
-            SendEmailDto sendEmailDto = new SendEmailDto();
-            sendEmailDto.setTo(Collections.singletonList(
-                    sendOTPReq.getEmail()));
-            sendEmailDto.setTemplateCode(EmailEnum.OTP_EMAIL.toString());
-            sendEmailDto.setSubject(ResourceUtils
-                    .getMessage(SysConstant.EMAIL_001_SUBJECT,
-                            locale));
-            Map<String, Object> mapData = new HashMap<>(); //Data
-            mapData.put("verifyUrl", this.getVerifyUrl(systemOTP.getOtpCode(),
-                    sendOTPReq.getUsername()));
-            mapData.put("domain", this.getDomain(locale));
-            mapData.put("userName", sendOTPReq.getUsername());
-            sendEmailDto.setMapData(mapData);
-            //Do send email
-            SendEmailResultDto sendEmailResultDto = emailService
-                    .sendEmailSMTP(sendEmailDto, locale);
-            if (ObjectUtils.isNotEmpty(sendEmailResultDto)
-                    && sendEmailResultDto.getIsSuccess()) {
-                LocalDateTime sentDate = sendEmailResultDto
-                        .getTime();
-                Optional<SystemOTP> systemOTPUpdate = systemOTPRepository
-                        .findById(systemOTP.getId());
-                systemOTPUpdate.ifPresent(otp -> {
-                    otp.setSentDate(sentDate);
-                    systemOTPRepository.save(otp); //Update
-                });
+        if (systemOTPValidator.validateBeforeSendEmailOTP(
+                sendOTPReq, locale)) {
+            SystemOTP systemOTP = this.generateOTPEmail(appUserDto, locale);
+            if (ObjectUtils.isNotEmpty(systemOTP)) {
+                SendEmailDto sendEmailDto = new SendEmailDto();
+                sendEmailDto.setTo(Collections.singletonList(
+                        sendOTPReq.getEmail()));
+                sendEmailDto.setTemplateCode(EmailEnum.OTP_EMAIL.toString());
+                sendEmailDto.setSubject(ResourceUtils
+                        .getMessage(SysConstant.EMAIL_001_SUBJECT,
+                                locale));
+                Map<String, Object> mapData = new HashMap<>(); //Data
+                mapData.put("verifyUrl", this.getVerifyUrl(systemOTP.getOtpCode(),
+                        sendOTPReq.getUsername()));
+                mapData.put("domain", this.getDomain(locale));
+                mapData.put("userName", sendOTPReq.getUsername());
+                sendEmailDto.setMapData(mapData);
+                //Do send email
+                SendEmailResultDto sendEmailResultDto = emailService
+                        .sendEmailSMTP(sendEmailDto, locale);
+                if (ObjectUtils.isNotEmpty(sendEmailResultDto)
+                        && sendEmailResultDto.getIsSuccess()) {
+                    LocalDateTime sentDate = sendEmailResultDto
+                            .getTime();
+                    Optional<SystemOTP> systemOTPUpdate = systemOTPRepository
+                            .findById(systemOTP.getId());
+                    systemOTPUpdate.ifPresent(otp -> {
+                        otp.setSentDate(sentDate);
+                        systemOTPRepository.save(otp); //Update
+                    });
+                }
             }
         }
     }
