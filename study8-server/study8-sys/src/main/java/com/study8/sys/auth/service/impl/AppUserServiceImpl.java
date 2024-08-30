@@ -94,6 +94,9 @@ public class AppUserServiceImpl implements AppUserService {
             switch (sendOTPEnum) {
                 case EMAIL -> appUser.setEmailVerified(true);
                 case PHONE_NUMBER -> appUser.setPhoneNumberVerified(true);
+                case UNKNOWN -> {
+                    return null;
+                }
             }
             return appUserRepository.save(appUser);
         }
