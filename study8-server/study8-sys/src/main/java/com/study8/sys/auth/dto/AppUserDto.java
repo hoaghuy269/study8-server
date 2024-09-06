@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 /**
  * AppUserDto
  * @Date: 2024-06-01
@@ -26,24 +24,4 @@ public class AppUserDto extends CoreDto {
     private Integer active;
     private Boolean emailVerified;
     private Boolean phoneNumberVerified;
-
-    public AppUserDto(Long id, String code, String username, String password,
-                      String email, String phoneNumber, Integer active, LocalDateTime createdDate,
-                      Long createdId, Integer deleted, LocalDateTime deletedDate, Long deletedId,
-                      Boolean emailVerified, Boolean phoneNumberVerified) {
-        this.id = id;
-        this.code = code;
-        this.username = username;
-        this.password = password;
-        this.active = active;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.setCreatedDate(createdDate);
-        this.setCreatedId(createdId);
-        this.setDeleted(deleted);
-        this.setDeletedDate(deletedDate);
-        this.setDeletedId(deletedId);
-        this.emailVerified = emailVerified;
-        this.phoneNumberVerified = phoneNumberVerified;
-    }
 }
