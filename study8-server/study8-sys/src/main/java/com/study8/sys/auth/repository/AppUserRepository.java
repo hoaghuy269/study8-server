@@ -1,6 +1,5 @@
 package com.study8.sys.auth.repository;
 
-import com.study8.sys.auth.dto.AppUserDto;
 import com.study8.sys.auth.entity.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

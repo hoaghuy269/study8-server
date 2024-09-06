@@ -1,6 +1,5 @@
 package com.study8.sys.system.repository;
 
-import com.study8.sys.system.dto.SystemConfigDto;
 import com.study8.sys.system.entity.SystemConfig;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
