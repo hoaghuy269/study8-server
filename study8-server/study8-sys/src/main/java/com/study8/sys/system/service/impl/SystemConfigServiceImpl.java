@@ -1,6 +1,8 @@
 package com.study8.sys.system.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study8.sys.system.dto.SystemConfigDto;
+import com.study8.sys.system.entity.SystemConfig;
 import com.study8.sys.system.repository.SystemConfigRepository;
 import com.study8.sys.system.service.SystemConfigService;
 import org.apache.commons.lang3.ObjectUtils;
@@ -9,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +26,9 @@ import java.util.stream.Collectors;
 public class SystemConfigServiceImpl implements SystemConfigService {
     @Autowired
     SystemConfigRepository systemConfigRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Override
     public Integer getIntValue(String code, String groupCode) {
@@ -52,13 +55,13 @@ public class SystemConfigServiceImpl implements SystemConfigService {
     @Override
     public Map<String, String> getListStringValue(String groupCode) {
         Map<String, String> result = new HashMap<>();
-        List<SystemConfigDto> systemConfigDtoList = systemConfigRepository
+        List<SystemConfig> systemConfigList = systemConfigRepository
                 .findListByGroupCode(groupCode);
-        if (!CollectionUtils.isEmpty(systemConfigDtoList)) {
-            return systemConfigDtoList.stream()
+        if (!CollectionUtils.isEmpty(systemConfigList)) {
+            return systemConfigList.stream()
                     .filter(item -> StringUtils.isNotEmpty(item.getValue())
                             && StringUtils.isNotEmpty(item.getCode()))
-                    .collect(Collectors.toMap(SystemConfigDto::getCode, SystemConfigDto::getValue));
+                    .collect(Collectors.toMap(SystemConfig::getCode, SystemConfig::getValue));
         }
         return result;
     }
@@ -76,6 +79,12 @@ public class SystemConfigServiceImpl implements SystemConfigService {
     }
 
     private SystemConfigDto findConfigByCodeAndGroupCode(String code, String groupCode) {
-        return systemConfigRepository.findByCodeAndGroupCode(code, groupCode);
+        SystemConfig systemConfig = systemConfigRepository
+                .findByCodeAndGroupCode(code, groupCode);
+        if (ObjectUtils.isNotEmpty(systemConfig)) {
+            return objectMapper.convertValue(
+                    systemConfig, SystemConfigDto.class);
+        }
+        return null;
     }
 }
