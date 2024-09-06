@@ -17,13 +17,13 @@ import java.util.List;
  */
 @Repository
 public interface SystemConfigRepository extends JpaRepository<SystemConfig, Long> {
-    @Query("SELECT new com.study8.sys.system.dto.SystemConfigDto(sc.groupCode, sc.code, sc.value, sc.createdDate, sc.createdId, sc.deleted, sc.deletedDate, sc.deletedId) " +
-            "FROM SystemConfig sc WHERE sc.code = :code " +
+    @Query("SELECT sc FROM SystemConfig sc " +
+            "WHERE sc.code = :code " +
                 "AND sc.groupCode = :groupCode")
-    SystemConfigDto findByCodeAndGroupCode(@Param("code") String code,
+    SystemConfig findByCodeAndGroupCode(@Param("code") String code,
                                            @Param("groupCode") String groupCode);
 
-    @Query("SELECT new com.study8.sys.system.dto.SystemConfigDto(sc.groupCode, sc.code, sc.value, sc.createdDate, sc.createdId, sc.deleted, sc.deletedDate, sc.deletedId) " +
-            "FROM SystemConfig sc WHERE sc.groupCode = :groupCode")
-    List<SystemConfigDto> findListByGroupCode(@Param("groupCode") String groupCode);
+    @Query("SELECT sc FROM SystemConfig sc " +
+            "WHERE sc.groupCode = :groupCode")
+    List<SystemConfig> findListByGroupCode(@Param("groupCode") String groupCode);
 }

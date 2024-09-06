@@ -20,18 +20,4 @@ public class SystemConfigDto extends CoreDto {
     private String groupCode;
     private String code;
     private String value;
-
-    public SystemConfigDto(String groupCode, String code, String value,
-                           LocalDateTime createdDate, Long createdId,
-                           Integer deleted, LocalDateTime deletedDate,
-                           Long deletedId) {
-        this.groupCode = groupCode;
-        this.code = code;
-        this.value = value;
-        this.setCreatedDate(createdDate);
-        this.setCreatedId(createdId);
-        this.setDeleted(deleted);
-        this.setDeletedDate(deletedDate);
-        this.setDeletedId(deletedId);
-    }
 }
