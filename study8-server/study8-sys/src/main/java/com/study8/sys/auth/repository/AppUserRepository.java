@@ -1,11 +1,12 @@
 package com.study8.sys.auth.repository;
 
-import com.study8.sys.auth.dto.AppUserDto;
 import com.study8.sys.auth.entity.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * AppUserRepository
@@ -15,15 +16,18 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
-    @Query("SELECT new com.study8.sys.auth.dto.AppUserDto(u.id, u.code, u.username, u.password, u.email, u.phoneNumber, u.active, " +
-                "u.createdDate, u.createdId, u.deleted, u.deletedDate, u.deletedId, u.emailVerified, u.phoneNumberVerified) " +
-            "FROM AppUser u WHERE u.username = :username " +
+    @Query("SELECT u FROM AppUser u " +
+            "WHERE u.username = :username " +
                 "AND COALESCE(u.deleted, 0) = 0")
-    AppUserDto findByUsername(@Param("username") String username);
+    AppUser findByUsername(@Param("username") String username);
 
-    @Query("SELECT new com.study8.sys.auth.dto.AppUserDto(u.id, u.code, u.username, u.password, u.email, u.phoneNumber, u.active, " +
-                "u.createdDate, u.createdId, u.deleted, u.deletedDate, u.deletedId, u.emailVerified, u.phoneNumberVerified) " +
-            "FROM AppUser u WHERE u.phoneNumber = :phoneNumber " +
+    @Query("SELECT u FROM AppUser u " +
+            "WHERE u.phoneNumber = :phoneNumber " +
                 "AND COALESCE(u.deleted, 0) = 0")
-    AppUserDto findByPhoneNumber(@Param("phoneNumber") String phoneNumber);
+    List<AppUser> findByPhoneNumber(@Param("phoneNumber") String phoneNumber);
+
+    @Query("SELECT u FROM AppUser u " +
+            "WHERE u.email = :email " +
+            "AND COALESCE(u.deleted, 0) = 0")
+    List<AppUser> findByEmail(@Param("email") String email);
 }

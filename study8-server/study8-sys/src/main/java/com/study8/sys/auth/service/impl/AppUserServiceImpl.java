@@ -14,6 +14,7 @@ import com.study8.sys.config.SettingVariable;
 import com.study8.sys.util.UUIDUtils;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,6 +25,8 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -50,7 +53,12 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public AppUserDto getByUsername(String username) {
-        return appUserRepository.findByUsername(username);
+        AppUser appUser = appUserRepository.findByUsername(username);
+        if (ObjectUtils.isNotEmpty(appUser)) {
+            return objectMapper.convertValue(
+                    appUser, AppUserDto.class);
+        }
+        return null;
     }
 
     @Override
@@ -79,8 +87,15 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public AppUserDto getByPhoneNumber(String phoneNumber) {
-        return appUserRepository.findByPhoneNumber(phoneNumber);
+    public List<AppUserDto> getListByPhoneNumber(String phoneNumber) {
+        List<AppUser> appUserList = appUserRepository
+                .findByPhoneNumber(phoneNumber);
+        if (CollectionUtils.isNotEmpty(appUserList)) {
+            return appUserList.stream()
+                    .map(appUser -> objectMapper.convertValue(appUser, AppUserDto.class))
+                    .toList();
+        }
+        return Collections.emptyList();
     }
 
     @Override
@@ -121,5 +136,23 @@ public class AppUserServiceImpl implements AppUserService {
         } else { //In thread
             appUserRepository.save(appUser);
         }
+    }
+
+    @Override
+    public boolean isEmailVerified(String email) {
+        return appUserValidator
+                .validateEmailVerified(email);
+    }
+
+    @Override
+    public List<AppUserDto> getListByEmail(String email) {
+        List<AppUser> appUserList = appUserRepository
+                .findByEmail(email);
+        if (CollectionUtils.isNotEmpty(appUserList)) {
+            return appUserList.stream()
+                    .map(appUser -> objectMapper.convertValue(appUser, AppUserDto.class))
+                    .toList();
+        }
+        return Collections.emptyList();
     }
 }
