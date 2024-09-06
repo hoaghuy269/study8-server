@@ -94,7 +94,7 @@ public class AppUserServiceImpl implements AppUserService {
         if (CollectionUtils.isNotEmpty(appUserList)) {
             return appUserList.stream()
                     .map(appUser -> objectMapper.convertValue(appUser, AppUserDto.class))
-                    .collect(Collectors.toList());
+                    .toList();
         }
         return Collections.emptyList();
     }
@@ -152,7 +152,7 @@ public class AppUserServiceImpl implements AppUserService {
         if (CollectionUtils.isNotEmpty(appUserList)) {
             return appUserList.stream()
                     .map(appUser -> objectMapper.convertValue(appUser, AppUserDto.class))
-                    .collect(Collectors.toList());
+                    .toList();
         }
         return Collections.emptyList();
     }
