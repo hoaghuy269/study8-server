@@ -2,15 +2,21 @@ package com.study8.sys.auth.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study8.core.exception.CoreApplicationException;
+import com.study8.sys.auth.dto.AppRoleDto;
 import com.study8.sys.auth.dto.AppUserDto;
+import com.study8.sys.auth.entity.AppRole;
 import com.study8.sys.auth.entity.AppUser;
 import com.study8.sys.auth.enumf.AccountActiveEnum;
+import com.study8.sys.auth.enumf.RoleEnum;
 import com.study8.sys.auth.enumf.SendOTPEnum;
 import com.study8.sys.auth.repository.AppUserRepository;
 import com.study8.sys.auth.req.RegisterReq;
+import com.study8.sys.auth.service.AppRoleService;
 import com.study8.sys.auth.service.AppUserService;
 import com.study8.sys.auth.validator.AppUserValidator;
 import com.study8.sys.config.SettingVariable;
+import com.study8.sys.system.constant.SystemExceptionConstant;
+import com.study8.sys.util.ExceptionUtils;
 import com.study8.sys.util.UUIDUtils;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -26,9 +32,11 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * AppUserServiceImpl
@@ -50,6 +58,9 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Autowired
     private PlatformTransactionManager platformTransactionManager;
+
+    @Autowired
+    private AppRoleService appRoleService;
 
     @Override
     public AppUserDto getByUsername(String username) {
@@ -77,6 +88,22 @@ public class AppUserServiceImpl implements AppUserService {
             appUserInsert.setEmailVerified(false);
             appUserInsert.setPhoneNumberVerified(false);
             appUserInsert.setCreatedId(SettingVariable.SYSTEM_ADMIN_ID);
+
+            //ROLE_VISITOR
+            Set<AppRole> appRoleSet = new HashSet<>();
+            AppRoleDto roleVisitorDto = appRoleService
+                    .getByName(RoleEnum.ROLE_VISITOR
+                            .getValue());
+            if (ObjectUtils.isEmpty(roleVisitorDto)) {
+                ExceptionUtils.throwCoreApplicationException(
+                        SystemExceptionConstant.EXCEPTION_OTP_NOT_VALID, locale);
+            }
+            appRoleSet.add(objectMapper
+                    .convertValue(roleVisitorDto,
+                            AppRole.class));
+            appUserInsert.setRoles(appRoleSet);
+
+            //Do save data
             AppUser appUser = appUserRepository.save(appUserInsert);
             if (ObjectUtils.isNotEmpty(appUser)) {
                 return objectMapper.convertValue(
