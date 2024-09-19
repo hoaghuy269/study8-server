@@ -1,5 +1,6 @@
 package com.study8.sys.auth.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study8.core.entity.CoreEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -50,6 +51,7 @@ public class AppUser extends CoreEntity {
     @Column(name = "active")
     private Integer active;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "app_user_role",
             joinColumns = @JoinColumn(name = "user_id"),

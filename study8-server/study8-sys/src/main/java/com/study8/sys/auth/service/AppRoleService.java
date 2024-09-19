@@ -1,6 +1,9 @@
 package com.study8.sys.auth.service;
 
 import com.study8.sys.auth.dto.AppRoleDto;
+import com.study8.sys.auth.entity.AppRole;
+
+import java.util.Set;
 
 /**
  * AppRoleService
@@ -10,4 +13,6 @@ import com.study8.sys.auth.dto.AppRoleDto;
  */
 public interface AppRoleService {
     AppRoleDto getByName(String name);
+
+    Set<AppRole> getSetByUserId(Long userId);
 }

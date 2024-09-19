@@ -148,6 +148,11 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public void updateAccount(AppUserDto appUserDto, boolean isUpdateInNewThread) {
         AppUser appUser = objectMapper.convertValue(appUserDto, AppUser.class);
+        Set<AppRole> appRoleSet = appRoleService
+                .getSetByUserId(appUser.getId());
+        if (CollectionUtils.isNotEmpty(appRoleSet)) {
+            appUser.setRoles(appRoleSet);
+        }
         if (isUpdateInNewThread) { //New thread
             TransactionTemplate transactionTemplate = new TransactionTemplate(
                     platformTransactionManager);
