@@ -3,6 +3,7 @@ package com.study8.sys.system.validator;
 import com.study8.core.exception.CoreApplicationException;
 import com.study8.sys.auth.dto.AppUserDto;
 import com.study8.sys.auth.enumf.AccountActiveEnum;
+import com.study8.sys.auth.enumf.RoleEnum;
 import com.study8.sys.auth.enumf.SendOTPEnum;
 import com.study8.sys.auth.service.AppUserService;
 import com.study8.sys.constant.ExceptionConstant;
@@ -93,6 +94,11 @@ public class SystemOTPValidator {
         }
         if ((UserProfileUtils.getUserId() != null
                 && !UserProfileUtils.getUserId().equals(appUserDto.getId()))
+                && isHasToken) {
+            ExceptionUtils.throwCoreApplicationException(
+                    ExceptionConstant.EXCEPTION_ACCOUNT_DOES_NOT_HAVE_PERMISSION, locale);
+        }
+        if (!UserProfileUtils.hasRole(RoleEnum.ROLE_VISITOR)
                 && isHasToken) {
             ExceptionUtils.throwCoreApplicationException(
                     ExceptionConstant.EXCEPTION_ACCOUNT_DOES_NOT_HAVE_PERMISSION, locale);

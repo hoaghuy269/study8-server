@@ -11,6 +11,8 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 /**
  * AppRoleServiceImpl
  * @Date: 2024-06-01
@@ -35,5 +37,11 @@ public class AppRoleServiceImpl implements AppRoleService {
                     appRole, AppRoleDto.class);
         }
         return null;
+    }
+
+    @Override
+    public Set<AppRole> getSetByUserId(Long userId) {
+        return appRoleRepository
+                .findByUserId(userId);
     }
 }
