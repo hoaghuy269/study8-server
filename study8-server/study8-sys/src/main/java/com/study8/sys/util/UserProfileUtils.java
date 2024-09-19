@@ -44,7 +44,6 @@ public class UserProfileUtils {
     }
 
     public static boolean hasRole(RoleEnum role) {
-        Collection<? extends GrantedAuthority> roleEnums = Objects.requireNonNull(getUserDetail()).getAuthorities();
         return Optional.ofNullable(getUserDetail())
                 .map(UserDetailsImpl::getAuthorities)
                 .orElse(Collections.emptyList())
