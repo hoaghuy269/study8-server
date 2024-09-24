@@ -4,6 +4,7 @@ import com.study8.core.exception.CoreApplicationException;
 import com.study8.sys.auth.dto.AppUserDto;
 import com.study8.sys.auth.entity.AppUser;
 import com.study8.sys.auth.enumf.SendOTPEnum;
+import com.study8.sys.config.SettingVariable;
 import com.study8.sys.system.req.SendOTPReq;
 import com.study8.sys.system.res.SendOTPRes;
 import com.study8.sys.auth.service.AppUserService;
@@ -26,12 +27,17 @@ import com.study8.sys.util.ExceptionUtils;
 import com.study8.sys.util.ResourceUtils;
 import com.study8.sys.util.UUIDUtils;
 import com.study8.sys.util.UserProfileUtils;
+import lombok.NonNull;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -65,6 +71,9 @@ public class SystemOTPServiceImpl implements SystemOTPService {
     @Autowired
     private SystemOTPValidator systemOTPValidator;
 
+    @Autowired
+    private PlatformTransactionManager platformTransactionManager;
+
     @Override
     public SendOTPRes sendOTP(SendOTPReq sendOTPReq, Locale locale)
             throws CoreApplicationException {
@@ -95,7 +104,8 @@ public class SystemOTPServiceImpl implements SystemOTPService {
     }
 
     @Override
-    public SystemOTP updateActive(Long systemOTPId, boolean isVerified) {
+    public SystemOTP updateActive(Long systemOTPId, boolean isVerified,
+                                  boolean isUpdateInNewThread) {
         LocalDateTime currentDate = LocalDateTime.now();
         Optional<SystemOTP> systemOTPOptional = systemOTPRepository
                 .findById(systemOTPId);
@@ -104,12 +114,26 @@ public class SystemOTPServiceImpl implements SystemOTPService {
             systemOTP.setActive(false);
             systemOTP.setDeleted(1);
             systemOTP.setDeletedDate(currentDate);
-            systemOTP.setDeletedId(UserProfileUtils.getUserId());
+            systemOTP.setDeletedId(SettingVariable.SYSTEM_ADMIN_ID);
             if (isVerified) {
                 systemOTP.setVerificationDate(currentDate);
                 systemOTP.setVerified(true);
             }
-            return systemOTPRepository.save(systemOTP);
+            if (isUpdateInNewThread) { //New thread
+                TransactionTemplate transactionTemplate = new TransactionTemplate(
+                        platformTransactionManager);
+                Runnable saveMERequirementDetailHist = () -> transactionTemplate
+                        .execute(new TransactionCallbackWithoutResult() {
+                            @Override
+                            protected void doInTransactionWithoutResult(@NonNull TransactionStatus status) {
+                                systemOTPRepository.save(systemOTP);
+                            }
+                        });
+                Thread thread = new Thread(saveMERequirementDetailHist);
+                thread.start();
+            } else { //In thread
+                return systemOTPRepository.save(systemOTP);
+            }
         }
         return null;
     }
@@ -129,7 +153,7 @@ public class SystemOTPServiceImpl implements SystemOTPService {
                     .activeAccount(appUserDto.getId(),
                             systemOTPDto.getOtpType());
             SystemOTP systemOTPUpdated = this.updateActive(
-                    systemOTPDto.getId(), true);
+                    systemOTPDto.getId(), true, false);
             if (ObjectUtils.isEmpty(appUserUpdated)
                     || ObjectUtils.isEmpty(systemOTPUpdated)) {
                 ExceptionUtils.throwCoreApplicationException(
@@ -177,7 +201,7 @@ public class SystemOTPServiceImpl implements SystemOTPService {
                 SendEmailResultDto sendEmailResultDto = emailService
                         .sendEmailSMTP(sendEmailDto, locale);
                 if (ObjectUtils.isNotEmpty(sendEmailResultDto)
-                        && sendEmailResultDto.getIsSuccess()) {
+                        && sendEmailResultDto.getIsSuccess()) { //Send email success
                     LocalDateTime sentDate = sendEmailResultDto
                             .getTime();
                     Optional<SystemOTP> systemOTPUpdate = systemOTPRepository
@@ -186,6 +210,11 @@ public class SystemOTPServiceImpl implements SystemOTPService {
                         otp.setSentDate(sentDate);
                         systemOTPRepository.save(otp); //Update
                     });
+                } else { //Send email fail
+                    this.updateActive(systemOTP.getId(),
+                            false, true);
+                    ExceptionUtils.throwCoreApplicationException(
+                            ExceptionConstant.EXCEPTION_TRY_AGAIN, locale);
                 }
             }
         }
