@@ -25,7 +25,7 @@ public interface SystemOTPService {
 
     SystemOTPDto getByUserId(Long userId);
 
-    SystemOTP updateActive(Long systemOTPId, boolean isVerified);
+    SystemOTP updateActive(Long systemOTPId, boolean isVerified, boolean isUpdateInNewThread);
 
     VerifyOTPRes verifyOTP(String username, String code, Locale locale)
             throws CoreApplicationException;

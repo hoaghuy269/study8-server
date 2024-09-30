@@ -25,6 +25,7 @@
 		<module>study8-api</module>
 		<module>study8-sys</module>
 		<module>study8-gateway</module>
+		<module>study8-biz</module>
 	</modules>
 
 	<build>

@@ -71,6 +71,7 @@ public class EmailServiceImpl implements EmailService {
             sendEmailResultDto.setIsSuccess(false);
             sendEmailResultDto.setErrorMessage(e.getMessage());
             sendEmailResultDto.setTime(currentDate);
+            return sendEmailResultDto;
         }
         //Success
         sendEmailResultDto.setIsSuccess(true);
