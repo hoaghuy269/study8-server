@@ -18,7 +18,6 @@ import com.study8.sys.auth.service.AppRoleService;
 import com.study8.sys.auth.service.AppUserService;
 import com.study8.sys.auth.validator.AppUserValidator;
 import com.study8.sys.config.SettingVariable;
-import com.study8.sys.constant.ExceptionConstant;
 import com.study8.sys.system.constant.SystemExceptionConstant;
 import com.study8.sys.system.enumf.SystemErrorEnum;
 import com.study8.sys.system.enumf.SystemErrorPriorityEnum;
