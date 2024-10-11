@@ -2,6 +2,7 @@ package com.study8.sys.config;
 
 import com.study8.sys.constant.SysConstant;
 import com.study8.sys.system.service.SystemConfigService;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +19,13 @@ import java.util.Properties;
  * @Author: HuyNH
  * @Desc: Mail Config
  */
+@Getter
 @Configuration
 public class MailConfig {
+    private String mailHost;
+    private int mailPort;
+    private String emailServer;
+
     @Bean
     @Lazy
     public JavaMailSender javaMailSender(
@@ -44,6 +50,11 @@ public class MailConfig {
         props.put("mail.smtp.starttls.enable", String.valueOf(mailSmtpStarttlsEnable));
         props.put("mail.debug", "true");
 
+        this.mailHost = mailHost;
+        this.mailPort = mailPort;
+        this.emailServer = mailSender.getUsername();
+
         return mailSender;
     }
+
 }

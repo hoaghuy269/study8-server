@@ -1,28 +1,41 @@
 package com.study8.sys.system.service.impl;
 
+import com.study8.sys.config.MailConfig;
+import com.study8.sys.config.SettingVariable;
 import com.study8.sys.constant.ContentConstant;
 import com.study8.sys.constant.ExceptionConstant;
 import com.study8.sys.constant.SignConstant;
 import com.study8.sys.constant.SysConstant;
 import com.study8.sys.system.dto.SendEmailDto;
 import com.study8.sys.system.dto.SendEmailResultDto;
+import com.study8.sys.system.dto.SystemEmailLogDto;
 import com.study8.sys.system.enumf.EmailEnum;
 import com.study8.sys.system.enumf.LanguageEnum;
 import com.study8.sys.system.service.EmailService;
+import com.study8.sys.system.service.SystemEmailLogService;
 import com.study8.sys.system.validator.EmailValidator;
 import com.study8.sys.util.ResourceUtils;
+import jakarta.mail.Address;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * EmailServiceImpl
@@ -38,6 +51,12 @@ public class EmailServiceImpl implements EmailService {
 
     @Autowired
     private EmailValidator emailValidator;
+
+    @Autowired
+    private SystemEmailLogService systemEmailLogService;
+
+    @Autowired
+    private MailConfig mailConfig;
 
     @Override
     public SendEmailResultDto sendEmailSMTP(SendEmailDto sendEmailDto, Locale locale) {
@@ -62,15 +81,33 @@ public class EmailServiceImpl implements EmailService {
                 mimeMessageHelper.setCc(sendEmailDto.getCc().toArray(new String[0]));
             }
             mimeMessageHelper.setSubject(sendEmailDto.getSubject()); //Subject
-            mimeMessageHelper.setText(this.getTemplateResource(sendEmailDto.getTemplateCode(),
-                    locale.getLanguage(), sendEmailDto.getMapData()), true); //Content
+
+            String content = this.getTemplateResource(sendEmailDto.getTemplateCode(),
+                    locale.getLanguage(), sendEmailDto.getMapData());
+            mimeMessageHelper.setText(content, true); //Content
+
             //Do send mail
             javaMailSender.send(mimeMessage);
+
+            //Save Log
+            this.saveLog(mimeMessage,
+                    sendEmailDto.getTemplateCode(),
+                    content,
+                    currentDate,
+                    true);
         } catch (Exception e) {
             log.error("EmailServiceImpl | sendEmailSMTP", e);
             sendEmailResultDto.setIsSuccess(false);
             sendEmailResultDto.setErrorMessage(e.getMessage());
             sendEmailResultDto.setTime(currentDate);
+
+            //Save Log
+            this.saveLog(mimeMessage,
+                    sendEmailDto.getTemplateCode(),
+                    null,
+                    currentDate,
+                    false);
+
             return sendEmailResultDto;
         }
         //Success
@@ -95,5 +132,81 @@ public class EmailServiceImpl implements EmailService {
         StringSubstitutor stringSubstitutor = new StringSubstitutor(mapData);
         return stringSubstitutor
                 .replace(htmlTemplate);
+    }
+
+    private void saveLog(MimeMessage mimeMessage,
+                         String templateCode,
+                         String content,
+                         LocalDateTime currentDate,
+                         boolean isSuccess) {
+        SystemEmailLogDto systemEmailLogDto = new SystemEmailLogDto();
+
+        try {
+            String ipAddress = InetAddress.getLocalHost().getHostAddress();
+            systemEmailLogDto.setEmailServerIp(StringUtils.isNotEmpty(ipAddress)
+                    ? ipAddress
+                    : null);
+        } catch (UnknownHostException e) {
+            log.error("EmailServiceImpl | saveLog", e);
+        }
+
+
+        //Get config
+        systemEmailLogDto.setEmailServer(mailConfig.getEmailServer());
+        systemEmailLogDto.setEmailHost(mailConfig.getMailHost());
+        systemEmailLogDto.setEmailPort(mailConfig.getMailPort());
+
+        try {
+            //To
+            Address[] recipientArrayTo = mimeMessage
+                    .getRecipients(MimeMessage.RecipientType.TO);
+            if (ArrayUtils.isNotEmpty(recipientArrayTo)) {
+                systemEmailLogDto.setEmailTo(this
+                        .convertAddressesToString(
+                                recipientArrayTo));
+            }
+
+            //Cc
+            Address[] recipientArrayCc = mimeMessage
+                    .getRecipients(MimeMessage.RecipientType.CC);
+            if (ArrayUtils.isNotEmpty(recipientArrayCc)) {
+                systemEmailLogDto.setEmailCc(this
+                        .convertAddressesToString(
+                                recipientArrayCc));
+            }
+
+            //Bcc
+            Address[] recipientArrayBcc = mimeMessage
+                    .getRecipients(MimeMessage.RecipientType.BCC);
+            if (ArrayUtils.isNotEmpty(recipientArrayBcc)) {
+                systemEmailLogDto.setEmailBcc(this
+                        .convertAddressesToString(
+                                recipientArrayBcc));
+            }
+
+            //Subject
+            systemEmailLogDto.setEmailSubject(mimeMessage.getSubject());
+        } catch (MessagingException e) {
+            log.error("EmailServiceImpl | saveLog", e);
+        }
+
+
+        systemEmailLogDto.setEmailTemplateCode(templateCode);
+        systemEmailLogDto.setEmailContent(content);
+        systemEmailLogDto.setSentDate(currentDate);
+
+        if (isSuccess) {
+            systemEmailLogDto.setSentStatus(200);
+        } else {
+            systemEmailLogDto.setSentStatus(400);
+        }
+
+        systemEmailLogService.saveLog(systemEmailLogDto, SettingVariable.SYSTEM_ADMIN_ID);
+    }
+
+    private String convertAddressesToString(Address[] addresses) {
+        return Arrays.stream(addresses)
+                .map(address -> ((InternetAddress) address).getAddress())
+                .collect(Collectors.joining(", "));
     }
 }

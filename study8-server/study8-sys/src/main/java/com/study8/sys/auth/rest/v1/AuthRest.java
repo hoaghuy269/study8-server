@@ -2,8 +2,10 @@ package com.study8.sys.auth.rest.v1;
 
 import com.study8.core.res.CoreApiRes;
 import com.study8.sys.auth.constant.AuthApiConstant;
+import com.study8.sys.auth.req.ForgotPasswordReq;
 import com.study8.sys.auth.req.LoginReq;
 import com.study8.sys.auth.req.RegisterReq;
+import com.study8.sys.auth.res.ForgotPasswordRes;
 import com.study8.sys.auth.res.LoginRes;
 import com.study8.sys.auth.res.RegisterRes;
 import com.study8.sys.constant.ApiConstant;
@@ -45,4 +47,14 @@ public interface AuthRest {
                                      BindingResult bindingResult, HttpServletRequest request,
                                      HttpServletResponse response);
 
+    /**
+     * @API: /sys/api/v1/auth/forgot-password
+     * @Date: 2024-09-30
+     * @Author: HuyNH
+     * @Desc: Forgot Password API
+     */
+    @PostMapping(AuthApiConstant.API_FORGOT_PASSWORD)
+    CoreApiRes<ForgotPasswordRes> forgotPassword(@RequestBody @Valid ForgotPasswordReq forgotPasswordReq,
+                                                 BindingResult bindingResult, HttpServletRequest request,
+                                                 HttpServletResponse response);
 }

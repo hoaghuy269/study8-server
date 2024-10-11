@@ -25,6 +25,8 @@ public interface AppRoleRepository extends JpaRepository<AppRole, Long> {
                 "ar.created_id as created_id, " +
                 "ar.created_date as created_date, " +
                 "ar.deleted as deleted, " +
+                "ar.updated_date as updated_date, " +
+                "ar.updated_id as updated_id, " +
                 "ar.deleted_date as deleted_date, " +
                 "ar.deleted_id as deleted_id " +
             "FROM app_user_role aur " +

@@ -2,6 +2,7 @@ package com.study8.sys.auth.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study8.core.exception.CoreApplicationException;
+import com.study8.sys.auth.constant.AuthExceptionConstant;
 import com.study8.sys.auth.dto.AppRoleDto;
 import com.study8.sys.auth.dto.AppUserDto;
 import com.study8.sys.auth.entity.AppRole;
@@ -10,18 +11,25 @@ import com.study8.sys.auth.enumf.AccountActiveEnum;
 import com.study8.sys.auth.enumf.RoleEnum;
 import com.study8.sys.auth.enumf.SendOTPEnum;
 import com.study8.sys.auth.repository.AppUserRepository;
+import com.study8.sys.auth.req.ForgotPasswordReq;
 import com.study8.sys.auth.req.RegisterReq;
+import com.study8.sys.auth.res.ForgotPasswordRes;
 import com.study8.sys.auth.service.AppRoleService;
 import com.study8.sys.auth.service.AppUserService;
 import com.study8.sys.auth.validator.AppUserValidator;
 import com.study8.sys.config.SettingVariable;
+import com.study8.sys.constant.ExceptionConstant;
 import com.study8.sys.system.constant.SystemExceptionConstant;
+import com.study8.sys.system.enumf.SystemErrorEnum;
+import com.study8.sys.system.enumf.SystemErrorPriorityEnum;
+import com.study8.sys.system.service.SystemErrorLogService;
 import com.study8.sys.util.ExceptionUtils;
 import com.study8.sys.util.UUIDUtils;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -61,6 +69,9 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Autowired
     private AppRoleService appRoleService;
+
+    @Autowired
+    private SystemErrorLogService systemErrorLogService;
 
     @Override
     public AppUserDto getByUsername(String username) {
@@ -177,6 +188,17 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
+    public AppUserDto getById(Long id) {
+        Optional<AppUser> appUser = appUserRepository.findById(id);
+        if (appUser.isPresent()) {
+            return objectMapper.convertValue(
+                    appUser,
+                    AppUserDto.class);
+        }
+        return null;
+    }
+
+    @Override
     public List<AppUserDto> getListByEmail(String email) {
         List<AppUser> appUserList = appUserRepository
                 .findByEmail(email);
@@ -186,5 +208,65 @@ public class AppUserServiceImpl implements AppUserService {
                     .toList();
         }
         return Collections.emptyList();
+    }
+
+    @Override
+    public ForgotPasswordRes forgotPassword(ForgotPasswordReq forgotPasswordReq, Locale locale)
+            throws CoreApplicationException {
+        ForgotPasswordRes result = new ForgotPasswordRes();
+        result.setIsAccountValid(false);
+        result.setIsSendOTP(false);
+
+        AppUserDto appUserDto = null;
+        if (appUserValidator.validateBeforeForgotPassword(
+                forgotPasswordReq,
+                locale)) {
+            if (StringUtils.isNotEmpty(
+                    forgotPasswordReq.getUsername())) {
+                appUserDto = this.getByUsername(
+                        forgotPasswordReq.getUsername());
+            }
+            if (StringUtils.isNotEmpty(
+                    forgotPasswordReq.getEmail())) {
+                List<AppUserDto> appUserDtoList = this
+                        .getListByEmail(forgotPasswordReq.getEmail());
+                appUserDto = appUserDtoList.stream()
+                        .filter(AppUserDto::getEmailVerified)
+                        .findFirst()
+                        .orElse(this.saveErrorLog(locale));
+            }
+            if (StringUtils.isNotEmpty(
+                    forgotPasswordReq.getPhoneNumber())) {
+                List<AppUserDto> appUserDtoList = this
+                        .getListByPhoneNumber(forgotPasswordReq.getEmail());
+                appUserDto = appUserDtoList.stream()
+                        .filter(AppUserDto::getPhoneNumberVerified)
+                        .findFirst()
+                        .orElse(this.saveErrorLog(locale));
+            }
+        }
+        if (ObjectUtils.isNotEmpty(appUserDto)) {
+            result.setIsAccountValid(true);
+            this.sendEmailForgotPassword();
+
+        } else {
+            ExceptionUtils.throwCoreApplicationException(
+                    AuthExceptionConstant.EXCEPTION_ACCOUNT_DOES_NOT_EXIST,
+                    locale);
+        }
+        return result;
+    }
+
+    private AppUserDto saveErrorLog(Locale locale) {
+        systemErrorLogService.saveErrorLog(
+                SystemErrorEnum.ERROR_DB_1001,
+                SystemErrorPriorityEnum.CRITICAL,
+                locale,
+                true);
+        return null;
+    }
+
+    private void sendEmailForgotPassword() {
+
     }
 }

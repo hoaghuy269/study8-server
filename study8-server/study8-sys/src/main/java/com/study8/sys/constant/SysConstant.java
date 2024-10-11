@@ -27,5 +27,6 @@ public class SysConstant {
     public static final String STUDY8_DOMAIN = "STUDY8_DOMAIN";
     public static final String AUTHORIZATION = "Authorization";
     public static final String BEARER = "Bearer ";
-    public static final String JWT_SECRET ="JWT_SECRET";
+    public static final String SYSTEM_ERROR_PRIORITY ="SYSTEM_ERROR_PRIORITY";
+    public static final String SYSTEM_MAINTENANCE ="SYSTEM_MAINTENANCE";
 }

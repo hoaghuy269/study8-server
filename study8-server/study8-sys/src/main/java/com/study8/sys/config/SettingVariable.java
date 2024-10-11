@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SettingVariable {
     public static final Long SYSTEM_ADMIN_ID = 1L;
+    public static final String SERVICE_NAME = "SYS";
 }
