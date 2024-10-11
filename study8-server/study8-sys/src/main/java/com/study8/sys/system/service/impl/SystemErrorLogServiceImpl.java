@@ -27,6 +27,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
@@ -92,9 +93,9 @@ public class SystemErrorLogServiceImpl
                                     .getListByGroupCode(SysConstant.SYSTEM_MAINTENANCE);
                             if (CollectionUtils.isNotEmpty(systemInternalAssignmentDtoList)) {
                                 //Random staff support issue error
-                                int randomAssignee = new Random()
-                                        .nextInt(systemInternalAssignmentDtoList
-                                                .size());
+                                int randomAssignee = new SecureRandom()
+                                        .nextInt(systemInternalAssignmentDtoList.size());
+
                                 SystemInternalAssignmentDto systemInternalAssignmentDto = systemInternalAssignmentDtoList
                                         .get(randomAssignee);
 
