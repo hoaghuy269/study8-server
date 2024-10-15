@@ -39,7 +39,7 @@ public class UserProfileUtils {
     public static Long getUserId() {
         return Optional.ofNullable(getUserDetail())
                 .map(UserDetailsImpl::getId)
-                .orElse(null);
+                .orElse(1L);
     }
 
     public static boolean hasRole(RoleEnum role) {

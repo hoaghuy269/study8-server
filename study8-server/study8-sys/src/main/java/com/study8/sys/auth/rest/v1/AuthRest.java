@@ -2,15 +2,20 @@ package com.study8.sys.auth.rest.v1;
 
 import com.study8.core.res.CoreApiRes;
 import com.study8.sys.auth.constant.AuthApiConstant;
+import com.study8.sys.auth.req.ForgotPasswordReq;
 import com.study8.sys.auth.req.LoginReq;
 import com.study8.sys.auth.req.RegisterReq;
+import com.study8.sys.auth.req.ResetPasswordReq;
+import com.study8.sys.auth.res.ForgotPasswordRes;
 import com.study8.sys.auth.res.LoginRes;
 import com.study8.sys.auth.res.RegisterRes;
+import com.study8.sys.auth.res.ResetPasswordRes;
 import com.study8.sys.constant.ApiConstant;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,4 +50,26 @@ public interface AuthRest {
                                      BindingResult bindingResult, HttpServletRequest request,
                                      HttpServletResponse response);
 
+    /**
+     * @API: /sys/api/v1/auth/forgot-password
+     * @Date: 2024-09-30
+     * @Author: HuyNH
+     * @Desc: Forgot Password API
+     */
+    @PostMapping(AuthApiConstant.API_FORGOT_PASSWORD)
+    CoreApiRes<ForgotPasswordRes> forgotPassword(@RequestBody @Valid ForgotPasswordReq forgotPasswordReq,
+                                                 BindingResult bindingResult, HttpServletRequest request,
+                                                 HttpServletResponse response);
+
+    /**
+     * @API: /sys/api/v1/auth/reset-password
+     * @Date: 2024-10-15
+     * @Author: HuyNH
+     * @Desc: Reset Password API
+     */
+    @PostMapping(AuthApiConstant.API_RESET_PASSWORD + "/{code}")
+    CoreApiRes<ResetPasswordRes> resetPassword(@PathVariable("code") String code,
+                                               @RequestBody @Valid ResetPasswordReq resetPasswordReq,
+                                               BindingResult bindingResult, HttpServletRequest request,
+                                               HttpServletResponse response);
 }

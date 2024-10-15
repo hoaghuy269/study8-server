@@ -30,4 +30,6 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
             "WHERE u.email = :email " +
             "AND COALESCE(u.deleted, 0) = 0")
     List<AppUser> findByEmail(@Param("email") String email);
+
+    AppUser findByResetPassword(String resetPassword);
 }

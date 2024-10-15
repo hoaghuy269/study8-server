@@ -1,6 +1,7 @@
 package com.study8.sys.system.service;
 
 import com.study8.core.exception.CoreApplicationException;
+import com.study8.sys.auth.enumf.SendOTPEnum;
 import com.study8.sys.system.req.SendOTPReq;
 import com.study8.sys.system.res.SendOTPRes;
 import com.study8.sys.system.dto.SystemOTPDto;
@@ -33,4 +34,8 @@ public interface SystemOTPService {
     Page<SystemOTP> getExpiredOTP(LocalDateTime currentDate, Pageable pageable);
 
     void saveAllEntityList(List<SystemOTP> systemOTPList);
+
+    SystemOTP generateOTP(SendOTPEnum sendOTPEnum, String otpCode, Long userId);
+
+    SystemOTPDto getByCode(String code,Long userId);
 }

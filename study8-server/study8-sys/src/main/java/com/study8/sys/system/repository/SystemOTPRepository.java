@@ -36,4 +36,6 @@ public interface SystemOTPRepository extends JpaRepository<SystemOTP, Long> {
             "AND so.expiryDate < :now " +
             "AND COALESCE(so.deleted, 0) = 0")
     Page<SystemOTP> findExpiredOTP(@Param("now") LocalDateTime now, Pageable pageable);
+
+    SystemOTP findByOtpCodeAndUserIdAndDeleted(String otpCode, Long userId, Integer deleted);
 }

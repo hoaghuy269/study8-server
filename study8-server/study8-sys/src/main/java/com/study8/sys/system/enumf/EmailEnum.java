@@ -7,7 +7,8 @@ package com.study8.sys.system.enumf;
  * @Desc: Email Enum
  */
 public enum EmailEnum {
-    OTP_EMAIL("email_001"), //Send OTP email
+    OTP_EMAIL("email_001"),
+    FORGOT_PASSWORD_EMAIL("email_003"),
     UNKNOWN("unknown");
 
     private final String value;
