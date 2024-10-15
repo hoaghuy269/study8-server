@@ -36,4 +36,6 @@ public interface SystemOTPService {
     void saveAllEntityList(List<SystemOTP> systemOTPList);
 
     SystemOTP generateOTP(SendOTPEnum sendOTPEnum, String otpCode, Long userId);
+
+    SystemOTPDto getByCode(String code,Long userId);
 }

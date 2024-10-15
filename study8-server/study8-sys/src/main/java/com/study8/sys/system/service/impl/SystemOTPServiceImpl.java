@@ -1,5 +1,6 @@
 package com.study8.sys.system.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study8.core.exception.CoreApplicationException;
 import com.study8.sys.auth.dto.AppUserDto;
 import com.study8.sys.auth.entity.AppUser;
@@ -72,6 +73,9 @@ public class SystemOTPServiceImpl implements SystemOTPService {
 
     @Autowired
     private PlatformTransactionManager platformTransactionManager;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Override
     public SendOTPRes sendOTP(SendOTPReq sendOTPReq, Locale locale)
@@ -195,6 +199,16 @@ public class SystemOTPServiceImpl implements SystemOTPService {
         systemOTPRepository.save(systemOTP);
 
         return systemOTP;
+    }
+
+    @Override
+    public SystemOTPDto getByCode(String code, Long userId) {
+        SystemOTPDto result = null;
+        SystemOTP entity = systemOTPRepository.findByOtpCodeAndUserIdAndDeleted(code, userId, null);
+        if (ObjectUtils.isNotEmpty(entity)) {
+            result = objectMapper.convertValue(entity, SystemOTPDto.class);
+        }
+        return result;
     }
 
     private void sendEmailOTP(SendOTPReq sendOTPReq, AppUserDto appUserDto, Locale locale)

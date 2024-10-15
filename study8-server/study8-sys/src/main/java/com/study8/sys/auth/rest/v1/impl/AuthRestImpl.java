@@ -112,7 +112,7 @@ public class AuthRestImpl implements AuthRest {
                     .forgotPassword(forgotPasswordReq, locale);
             return CoreApiRes.handleSuccess(res, locale);
         } catch (Exception e) {
-            log.error("AuthRestImpl | register", e);
+            log.error("AuthRestImpl | forgotPassword", e);
             return CoreApiRes.handleError(e.getMessage());
         }
     }
@@ -127,10 +127,13 @@ public class AuthRestImpl implements AuthRest {
         try {
             BindingResultUtils.handleBindingResult(bindingResult, locale);
             ResetPasswordRes res = appUserService
-                    .resetPassword(code, resetPasswordReq.getPassword());
+                    .resetPassword(code,
+                            resetPasswordReq.getOtpCode(),
+                            resetPasswordReq.getPassword(),
+                            locale);
             return CoreApiRes.handleSuccess(res, locale);
         } catch (Exception e) {
-            log.error("AuthRestImpl | register", e);
+            log.error("AuthRestImpl | resetPassword", e);
             return CoreApiRes.handleError(e.getMessage());
         }
     }

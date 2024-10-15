@@ -21,7 +21,7 @@ public class SystemErrorLogDto extends CoreDto {
     private String code;
     private String message;
     private String serviceName;
-    private String service_log;
+    private String serviceLog;
     private Integer priority;
     private String priorityName;
     private Long assigneeId;

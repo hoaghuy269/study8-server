@@ -38,6 +38,9 @@ public interface AppUserService {
     ForgotPasswordRes forgotPassword(ForgotPasswordReq forgotPasswordReq, Locale locale)
             throws CoreApplicationException;
 
-    ResetPasswordRes resetPassword(String code, String newPassword)
+    ResetPasswordRes resetPassword(String code,
+                                   String otpCode,
+                                   String newPassword,
+                                   Locale locale)
             throws CoreApplicationException;
 }

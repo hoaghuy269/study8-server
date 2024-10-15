@@ -28,6 +28,7 @@ import com.study8.sys.constant.SysConstant;
 import com.study8.sys.system.constant.SystemExceptionConstant;
 import com.study8.sys.system.dto.SendEmailDto;
 import com.study8.sys.system.dto.SendEmailResultDto;
+import com.study8.sys.system.dto.SystemOTPDto;
 import com.study8.sys.system.entity.SystemOTP;
 import com.study8.sys.system.enumf.EmailEnum;
 import com.study8.sys.system.enumf.SystemErrorEnum;
@@ -277,9 +278,40 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public ResetPasswordRes resetPassword(String code, String newPassword)
+    public ResetPasswordRes resetPassword(String code, String otpCode, String newPassword, Locale locale)
             throws CoreApplicationException {
-        return null;
+        ResetPasswordRes result = new ResetPasswordRes();
+
+        AppUser appUser = appUserRepository.findByResetPassword(code);
+        AppUserDto appUserDto = objectMapper.convertValue(appUser, AppUserDto.class);
+
+        SystemOTPDto systemOTPDto = null;
+        if (ObjectUtils.isNotEmpty(appUser)
+                && appUserDto.getId()!= null) {
+            systemOTPDto = systemOTPService.getByCode(code, appUserDto.getId());
+        }
+
+        if (appUserValidator.validateBeforeResetPassword(
+                appUserDto,
+                systemOTPDto,
+                locale)) {
+
+        }
+
+        //Reset password
+        String passwordEncode = new BCryptPasswordEncoder()
+                .encode(newPassword);
+
+        appUser.setPassword(passwordEncode);
+        appUser.setResetPassword(null);
+        appUser.setUpdatedId(SettingVariable.SYSTEM_ADMIN_ID);
+        appUser.setUpdatedDate(LocalDateTime.now());
+
+
+        this.updateAccount(appUserDto, false);
+
+        result.setSuccess(true);
+        return result;
     }
 
     private AppUserDto getAppUserForgotPassword(ForgotPasswordReq forgotPasswordReq, Locale locale)

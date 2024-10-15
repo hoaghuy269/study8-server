@@ -40,7 +40,7 @@ public class SystemErrorLog extends CoreEntity {
     private String serviceName;
 
     @Column(name = "service_log")
-    private String service_log;
+    private String serviceLog;
 
     @Column(name = "priority")
     private Integer priority;

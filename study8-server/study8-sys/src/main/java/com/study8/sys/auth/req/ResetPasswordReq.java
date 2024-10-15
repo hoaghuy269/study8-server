@@ -22,4 +22,8 @@ public class ResetPasswordReq {
     @Size(max = 100)
     @Pattern(regexp = SysConstant.PASSWORD_PATTERN)
     private String password;
+
+    @Size(max = 50)
+    @NotBlank
+    private String otpCode;
 }
