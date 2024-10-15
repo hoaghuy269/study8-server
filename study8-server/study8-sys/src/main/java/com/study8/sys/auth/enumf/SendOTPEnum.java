@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 public enum SendOTPEnum {
-    PHONE_NUMBER(1), //Send OTP
+    PHONE_NUMBER(1), //Send SMS
     EMAIL(2), //Send email
     UNKNOWN(999); //Unknown
 

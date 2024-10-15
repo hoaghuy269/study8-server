@@ -28,4 +28,5 @@ public class SysConstant {
     public static final String BEARER = "Bearer ";
     public static final String SYSTEM_ERROR_PRIORITY ="SYSTEM_ERROR_PRIORITY";
     public static final String SYSTEM_MAINTENANCE ="SYSTEM_MAINTENANCE";
+    public static final String EMAIL_003_SUBJECT = "EMAIL_003_SUBJECT";
 }

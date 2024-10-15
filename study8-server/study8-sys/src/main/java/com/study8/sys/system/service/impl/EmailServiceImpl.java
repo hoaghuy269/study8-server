@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Locale;
@@ -72,13 +73,13 @@ public class EmailServiceImpl implements EmailService {
         }
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
             mimeMessageHelper.setTo(sendEmailDto.getTo().toArray(new String[0]));
             if (CollectionUtils.isNotEmpty(sendEmailDto.getCc())) { //cc
                 mimeMessageHelper.setCc(sendEmailDto.getCc().toArray(new String[0]));
             }
             if (CollectionUtils.isNotEmpty(sendEmailDto.getBcc())) { //bcc
-                mimeMessageHelper.setCc(sendEmailDto.getCc().toArray(new String[0]));
+                mimeMessageHelper.setBcc(sendEmailDto.getBcc().toArray(new String[0]));
             }
             mimeMessageHelper.setSubject(sendEmailDto.getSubject()); //Subject
 

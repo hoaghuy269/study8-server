@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * OTPServiceImpl
@@ -178,11 +179,37 @@ public class SystemOTPServiceImpl implements SystemOTPService {
         systemOTPRepository.saveAll(systemOTPList);
     }
 
+    @Override
+    public SystemOTP generateOTP(SendOTPEnum sendOTPEnum, String otpCode, Long userId) {
+        LocalDateTime currentDate = LocalDateTime.now();
+
+        //Do generate random OTP
+        SystemOTP systemOTP = new SystemOTP();
+        systemOTP.setUserId(userId);
+        systemOTP.setOtpType(sendOTPEnum.getValue());
+        systemOTP.setOtpCode(otpCode);
+        systemOTP.setActive(true);
+        systemOTP.setVerified(false);
+        systemOTP.setExpiryDate(this.getOTPExpiryDate(currentDate));
+        systemOTP.setSentDate(currentDate);
+        systemOTP.setCreatedDate(currentDate);
+        systemOTP.setCreatedId(SettingVariable.SYSTEM_ADMIN_ID);
+        systemOTPRepository.save(systemOTP);
+
+        return systemOTP;
+    }
+
     private void sendEmailOTP(SendOTPReq sendOTPReq, AppUserDto appUserDto, Locale locale)
             throws CoreApplicationException {
         if (systemOTPValidator.validateBeforeSendEmailOTP(
                 sendOTPReq, locale)) {
-            SystemOTP systemOTP = this.generateOTPEmail(appUserDto, locale);
+
+            //Generate OTP
+            SystemOTP systemOTP = this.generateOTP(
+                    SendOTPEnum.EMAIL,
+                    UUIDUtils.randomUUID(),
+                    appUserDto.getId());
+
             if (ObjectUtils.isNotEmpty(systemOTP)) {
                 SendEmailDto sendEmailDto = new SendEmailDto();
                 sendEmailDto.setTo(Collections.singletonList(
@@ -222,34 +249,6 @@ public class SystemOTPServiceImpl implements SystemOTPService {
 
     private void sendPhoneNumberOTP() {
         //TODO: Send OTP to phone
-    }
-
-    private SystemOTP generateOTPEmail(AppUserDto appUserDto, Locale locale)
-            throws CoreApplicationException {
-        LocalDateTime currentDate = LocalDateTime.now();
-        Long userId = this.getUserId(appUserDto, locale);
-
-        //Do generate random OTP
-        SystemOTP systemOTP = new SystemOTP();
-        systemOTP.setUserId(userId);
-        systemOTP.setOtpType(SendOTPEnum.EMAIL.getValue());
-        systemOTP.setOtpCode(UUIDUtils.randomUUID());
-        systemOTP.setActive(true);
-        systemOTP.setVerified(false);
-        systemOTP.setExpiryDate(this.getOTPExpiryDate(currentDate));
-        systemOTP.setCreatedDate(currentDate);
-        systemOTP.setCreatedId(UserProfileUtils.getUserId());
-        return systemOTPRepository.save(systemOTP);
-    }
-
-    private Long getUserId(AppUserDto appUserDto, Locale locale)
-            throws CoreApplicationException {
-        if (ObjectUtils.isNotEmpty(appUserDto)
-                    && appUserDto.getId() == null) {
-            ExceptionUtils.throwCoreApplicationException(
-                    ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
-        }
-        return appUserDto.getId();
     }
 
     private LocalDateTime getOTPExpiryDate(LocalDateTime currentDate) {

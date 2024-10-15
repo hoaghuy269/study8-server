@@ -6,6 +6,7 @@ import com.study8.sys.auth.entity.AppUser;
 import com.study8.sys.auth.req.ForgotPasswordReq;
 import com.study8.sys.auth.req.RegisterReq;
 import com.study8.sys.auth.res.ForgotPasswordRes;
+import com.study8.sys.auth.res.ResetPasswordRes;
 
 import java.util.List;
 import java.util.Locale;
@@ -35,5 +36,8 @@ public interface AppUserService {
     List<AppUserDto> getListByEmail(String email);
 
     ForgotPasswordRes forgotPassword(ForgotPasswordReq forgotPasswordReq, Locale locale)
+            throws CoreApplicationException;
+
+    ResetPasswordRes resetPassword(String code, String newPassword)
             throws CoreApplicationException;
 }

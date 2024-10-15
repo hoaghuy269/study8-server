@@ -24,4 +24,5 @@ public class AppUserDto extends CoreDto {
     private Integer active;
     private Boolean emailVerified;
     private Boolean phoneNumberVerified;
+    private String resetPassword;
 }

@@ -6,6 +6,9 @@ import com.study8.sys.auth.dto.AppUserDto;
 import com.study8.sys.auth.req.ForgotPasswordReq;
 import com.study8.sys.auth.service.AppUserService;
 import com.study8.sys.constant.ExceptionConstant;
+import com.study8.sys.system.enumf.SystemErrorEnum;
+import com.study8.sys.system.enumf.SystemErrorPriorityEnum;
+import com.study8.sys.system.service.SystemErrorLogService;
 import com.study8.sys.util.ExceptionUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -66,8 +69,7 @@ public class AppUserValidator {
         List<String> fieldList = Arrays.asList(
                 forgotPasswordReq.getUsername(),
                 forgotPasswordReq.getPhoneNumber(),
-                forgotPasswordReq.getEmail(),
-                forgotPasswordReq.getUnknown()
+                forgotPasswordReq.getEmail()
         );
         long fieldCount = fieldList.stream()
                 .filter(StringUtils::isNotEmpty)
