@@ -53,6 +53,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
@@ -62,7 +63,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * AppUserServiceImpl
@@ -341,8 +341,9 @@ public class AppUserServiceImpl implements AppUserService {
         sendEmailDto.setTemplateCode(EmailEnum.FORGOT_PASSWORD_EMAIL.toString());
         sendEmailDto.setTo(List.of(appUserDto.getEmail()));
 
-        String otpCode = String.format("%06d",
-                ThreadLocalRandom.current().nextInt(1000000));
+        int otpInt = new SecureRandom().nextInt(1000000);
+        String otpCode = String.format("%06d", otpInt);
+
         SystemOTP systemOTP = systemOTPService
                 .generateOTP(SendOTPEnum.EMAIL, otpCode, appUserDto.getId());
 
