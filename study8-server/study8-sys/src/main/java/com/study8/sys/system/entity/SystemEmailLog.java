@@ -65,4 +65,7 @@ public class SystemEmailLog extends CoreEntity {
 
     @Column(name = "sent_status")
     private Integer sentStatus;
+
+    @Column(name = "system_log")
+    private String systemLog;
 }
