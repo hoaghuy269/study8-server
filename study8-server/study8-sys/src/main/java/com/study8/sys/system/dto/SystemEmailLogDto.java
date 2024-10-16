@@ -30,4 +30,5 @@ public class SystemEmailLogDto extends CoreDto {
     private String emailContent;
     private LocalDateTime sentDate;
     private Integer sentStatus;
+    private String systemLog;
 }

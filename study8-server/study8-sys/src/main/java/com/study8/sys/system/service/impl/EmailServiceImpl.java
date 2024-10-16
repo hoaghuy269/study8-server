@@ -94,7 +94,9 @@ public class EmailServiceImpl implements EmailService {
                     sendEmailDto.getTemplateCode(),
                     content,
                     currentDate,
-                    true);
+                    true,
+                    "SUCCESS"
+            );
         } catch (Exception e) {
             log.error("EmailServiceImpl | sendEmailSMTP", e);
             sendEmailResultDto.setIsSuccess(false);
@@ -106,7 +108,9 @@ public class EmailServiceImpl implements EmailService {
                     sendEmailDto.getTemplateCode(),
                     null,
                     currentDate,
-                    false);
+                    false,
+                    e.getMessage()
+            );
 
             return sendEmailResultDto;
         }
@@ -138,7 +142,8 @@ public class EmailServiceImpl implements EmailService {
                          String templateCode,
                          String content,
                          LocalDateTime currentDate,
-                         boolean isSuccess) {
+                         boolean isSuccess,
+                         String message) {
         SystemEmailLogDto systemEmailLogDto = new SystemEmailLogDto();
 
         try {
@@ -194,6 +199,7 @@ public class EmailServiceImpl implements EmailService {
         systemEmailLogDto.setEmailTemplateCode(templateCode);
         systemEmailLogDto.setEmailContent(content);
         systemEmailLogDto.setSentDate(currentDate);
+        systemEmailLogDto.setSystemLog(message);
 
         if (isSuccess) {
             systemEmailLogDto.setSentStatus(200);
