@@ -23,6 +23,7 @@ import com.study8.sys.config.SettingVariable;
 import com.study8.sys.constant.ApiConstant;
 import com.study8.sys.constant.DateTimeConstant;
 import com.study8.sys.constant.ExceptionConstant;
+import com.study8.sys.constant.LanguageConstant;
 import com.study8.sys.constant.SignConstant;
 import com.study8.sys.constant.SysConstant;
 import com.study8.sys.system.constant.SystemExceptionConstant;
@@ -382,8 +383,13 @@ public class AppUserServiceImpl implements AppUserService {
         Map<String, Object> mapData = new HashMap<>(); //Data
         mapData.put("username", appUserDto.getUsername());
         mapData.put("otpCode", systemOTP.getOtpCode());
-        mapData.put("expiredDate", DateTimeUtils.getDateString(systemOTP.getExpiryDate(),
-                DateTimeConstant.DATETIME_NO_SECOND));
+        if (locale.getLanguage().equals(LanguageConstant.VI)) {
+            mapData.put("expiredDate", DateTimeUtils.getDateString(systemOTP.getExpiryDate(),
+                    DateTimeConstant.DATETIME_NO_SECOND));
+        } else {
+            mapData.put("expiredDate", DateTimeUtils.getDateString(systemOTP.getExpiryDate(),
+                    DateTimeConstant.DATETIME_NO_SECOND_US));
+        }
         sendEmailDto.setMapData(mapData);
 
         //Do send email
