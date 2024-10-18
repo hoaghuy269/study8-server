@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: study8-process
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://study8:study82024@localhost:8761/eureka/}
+  instance:
+    hostname: ${EUREKA_SERVER_HOSTNAME:localhost}
+    prefer-ip-address: true
+camunda:
+  bpm:
+    admin-user:
+      id: admin
+      password: VNoDUaX9j5BloHc
+server:
+  port: 8500
