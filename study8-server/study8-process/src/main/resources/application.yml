@@ -11,7 +11,7 @@ eureka:
 camunda:
   bpm:
     admin-user:
-      id: admin
-      password: VNoDUaX9j5BloHc
+      id: ${CAMUNDA_ID:admin}
+      password: ${CAMUNDA_PASSWORD:VNoDUaX9j5BloHc}
 server:
   port: 8500
