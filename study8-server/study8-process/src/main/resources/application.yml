@@ -7,14 +7,23 @@ spring:
     password: ${DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
+      auto-commit: true
       maximum-pool-size: 10
-      connection-timeout: 30000
+      connection-timeout: 60000
+      idle-timeout: 300000
+      max-lifetime: 1800000
       leakDetectionThreshold: 60000
       data-source-properties:
         cachePrepStmts: false
-        prepStmtCacheSize: 0
+        prepStmtCacheSize: 500
+        prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: false
   jpa:
+    properties:
+      hibernate:
+        jdbc:
+          use_streams_for_binary: true
+          statement_release_mode: on_close
     hibernate:
       ddl-auto: update
 eureka:
