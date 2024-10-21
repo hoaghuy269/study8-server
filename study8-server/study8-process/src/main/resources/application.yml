@@ -1,6 +1,22 @@
 spring:
   application:
     name: study8-process
+  datasource:
+    url: ${DATASOURCE_URL:}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 30000
+      leakDetectionThreshold: 60000
+      data-source-properties:
+        cachePrepStmts: false
+        prepStmtCacheSize: 0
+        useServerPrepStmts: false
+  jpa:
+    hibernate:
+      ddl-auto: update
 eureka:
   client:
     service-url:
@@ -13,5 +29,7 @@ camunda:
     admin-user:
       id: ${CAMUNDA_ID:admin}
       password: ${CAMUNDA_PASSWORD:VNoDUaX9j5BloHc}
+    database:
+      type: postgres
 server:
   port: 8500
