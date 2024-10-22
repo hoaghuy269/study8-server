@@ -2,7 +2,7 @@ spring:
   application:
     name: study8-process
   datasource:
-    url: ${DATASOURCE_URL:}
+    url: ${DATASOURCE_URL}
     username: ${DATASOURCE_USERNAME}
     password: ${DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
