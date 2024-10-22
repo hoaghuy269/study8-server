@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: study8-process
+  datasource:
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      auto-commit: true
+      maximum-pool-size: 10
+      connection-timeout: 60000
+      idle-timeout: 300000
+      max-lifetime: 1800000
+      leakDetectionThreshold: 60000
+      data-source-properties:
+        cachePrepStmts: false
+        prepStmtCacheSize: 500
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: false
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          use_streams_for_binary: true
+          statement_release_mode: on_close
+    hibernate:
+      ddl-auto: update
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://study8:study82024@localhost:8761/eureka/}
+  instance:
+    hostname: ${EUREKA_SERVER_HOSTNAME:localhost}
+    prefer-ip-address: true
+camunda:
+  bpm:
+    admin-user:
+      id: ${CAMUNDA_ID:admin}
+      password: ${CAMUNDA_PASSWORD:VNoDUaX9j5BloHc}
+    database:
+      type: postgres
+server:
+  port: 8500
