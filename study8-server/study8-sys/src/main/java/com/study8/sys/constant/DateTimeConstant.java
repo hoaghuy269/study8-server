@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DateTimeConstant {
-    public static final String DDMMYYYY = "ddMMyyyy";
+    public static final String DATETIME_NO_SECOND = "dd-MM-yyyy HH:mm";
+    public static final String DATETIME_NO_SECOND_US = "yyyy-MM-dd HH:mm";
 }

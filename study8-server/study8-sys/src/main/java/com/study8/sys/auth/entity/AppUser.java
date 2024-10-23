@@ -51,6 +51,9 @@ public class AppUser extends CoreEntity {
     @Column(name = "active")
     private Integer active;
 
+    @Column(name = "reset_password")
+    private String resetPassword;
+
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "app_user_role",

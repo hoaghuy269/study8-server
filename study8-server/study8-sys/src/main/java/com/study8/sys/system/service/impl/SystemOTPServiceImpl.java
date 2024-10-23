@@ -1,32 +1,32 @@
 package com.study8.sys.system.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study8.core.exception.CoreApplicationException;
 import com.study8.sys.auth.dto.AppUserDto;
 import com.study8.sys.auth.entity.AppUser;
 import com.study8.sys.auth.enumf.SendOTPEnum;
-import com.study8.sys.config.SettingVariable;
-import com.study8.sys.system.req.SendOTPReq;
-import com.study8.sys.system.res.SendOTPRes;
 import com.study8.sys.auth.service.AppUserService;
+import com.study8.sys.config.SettingVariable;
 import com.study8.sys.constant.ApiConstant;
-import com.study8.sys.system.constant.SystemApiConstant;
-import com.study8.sys.system.dto.SystemOTPDto;
-import com.study8.sys.system.entity.SystemOTP;
-import com.study8.sys.system.repository.SystemOTPRepository;
-import com.study8.sys.system.res.VerifyOTPRes;
-import com.study8.sys.system.service.SystemConfigService;
-import com.study8.sys.system.service.SystemOTPService;
 import com.study8.sys.constant.ExceptionConstant;
 import com.study8.sys.constant.SysConstant;
+import com.study8.sys.system.constant.SystemApiConstant;
 import com.study8.sys.system.dto.SendEmailDto;
 import com.study8.sys.system.dto.SendEmailResultDto;
+import com.study8.sys.system.dto.SystemOTPDto;
+import com.study8.sys.system.entity.SystemOTP;
 import com.study8.sys.system.enumf.EmailEnum;
+import com.study8.sys.system.repository.SystemOTPRepository;
+import com.study8.sys.system.req.SendOTPReq;
+import com.study8.sys.system.res.SendOTPRes;
+import com.study8.sys.system.res.VerifyOTPRes;
 import com.study8.sys.system.service.EmailService;
+import com.study8.sys.system.service.SystemConfigService;
+import com.study8.sys.system.service.SystemOTPService;
 import com.study8.sys.system.validator.SystemOTPValidator;
 import com.study8.sys.util.ExceptionUtils;
 import com.study8.sys.util.ResourceUtils;
 import com.study8.sys.util.UUIDUtils;
-import com.study8.sys.util.UserProfileUtils;
 import lombok.NonNull;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -73,6 +73,9 @@ public class SystemOTPServiceImpl implements SystemOTPService {
 
     @Autowired
     private PlatformTransactionManager platformTransactionManager;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Override
     public SendOTPRes sendOTP(SendOTPReq sendOTPReq, Locale locale)
@@ -178,11 +181,47 @@ public class SystemOTPServiceImpl implements SystemOTPService {
         systemOTPRepository.saveAll(systemOTPList);
     }
 
+    @Override
+    public SystemOTP generateOTP(SendOTPEnum sendOTPEnum, String otpCode, Long userId) {
+        LocalDateTime currentDate = LocalDateTime.now();
+
+        //Do generate random OTP
+        SystemOTP systemOTP = new SystemOTP();
+        systemOTP.setUserId(userId);
+        systemOTP.setOtpType(sendOTPEnum.getValue());
+        systemOTP.setOtpCode(otpCode);
+        systemOTP.setActive(true);
+        systemOTP.setVerified(false);
+        systemOTP.setExpiryDate(this.getOTPExpiryDate(currentDate));
+        systemOTP.setSentDate(currentDate);
+        systemOTP.setCreatedDate(currentDate);
+        systemOTP.setCreatedId(SettingVariable.SYSTEM_ADMIN_ID);
+        systemOTPRepository.save(systemOTP);
+
+        return systemOTP;
+    }
+
+    @Override
+    public SystemOTPDto getByCode(String code, Long userId) {
+        SystemOTPDto result = null;
+        SystemOTP entity = systemOTPRepository.findByOtpCodeAndUserIdAndDeleted(code, userId, null);
+        if (ObjectUtils.isNotEmpty(entity)) {
+            result = objectMapper.convertValue(entity, SystemOTPDto.class);
+        }
+        return result;
+    }
+
     private void sendEmailOTP(SendOTPReq sendOTPReq, AppUserDto appUserDto, Locale locale)
             throws CoreApplicationException {
         if (systemOTPValidator.validateBeforeSendEmailOTP(
                 sendOTPReq, locale)) {
-            SystemOTP systemOTP = this.generateOTPEmail(appUserDto, locale);
+
+            //Generate OTP
+            SystemOTP systemOTP = this.generateOTP(
+                    SendOTPEnum.EMAIL,
+                    UUIDUtils.randomUUID(),
+                    appUserDto.getId());
+
             if (ObjectUtils.isNotEmpty(systemOTP)) {
                 SendEmailDto sendEmailDto = new SendEmailDto();
                 sendEmailDto.setTo(Collections.singletonList(
@@ -222,34 +261,6 @@ public class SystemOTPServiceImpl implements SystemOTPService {
 
     private void sendPhoneNumberOTP() {
         //TODO: Send OTP to phone
-    }
-
-    private SystemOTP generateOTPEmail(AppUserDto appUserDto, Locale locale)
-            throws CoreApplicationException {
-        LocalDateTime currentDate = LocalDateTime.now();
-        Long userId = this.getUserId(appUserDto, locale);
-
-        //Do generate random OTP
-        SystemOTP systemOTP = new SystemOTP();
-        systemOTP.setUserId(userId);
-        systemOTP.setOtpType(SendOTPEnum.EMAIL.getValue());
-        systemOTP.setOtpCode(UUIDUtils.randomUUID());
-        systemOTP.setActive(true);
-        systemOTP.setVerified(false);
-        systemOTP.setExpiryDate(this.getOTPExpiryDate(currentDate));
-        systemOTP.setCreatedDate(currentDate);
-        systemOTP.setCreatedId(UserProfileUtils.getUserId());
-        return systemOTPRepository.save(systemOTP);
-    }
-
-    private Long getUserId(AppUserDto appUserDto, Locale locale)
-            throws CoreApplicationException {
-        if (ObjectUtils.isNotEmpty(appUserDto)
-                    && appUserDto.getId() == null) {
-            ExceptionUtils.throwCoreApplicationException(
-                    ExceptionConstant.EXCEPTION_DATA_PROCESSING, locale);
-        }
-        return appUserDto.getId();
     }
 
     private LocalDateTime getOTPExpiryDate(LocalDateTime currentDate) {

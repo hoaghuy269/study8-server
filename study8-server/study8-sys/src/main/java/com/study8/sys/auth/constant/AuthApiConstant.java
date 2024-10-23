@@ -14,4 +14,6 @@ public class AuthApiConstant {
     public static final String API_AUTH = "/auth";
     public static final String API_LOGIN = "/login";
     public static final String API_REGISTER = "/register";
+    public static final String API_FORGOT_PASSWORD = "/forgot-password";
+    public static final String API_RESET_PASSWORD = "/reset-password";
 }

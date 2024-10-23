@@ -4,10 +4,14 @@ import com.study8.core.res.CoreApiRes;
 import com.study8.core.util.CoreLanguageUtils;
 import com.study8.sys.auth.constant.AuthExceptionConstant;
 import com.study8.sys.auth.dto.AppUserDto;
+import com.study8.sys.auth.req.ForgotPasswordReq;
 import com.study8.sys.auth.req.LoginReq;
 import com.study8.sys.auth.req.RegisterReq;
+import com.study8.sys.auth.req.ResetPasswordReq;
+import com.study8.sys.auth.res.ForgotPasswordRes;
 import com.study8.sys.auth.res.LoginRes;
 import com.study8.sys.auth.res.RegisterRes;
+import com.study8.sys.auth.res.ResetPasswordRes;
 import com.study8.sys.auth.rest.v1.AuthRest;
 import com.study8.sys.auth.service.AppUserService;
 import com.study8.sys.util.BindingResultUtils;
@@ -93,6 +97,43 @@ public class AuthRestImpl implements AuthRest {
             return CoreApiRes.handleSuccess(res, locale);
         } catch (Exception e) {
             log.error("AuthRestImpl | register", e);
+            return CoreApiRes.handleError(e.getMessage());
+        }
+    }
+
+    @Override
+    public CoreApiRes<ForgotPasswordRes> forgotPassword(ForgotPasswordReq forgotPasswordReq,
+                                                        BindingResult bindingResult, HttpServletRequest request,
+                                                        HttpServletResponse response) {
+        Locale locale = CoreLanguageUtils.getLanguageFromHeader(request);
+        try {
+            BindingResultUtils.handleBindingResult(bindingResult, locale);
+            ForgotPasswordRes res = appUserService
+                    .forgotPassword(forgotPasswordReq, locale);
+            return CoreApiRes.handleSuccess(res, locale);
+        } catch (Exception e) {
+            log.error("AuthRestImpl | forgotPassword", e);
+            return CoreApiRes.handleError(e.getMessage());
+        }
+    }
+
+    @Override
+    public CoreApiRes<ResetPasswordRes> resetPassword(String code,
+                                                      ResetPasswordReq resetPasswordReq,
+                                                      BindingResult bindingResult,
+                                                      HttpServletRequest request,
+                                                      HttpServletResponse response) {
+        Locale locale = CoreLanguageUtils.getLanguageFromHeader(request);
+        try {
+            BindingResultUtils.handleBindingResult(bindingResult, locale);
+            ResetPasswordRes res = appUserService
+                    .resetPassword(code,
+                            resetPasswordReq.getOtpCode(),
+                            resetPasswordReq.getPassword(),
+                            locale);
+            return CoreApiRes.handleSuccess(res, locale);
+        } catch (Exception e) {
+            log.error("AuthRestImpl | resetPassword", e);
             return CoreApiRes.handleError(e.getMessage());
         }
     }

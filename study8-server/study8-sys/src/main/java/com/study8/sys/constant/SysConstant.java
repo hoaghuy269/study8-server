@@ -22,10 +22,11 @@ public class SysConstant {
     public static final String EMAIL_001_SUBJECT = "EMAIL_001_SUBJECT";
     public static final String OTP_EXPIRATION = "OTP_EXPIRATION";
     public static final String SYSTEM = "SYSTEM";
-    public static final String JWT_EXPIRATION = "JWT_EXPIRATION";
     public static final String ROOT_DOMAIN = "ROOT_DOMAIN";
     public static final String STUDY8_DOMAIN = "STUDY8_DOMAIN";
     public static final String AUTHORIZATION = "Authorization";
     public static final String BEARER = "Bearer ";
-    public static final String JWT_SECRET ="JWT_SECRET";
+    public static final String SYSTEM_ERROR_PRIORITY ="SYSTEM_ERROR_PRIORITY";
+    public static final String SYSTEM_MAINTENANCE ="SYSTEM_MAINTENANCE";
+    public static final String EMAIL_003_SUBJECT = "EMAIL_003_SUBJECT";
 }

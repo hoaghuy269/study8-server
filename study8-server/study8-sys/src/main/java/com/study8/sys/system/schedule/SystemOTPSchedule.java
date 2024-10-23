@@ -1,5 +1,6 @@
 package com.study8.sys.system.schedule;
 
+import com.study8.sys.config.SettingVariable;
 import com.study8.sys.system.entity.SystemOTP;
 import com.study8.sys.system.service.SystemOTPService;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +47,7 @@ public class SystemOTPSchedule {
                 systemOTPUpdated.forEach(otp -> {
                     otp.setActive(false);
                     otp.setDeleted(1);
+                    otp.setDeletedId(SettingVariable.SYSTEM_ADMIN_ID);
                     otp.setDeletedDate(currentDate);
                 });
                 systemOTPService.saveAllEntityList(systemOTPUpdated);
