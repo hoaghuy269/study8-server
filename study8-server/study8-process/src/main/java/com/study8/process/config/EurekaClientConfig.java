@@ -12,6 +12,12 @@ import org.springframework.cloud.netflix.eureka.http.RestTemplateTransportClient
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * EurekaClientConfig
+ * @Date: 2024-10-23
+ * @Author: HuyNH
+ * @Desc: Config Eureka Client (Allow Camunda)
+ */
 @EnableDiscoveryClient
 @Configuration
 public class EurekaClientConfig {
