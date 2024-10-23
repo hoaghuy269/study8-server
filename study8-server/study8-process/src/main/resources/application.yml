@@ -25,7 +25,7 @@ spring:
           use_streams_for_binary: true
           statement_release_mode: on_close
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
 eureka:
   client:
     service-url:
